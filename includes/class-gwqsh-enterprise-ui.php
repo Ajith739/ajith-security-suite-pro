@@ -68,7 +68,7 @@ final class GWQSH_Enterprise_UI {
 			echo '<p>Rules apply after authentication. Country lookup requires consent in Settings. Use the existing visitor allowlist for trusted IP overrides. Emergency recovery: define GWQSH_DISABLE_ENTERPRISE as true in wp-config.php. Cloudflare headers require fresh verified Cloudflare ranges.</p>';
 		}
 		if ( 'waf' === $section ) {
-			echo '<p>WordPress-level inspection only. Existing reviewed rules retain their behavior. Additional rules default to report-only until explicitly enforced. The existing firewall master switch must also be enabled.</p>';
+			echo '<p>WordPress-level inspection only. Existing reviewed rules retain their behavior. Additional rules default to report-only until explicitly enforced. The existing firewall master switch must also be enabled.</p><p>Authenticated payload inspection is separate and defaults to detection only. It reads bounded, non-credential parameters of your own logged-in requests; findings record the parameter name and rule, never the submitted value. Enforcing blocks matching requests on ordinary endpoints only: post editors, media and other content-authoring endpoints are never denied, and an exempted rule stops being inspected entirely.</p>';
 		}
 		if ( 'signatures' === $section ) {
 			$db = GWQSH_Signatures::database();

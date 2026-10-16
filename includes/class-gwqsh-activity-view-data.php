@@ -126,7 +126,9 @@ final class GWQSH_Activity_View_Data {
 			}
 		}
 		if ( $f['ip'] ) {
-			$sql .= $wpdb->prepare( ' AND (ip_address = %s OR INET6_ATON(ip_address) = INET6_ATON(%s))', $f['ip'], $f['ip'] );
+			// Portable comparison: MySQL normalises IPv6 with INET6_ATON; SQLite compares
+			// the recorded value against every supported notation of the requested address.
+			$sql .= GWQSH_DB::ip_filter_sql( 'ip_address', $f['ip'] );
 		}
 		if ( $f['search'] ) {
 			$like = '%' . $wpdb->esc_like( $f['search'] ) . '%';

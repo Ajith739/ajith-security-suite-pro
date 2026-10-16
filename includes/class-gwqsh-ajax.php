@@ -153,6 +153,18 @@ final class GWQSH_Ajax {
 					wp_send_json_error( array( 'message' => 'Unable to queue the scan.' ), 500 ); }
 				wp_send_json_success( array( 'message' => 'Scan queued for background processing.' ) );
 				break;
+			case 'get_database_scan':
+				wp_send_json_success( self::database_scan_data() );
+				break;
+			case 'run_database_scan':
+				// Bounded, read-only inspection; the dispatcher already verified nonce and capability.
+				$report = GWQSH_Database_Scanner::run();
+				wp_send_json_success( self::database_scan_data() );
+				break;
+			case 'approve_admin_baseline':
+				GWQSH_Database_Scanner::approve_administrators();
+				wp_send_json_success( self::database_scan_data() );
+				break;
 			case 'get_firewall_data':
 				wp_send_json_success( GWQSH_Firewall::data( isset( $_POST['page_num'] ) ? absint( $_POST['page_num'] ) : 1 ) );
 				break;
@@ -854,6 +866,21 @@ final class GWQSH_Ajax {
 	 */
 	/**
 	 * Get scan data.
+	 */
+	/**
+	 * Stored database-scan state for the security screens.
+	 *
+	 * The view model is shared with the server-rendered screen so the two surfaces cannot
+	 * disagree. No report means "not scanned", never "clean".
+	 *
+	 * @return array Screen data.
+	 */
+	private static function database_scan_data() {
+		return GWQSH_Database_View_Data::get();
+	}
+
+	/**
+	 * Paginated file-integrity findings for the File Integrity screen.
 	 */
 	private static function get_scan_data() {
 		check_ajax_referer( 'gwqsh_nonce', 'nonce' );

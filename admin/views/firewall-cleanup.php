@@ -6,15 +6,16 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-$gwqsh_view_d               = GWQSH_Firewall::data();
-$gwqsh_view_user            = wp_get_current_user();
-$gwqsh_u_name    = ( $gwqsh_view_user && $gwqsh_view_user->exists() ) ? ( $gwqsh_view_user->display_name ? $gwqsh_view_user->display_name : $gwqsh_view_user->user_login ) : 'Admin';
-$gwqsh_u_initial = strtoupper( substr( $gwqsh_u_name, 0, 1 ) );
-$gwqsh_u_role    = ! empty( $gwqsh_view_user->roles[0] ) ? ucfirst( $gwqsh_view_user->roles[0] ) : 'Administrator';
-$gwqsh_view_icon            = static function ( $gwqsh_view_name ) {
+$gwqsh_view_d       = GWQSH_Firewall::data();
+$gwqsh_view_db      = GWQSH_Database_View_Data::get();
+$gwqsh_view_user    = wp_get_current_user();
+$gwqsh_u_name       = ( $gwqsh_view_user && $gwqsh_view_user->exists() ) ? ( $gwqsh_view_user->display_name ? $gwqsh_view_user->display_name : $gwqsh_view_user->user_login ) : 'Admin';
+$gwqsh_u_initial    = strtoupper( substr( $gwqsh_u_name, 0, 1 ) );
+$gwqsh_u_role       = ! empty( $gwqsh_view_user->roles[0] ) ? ucfirst( $gwqsh_view_user->roles[0] ) : 'Administrator';
+$gwqsh_view_icon    = static function ( $gwqsh_view_name ) {
 	return '<svg class="qs-icon" aria-hidden="true"><use href="#i-' . esc_attr( $gwqsh_view_name ) . '"/></svg>';
 };
-$gwqsh_view_url             = static function ( $gwqsh_view_page ) {
+$gwqsh_view_url     = static function ( $gwqsh_view_page ) {
 	$gwqsh_view_suffix = array(
 		'dashboard'        => '',
 		'login'            => '-login',
@@ -28,7 +29,7 @@ $gwqsh_view_url             = static function ( $gwqsh_view_page ) {
 	);
 	return admin_url( 'admin.php?page=gracewell-security-suite-pro' . $gwqsh_view_suffix[ $gwqsh_view_page ] );
 };
-$gwqsh_view_section         = static function ( $gwqsh_view_title, $gwqsh_view_symbol, $gwqsh_view_subtitle = '' ) use ( $gwqsh_view_icon ) {
+$gwqsh_view_section = static function ( $gwqsh_view_title, $gwqsh_view_symbol, $gwqsh_view_subtitle = '' ) use ( $gwqsh_view_icon ) {
 	echo '<div class="qs-card-head"><span class="qs-tile">' . $gwqsh_view_icon( $gwqsh_view_symbol ) . '</span><div><h2>' . esc_html( $gwqsh_view_title ) . '</h2>' . ( $gwqsh_view_subtitle ? '<p>' . esc_html( $gwqsh_view_subtitle ) . '</p>' : '' ) . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Helper escapes every variable; only trusted SVG markup is emitted.
 };
 require GWQSH_PATH . 'admin/views/dashboard-icons.php';
@@ -190,7 +191,7 @@ foreach ( array(
 else :
 	?>
 	<span class="qs-fw-switch"><input type="checkbox" data-rule="<?php echo esc_attr( $gwqsh_view_rule[0] ); ?>" aria-label="<?php echo esc_attr( $gwqsh_view_rule[1] ); ?>"><span></span></span><?php endif; ?></label>
-<?php endforeach; ?><p class="qs-fw-note">Opt-in protection inspects public URL query values only. Authenticated requests, admin screens and request bodies are excluded. It is not a comprehensive WAF.</p>
+<?php endforeach; ?><p class="qs-fw-note">Opt-in protection inspects public URL query values. Authenticated payload inspection is a separate switch under Firewall mode &amp; additional rules, detects by default, and never denies content-authoring requests. Uploaded file bodies, credentials and session material are never inspected. This is not a comprehensive WAF.</p>
 </div>
 <div role="tabpanel" id="qs-fw-panel-ips" aria-labelledby="qs-fw-tab-ips" hidden><h3>Active login lockouts &amp; trusted IPs</h3><div id="qs-fw-ip-records"></div><p>Temporary authentication blocks, expiration, unlock actions and IPv4/IPv6/CIDR allowlist exceptions use Login Protection.</p><a class="qs-button" href="<?php echo esc_url( $gwqsh_view_url( 'login' ) ); ?>">Manage real IP rules →</a><p>Permanent site-wide IP bans are unavailable.</p></div>
 <div role="tabpanel" id="qs-fw-panel-countries" aria-labelledby="qs-fw-tab-countries" hidden><h3>Country blocking is unavailable</h3><p>No trusted local GeoIP database or provider is configured. No country rules are enforced, and visitor-controlled country headers are ignored.</p></div>
@@ -261,7 +262,7 @@ foreach ( array( array( 'quarantine', 'Quarantine Files', 'Review findings and p
 	<?php
 	echo esc_html( $gwqsh_view_tool[2] );
 	?>
-</small></span><span aria-hidden="true">›</span></button><?php endforeach; ?></section></div>
+</small></span><span aria-hidden="true">›</span></button><?php endforeach; ?></section><section class="qs-card qs-fw-database"><?php $gwqsh_view_section( 'Database Scan', 'gear', 'Malware and persistence stored in options, posts, widgets, scheduled tasks and accounts.' ); ?><div class="qs-fw-scan-controls"><span class="qs-badge qs-fw-neutral" id="qs-db-status"><?php echo esc_html( $gwqsh_view_db['status_label'] ); ?></span><button type="button" class="qs-button qs-primary" id="qs-db-run">Run Database Scan</button><button type="button" class="qs-button qs-btn-outline" id="qs-db-baseline">Approve Administrator Baseline</button></div><p id="qs-db-feedback" role="status" aria-live="polite"></p><p class="qs-fw-note" id="qs-db-coverage"></p><p class="qs-fw-note" id="qs-db-meta"></p><div class="qs-fw-table-scroll" tabindex="0" role="region" aria-label="Database scan findings"><table><thead><tr><th scope="col">Rule</th><th scope="col">Severity</th><th scope="col">Stored in</th><th scope="col">Record</th><th scope="col">Evidence</th></tr></thead><tbody id="qs-db-rows"></tbody></table></div><p class="qs-fw-note" id="qs-db-disclaimer">Database findings are evidence for review. Nothing is deleted or modified automatically.</p></section></div>
 </div>
 <template id="tpl-waf">
 	<div class="qs-modal-enterprise-content">

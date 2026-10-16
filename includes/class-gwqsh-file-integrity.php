@@ -170,7 +170,7 @@ final class GWQSH_File_Integrity {
 					'Drop-in'       => 'dropin',
 				);
 				if ( isset( $components[ $filters['type'] ] ) ) {
-					$where[]        = "JSON_UNQUOTE(JSON_EXTRACT(IF(JSON_VALID(evidence), evidence, '{}'), '$.component')) = %s";
+					$where[]        = GWQSH_DB::json_text( 'evidence', 'component' ) . ' = %s';
 					$where_values[] = $components[ $filters['type'] ];
 				} else {
 					$where[]        = 'file_type = %s';
@@ -207,9 +207,9 @@ final class GWQSH_File_Integrity {
 			'path'     => 'file_path',
 			'status'   => 'status',
 			'type'     => 'file_type',
-			'modified' => "CAST(JSON_UNQUOTE(JSON_EXTRACT(IF(JSON_VALID(evidence), evidence, '{}'), '$.mtime')) AS UNSIGNED)",
-			'score'    => "CAST(JSON_UNQUOTE(JSON_EXTRACT(IF(JSON_VALID(evidence), evidence, '{}'), '$.score')) AS UNSIGNED)",
-			'severity' => "FIELD(JSON_UNQUOTE(JSON_EXTRACT(IF(JSON_VALID(evidence), evidence, '{}'), '$.severity')), 'Informational', 'Low', 'Medium', 'High', 'Critical')",
+			'modified' => GWQSH_DB::cast_unsigned( GWQSH_DB::json_text( 'evidence', 'mtime' ) ),
+			'score'    => GWQSH_DB::cast_unsigned( GWQSH_DB::json_text( 'evidence', 'score' ) ),
+			'severity' => GWQSH_DB::enum_rank( GWQSH_DB::json_text( 'evidence', 'severity' ), array( 'Informational', 'Low', 'Medium', 'High', 'Critical' ) ),
 		);
 		$sort_field = 'detected_at';
 		if ( ! empty( $filters['sort'] ) && isset( $sort_map[ $filters['sort'] ] ) ) {

@@ -52,7 +52,11 @@ final class PrefixMigrationTest extends TestCase {
         $old = esc_sql( $fixture . 'gqs_activity_log' );
         $new = esc_sql( $fixture . 'gwqsh_activity_log' );
         try {
-            $wpdb->query("CREATE TABLE `{$old}` LIKE `{$prefix}gwqsh_activity_log`");
+            // Portable fixture DDL: the SQLite drop-in supports neither CREATE TABLE ... LIKE
+            // nor CREATE TABLE ... AS SELECT, and the migration only renames the table without
+            // reading its schema, so the fixture declares the migration-relevant columns.
+            $wpdb->query("CREATE TABLE `{$old}` (id INTEGER PRIMARY KEY, event_time DATETIME NOT NULL, event_name VARCHAR(191) NOT NULL, details TEXT, event_type VARCHAR(32) NOT NULL)");
+            $this->assertSame('', $wpdb->last_error, 'Fixture table must be created before the migration runs.');
             $wpdb->insert($old, array('id'=>781, 'event_time'=>current_time('mysql'), 'event_name'=>'Migration fixture', 'details'=>'Preserve every field', 'event_type'=>'System'));
             $record = $wpdb->get_row("SELECT * FROM `{$old}`", ARRAY_A);
             $wpdb->prefix = $fixture;
@@ -61,6 +65,9 @@ final class PrefixMigrationTest extends TestCase {
             $this->assertSame($record, $wpdb->get_row("SELECT * FROM `{$new}`", ARRAY_A));
             $method->invoke(null);
             $this->assertSame('1', $wpdb->get_var("SELECT COUNT(*) FROM `{$new}`"));
+            // A move that only claims success (some SQLite driver versions accept a rename
+            // statement without renaming anything) would leave the legacy table in place.
+            $this->assertNull($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($old))), 'The legacy table must be gone after a verified move.');
         } finally {
             $wpdb->prefix = $prefix;
             $wpdb->query("DROP TABLE IF EXISTS `{$old}`"); $wpdb->query("DROP TABLE IF EXISTS `{$new}`");

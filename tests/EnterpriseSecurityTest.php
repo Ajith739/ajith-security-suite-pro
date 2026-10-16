@@ -76,7 +76,11 @@ final class EnterpriseSecurityTest extends TestCase {
   $this->assertSame('GWQSH-1003',GWQSH_Firewall::advanced(array(),array(),array('upload'=>array('name'=>'attack.php.jpg')),'/upload',$s));
   $s['post']=true;$this->assertSame('',GWQSH_Firewall::advanced(array(),array('password'=>'<script>alert(1)</script>','comment'=>'ordinary content'),array(),'/',$s));
   $this->assertSame('GWQSH-1004',GWQSH_Firewall::advanced(array(),array('query'=>"' OR 1=1 --"),array(),'/',$s));
-  $this->assertCount(5,GWQSH_Firewall::rules());
+  $rules=GWQSH_Firewall::rules();$this->assertCount(7,$rules);$this->assertArrayHasKey('GWQSH-1006',$rules);$this->assertArrayHasKey('GWQSH-1007',$rules);
+  $this->assertSame('authenticated',$rules['GWQSH-1006']['category']);$this->assertSame('authenticated',$rules['GWQSH-1007']['category']);$this->assertSame('Review',$rules['GWQSH-1006']['confidence']);
+  $this->assertSame('ignore',GWQSH_Firewall::privileged_decision('GWQSH-1006','/wp-admin/options.php',GWQSH_Enterprise_Config::get('waf')),'Authenticated inspection must stay off until it is opted into.');
+  $enforced=array('privileged'=>true,'privileged_enforce'=>true,'mode'=>'block','exclusions'=>'');
+  $this->assertSame('detect',GWQSH_Firewall::privileged_decision('GWQSH-1006','/wp-admin/post.php',$enforced),'Content authoring must never be denied.');
  }
  public function test_event_projection_dedup_queue_retry_and_no_secret_payload(): void {
   global $wpdb;GWQSH_Enterprise_Config::save('alerts',array('enabled'=>true,'slack'=>true,'minimum'=>'High'));
