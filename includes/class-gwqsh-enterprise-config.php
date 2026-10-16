@@ -98,7 +98,7 @@ final class GWQSH_Enterprise_Config {
 				'delivery_retention' => array( 'number', 7, 'Delivery audit retention (days)', array( 1, 30 ) ),
 			),
 			'waf'        => array(
-				'mode'        => array(
+				'mode'                  => array(
 					'select',
 					'block',
 					'Firewall operation mode',
@@ -108,14 +108,17 @@ final class GWQSH_Enterprise_Config {
 						'block'    => 'Blocking / enforcement',
 					),
 				),
-				'enforce_new' => array( 'bool', false, 'Enforce new rules (otherwise report only)' ),
-				'traversal'   => array( 'bool', true, 'Path traversal detection' ),
-				'inclusion'   => array( 'bool', true, 'File inclusion detection' ),
-				'uploads'     => array( 'bool', true, 'Unauthenticated executable upload attempts' ),
-				'post'        => array( 'bool', false, 'Inspect bounded noncredential POST values' ),
-				'rate'        => array( 'bool', false, 'Enable unauthenticated request rate limit' ),
-				'requests'    => array( 'number', 120, 'Requests per minute per IP', array( 10, 10000 ) ),
-				'exclusions'  => array( 'paths', '', 'Excluded exact paths (one per line)' ),
+				'enforce_new'           => array( 'bool', false, 'Enforce new rules (otherwise report only)' ),
+				'traversal'             => array( 'bool', true, 'Path traversal detection' ),
+				'inclusion'             => array( 'bool', true, 'File inclusion detection' ),
+				'uploads'               => array( 'bool', true, 'Unauthenticated executable upload attempts' ),
+				'post'                  => array( 'bool', false, 'Inspect bounded noncredential POST values' ),
+				'rate'                  => array( 'bool', false, 'Enable unauthenticated request rate limit' ),
+				'requests'              => array( 'number', 120, 'Requests per minute per IP', array( 10, 10000 ) ),
+				'exclusions'            => array( 'paths', '', 'Excluded exact paths (one per line)' ),
+				'privileged'            => array( 'bool', false, 'Inspect authenticated request payloads (detection only until enforced)' ),
+				'privileged_enforce'    => array( 'bool', false, 'Enforce authenticated payload rules on non-authoring endpoints' ),
+				'privileged_exclusions' => array( 'rules', '', 'Rules exempt from authenticated inspection: GWQSH-1006, GWQSH-1007' ),
 			),
 			'signatures' => array(
 				'enabled'         => array( 'bool', false, 'Enable configured signed-feed updates' ),
@@ -215,6 +218,12 @@ final class GWQSH_Enterprise_Config {
 								return new WP_Error( 'hashes', 'Use full lowercase SHA-256 hashes.' );
 					}
 				}$value = implode( "\n", $hashes );}
+			if ( 'rules' === $type ) {
+				$rules = array_values( array_unique( preg_split( '/[\s,]+/', strtoupper( trim( $value ) ), -1, PREG_SPLIT_NO_EMPTY ) ) );
+				$known = array( 'GWQSH-1006', 'GWQSH-1007' );
+				if ( array_diff( $rules, $known ) ) {
+					return new WP_Error( 'rules', 'Only authenticated-inspection rules can be exempted.' );
+				}$value = implode( ',', $rules );}
 			if ( 'countries' === $type ) {
 				$codes = array_values( array_unique( preg_split( '/[\s,]+/', strtoupper( trim( $value ) ), -1, PREG_SPLIT_NO_EMPTY ) ) );
 				if ( array_diff( $codes, self::country_codes() ) ) {

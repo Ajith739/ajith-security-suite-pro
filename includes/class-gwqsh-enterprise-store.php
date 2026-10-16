@@ -133,12 +133,24 @@ final class GWQSH_Enterprise_Store {
 		$key   = self::key( 'lease', $name );
 		$token = bin2hex( random_bytes( 16 ) );
 		$now   = time();
-		$wpdb->query( $wpdb->prepare( "INSERT INTO {$wpdb->prefix}gwqsh_security_state (state_key,kind,payload,expires_at) VALUES (%s,'lease',%s,%d) ON DUPLICATE KEY UPDATE payload=IF(expires_at<%d,VALUES(payload),payload),expires_at=IF(expires_at<%d,VALUES(expires_at),expires_at)", $key, $token, $now + $ttl, $now, $now ) );
-		$actual = $wpdb->get_var( $wpdb->prepare( "SELECT payload FROM {$wpdb->prefix}gwqsh_security_state WHERE state_key=%s", $key ) );
-		if ( ! is_string( $actual ) || ! hash_equals( $token, $actual ) ) { return false; }
+		$table = $wpdb->prefix . 'gwqsh_security_state';
+		if ( 'sqlite' === GWQSH_DB::driver() ) {
+			// SQLite has no MySQL upsert syntax in this driver, so the lease is taken with
+			// two atomic statements: claim an absent row, then claim an expired one. A lost
+			// race leaves the stored token different from ours and returns false below.
+			$wpdb->query( $wpdb->prepare( "INSERT INTO {$table} (state_key,kind,payload,expires_at) SELECT %s,'lease',%s,%d WHERE NOT EXISTS (SELECT 1 FROM {$table} WHERE state_key=%s)", $key, $token, $now + $ttl, $key ) );
+			$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET payload=%s, expires_at=%d WHERE state_key=%s AND expires_at<%d", $token, $now + $ttl, $key, $now ) );
+		} else {
+			$wpdb->query( $wpdb->prepare( "INSERT INTO {$table} (state_key,kind,payload,expires_at) VALUES (%s,'lease',%s,%d) ON DUPLICATE KEY UPDATE payload=IF(expires_at<%d,VALUES(payload),payload),expires_at=IF(expires_at<%d,VALUES(expires_at),expires_at)", $key, $token, $now + $ttl, $now, $now ) );
+		}
+		$actual = $wpdb->get_var( $wpdb->prepare( "SELECT payload FROM {$table} WHERE state_key=%s", $key ) );
+		if ( ! is_string( $actual ) || ! hash_equals( $token, $actual ) ) {
+			return false;
+		}
 		return $token;
 	}
 	/** Read an active owner lease without an object-cache dependency.
+	 *
 	 * @param string $name Lease identifier.
 	 * @return bool Whether the lease is active.
 	 */
@@ -169,7 +181,10 @@ final class GWQSH_Enterprise_Store {
 		$seconds = max( 1, (int) $seconds );
 		$key     = self::key( 'counter', $name . '|' . $identity . '|' . intdiv( time(), $seconds ) );
 		$table   = $wpdb->prefix . 'gwqsh_security_state';
-		$changed = $wpdb->query( $wpdb->prepare( "UPDATE {$table} SET counter=LAST_INSERT_ID(counter+1) WHERE state_key=%s", $key ) );
+		$sqlite  = 'sqlite' === GWQSH_DB::driver();
+		$changed = $sqlite
+			? $wpdb->query( $wpdb->prepare( "UPDATE {$table} SET counter=counter+1 WHERE state_key=%s", $key ) )
+			: $wpdb->query( $wpdb->prepare( "UPDATE {$table} SET counter=LAST_INSERT_ID(counter+1) WHERE state_key=%s", $key ) );
 		if ( false === $changed ) {
 			return null;
 		}
@@ -186,14 +201,23 @@ final class GWQSH_Enterprise_Store {
 						return null;
 					}
 				}
-				$changed = $wpdb->query( $wpdb->prepare( "INSERT INTO {$table} (state_key,kind,payload,counter,expires_at) VALUES (%s,'counter','',LAST_INSERT_ID(1),%d) ON DUPLICATE KEY UPDATE counter=LAST_INSERT_ID(counter+1)", $key, time() + $seconds + 60 ) );
+				if ( $sqlite ) {
+					// Create the window row only when it is absent, then apply the same atomic
+					// increment. Both statements run inside the admission lease.
+					$wpdb->query( $wpdb->prepare( "INSERT INTO {$table} (state_key,kind,payload,counter,expires_at) SELECT %s,'counter','',0,%d WHERE NOT EXISTS (SELECT 1 FROM {$table} WHERE state_key=%s)", $key, time() + $seconds + 60, $key ) );
+					$changed = $wpdb->query( $wpdb->prepare( "UPDATE {$table} SET counter=counter+1 WHERE state_key=%s", $key ) );
+				} else {
+					$changed = $wpdb->query( $wpdb->prepare( "INSERT INTO {$table} (state_key,kind,payload,counter,expires_at) VALUES (%s,'counter','',LAST_INSERT_ID(1),%d) ON DUPLICATE KEY UPDATE counter=LAST_INSERT_ID(counter+1)", $key, time() + $seconds + 60 ) );
+				}
 			} finally {
 				self::unlock( 'admission', $lock );}
 		}
 		if ( false === $changed ) {
 			return null;
 		}
-		$count = $wpdb->get_var( 'SELECT LAST_INSERT_ID()' );
+		$count = $sqlite
+			? $wpdb->get_var( $wpdb->prepare( "SELECT counter FROM {$table} WHERE state_key=%s", $key ) )
+			: $wpdb->get_var( 'SELECT LAST_INSERT_ID()' );
 		return null === $count ? null : (int) $count;
 	}
 	/**

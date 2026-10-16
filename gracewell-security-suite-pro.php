@@ -84,6 +84,7 @@ require_once GWQSH_PATH . 'includes/class-gwqsh-security-runtime.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-path-guard.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-guardian.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-malware-analyzer.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-database-scanner.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-scan-engine.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-file-integrity.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-quarantine-manager.php';
@@ -91,6 +92,7 @@ require_once GWQSH_PATH . 'includes/class-gwqsh-ajax.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-admin.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-firewall.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-dashboard-data.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-database-view-data.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-login-view-data.php';
 
 // Activation and Deactivation lifecycle hooks.
@@ -122,6 +124,7 @@ function gwqsh_pro_deactivate_plugin() {
 	wp_clear_scheduled_hook( 'gwqsh_daily_log_cleanup' );
 	wp_clear_scheduled_hook( 'gwqsh_activity_search_backfill' );
 	wp_clear_scheduled_hook( 'gwqsh_cleanup_lockouts' );
+	wp_clear_scheduled_hook( GWQSH_Database_Scanner::CRON_HOOK );
 	GWQSH_Hardening::sync_uploads_protection( false );
 }
 
@@ -154,6 +157,7 @@ function gwqsh_pro_bootstrap() {
 	GWQSH_File_Integrity::init();
 	GWQSH_Scheduler::init();
 	GWQSH_Guardian::init();
+	GWQSH_Database_Scanner::init();
 	GWQSH_Firewall::init();
 	GWQSH_Ajax::init();
 	GWQSH_Admin::init();

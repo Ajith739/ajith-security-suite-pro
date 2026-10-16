@@ -1040,9 +1040,19 @@ final class GWQSH_Quarantine_Manager {
 		}
 		// Exclusive hard-link publication fails if a target appeared during staging.
 		$published = @link( $temp, $target );
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
-		@unlink( $temp );
+		if ( $published ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
+			@unlink( $temp );
+		} else {
+			// Hard links are unavailable on some hosting filesystems (Windows, network and
+			// container volumes). Fall back to an atomic rename, which still refuses to
+			// overwrite anything that appeared after staging on platforms where rename()
+			// fails for an occupied target, and never exposes partially written bytes.
+			$published = self::publish_without_hard_link( $temp, $target );
+		}
 		if ( ! $published ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
+			@unlink( $temp );
 			return new WP_Error( self::ERR_TARGET_EXISTS, 'Restore target is occupied or cannot publish verified content.' );
 		}
 
@@ -1083,6 +1093,34 @@ final class GWQSH_Quarantine_Manager {
 		);
 
 		return array( 'restored' => '/' . $display );
+	}
+
+	/**
+	 * Publish a staged, verified copy when the filesystem has no hard-link support.
+	 *
+	 * The staged file already contains verified bytes and lives in the same directory as
+	 * the target, so an atomic rename keeps the "never overwrite live code" property:
+	 * POSIX rename() replaces only after the caller confirmed the target is absent, and
+	 * platforms where rename() refuses an occupied target (Windows) keep exclusivity.
+	 * A filesystem that reports success while a target appeared is detected by the
+	 * caller's post-publication checksum verification.
+	 *
+	 * @param string $temp   Staged, verified temporary file in the target directory.
+	 * @param string $target Validated absolute restore target.
+	 * @return bool True when the verified bytes were published.
+	 */
+	private static function publish_without_hard_link( $temp, $target ) {
+		if ( is_link( $temp ) || ! is_file( $temp ) ) {
+			return false;
+		}
+		if ( file_exists( $target ) || is_link( $target ) ) {
+			return false;
+		}
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- Validated local security file operation; atomic publication without hard-link support requires direct filesystem access.
+		if ( ! @rename( $temp, $target ) ) {
+			return false;
+		}
+		return is_file( $target ) && ! is_link( $target );
 	}
 
 	/**

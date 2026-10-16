@@ -19,9 +19,15 @@ final class GWQSH_Firewall {
 			)
 		);
 	}
-	/** Register one public request hook; no duplicate authentication hooks. */
+	/**
+	 * Register the public request hook and, separately, the authenticated payload hook.
+	 *
+	 * The two hooks stay independent so an administrator can enable public query
+	 * protection without also inspecting their own authenticated traffic.
+	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'inspect' ), 2 ); }
+		add_action( 'init', array( __CLASS__, 'inspect' ), 2 );
+		add_action( 'init', array( __CLASS__, 'inspect_privileged' ), 3 ); }
 	/**
 	 * Match bounded query evidence without executing it.
 	 *
@@ -88,8 +94,31 @@ final class GWQSH_Firewall {
 				'confidence' => 'Measured',
 				'version'    => 1,
 			),
+			'GWQSH-1006' => array(
+				'category'   => 'authenticated',
+				'severity'   => 'High',
+				'confidence' => 'Review',
+				'version'    => 1,
+			),
+			'GWQSH-1007' => array(
+				'category'   => 'authenticated',
+				'severity'   => 'High',
+				'confidence' => 'Review',
+				'version'    => 1,
+			),
 		);
 	}
+	/**
+	 * Evaluate the configurable rule set against request inputs. Values are read as
+	 * evidence for a denial decision and are never persisted or echoed back.
+	 *
+	 * @param array  $query    Query values.
+	 * @param array  $post     Posted values.
+	 * @param array  $files    Uploaded file descriptors.
+	 * @param string $path     Request path.
+	 * @param array  $settings Effective firewall settings.
+	 * @return string Matched rule id, or an empty string.
+	 */
 	public static function advanced( array $query, array $post, array $files, $path, array $settings ) {
 		$values  = array( $path );
 		$budget  = 16384;
@@ -160,7 +189,8 @@ final class GWQSH_Firewall {
 			return; }
 		// Query inputs only: editor/form HTML, REST bodies and password fields are untouched.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Request evidence is inspected for denial, never accepted as a settings mutation.
-		$rule     = self::match( wp_unslash( $_GET ), isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '', $path, $settings );
+		$rule = self::match( wp_unslash( $_GET ), isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '', $path, $settings );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Request evidence is inspected for denial, never accepted as a settings mutation.
 		$new_rule = self::advanced( wp_unslash( $_GET ), wp_unslash( $_POST ), $_FILES, $path, $advanced );
 		if ( ! $new_rule && $advanced['rate'] ) {
 			$count = GWQSH_Enterprise_Store::hit( 'waf-rate', $ip, 60 );
@@ -199,6 +229,190 @@ final class GWQSH_Firewall {
 		nocache_headers();
 		GWQSH_UI::error( 'GWQSH-1005' === $rule ? 429 : 403, 'Request blocked', 'This request matched a security rule. Contact the site administrator if you believe this is an error.' );
 	}
+	/**
+	 * Paths whose payloads WordPress content authors legitimately fill with rich markup.
+	 *
+	 * Authenticated inspection still records findings on these paths, but they are never
+	 * blocked: denying an editor's own save would be data loss, not protection.
+	 *
+	 * @return array Exact request paths.
+	 */
+	public static function content_writer_paths() {
+		return array(
+			'/wp-admin/post.php',
+			'/wp-admin/post-new.php',
+			'/wp-admin/admin-ajax.php',
+			'/wp-json/wp/v2/posts',
+			'/wp-json/wp/v2/pages',
+		);
+	}
+
+	/**
+	 * Collect the bounded, non-credential scalars of an authenticated request.
+	 *
+	 * Values are never stored: findings record the parameter name, rule and context only.
+	 * Oversized values (rich content, uploaded files, serialized editor state), nested
+	 * arrays, sensitive parameter names and file uploads are all skipped by design.
+	 *
+	 * @param array  $values Raw request values.
+	 * @param string $source Label recorded with a finding ('post' or 'query').
+	 * @return array Parameter name to inspected string.
+	 */
+	private static function privileged_values( array $values, $source ) {
+		$safe      = array();
+		$inspected = 0;
+		$budget    = 8192;
+		foreach ( $values as $key => $value ) {
+			if ( $inspected >= 40 || $budget <= 0 ) {
+				break;
+			}
+			if ( ! is_string( $key ) || ! is_scalar( $value ) || is_bool( $value ) ) {
+				continue;
+			}
+			if ( preg_match( '/nonce|pass|pwd|secret|token|auth|cookie|session|credit|card|payment|_wp_http_referer/i', $key ) ) {
+				continue;
+			}
+			$value = (string) $value;
+			if ( strlen( $value ) > 1024 ) {
+				// Long values are editor content, not attack parameters.
+				continue;
+			}
+			$budget -= strlen( $value );
+			++$inspected;
+			$safe[ $source . ':' . sanitize_text_field( $key ) ] = rawurldecode( $value );
+		}
+		return $safe;
+	}
+
+	/**
+	 * Decide what to do with an authenticated-context match. Pure policy, no request effects.
+	 *
+	 * @param string $rule     Matched rule id.
+	 * @param string $path     Request path.
+	 * @param array  $settings Authenticated-inspection configuration.
+	 * @return string 'ignore', 'detect' or 'block'.
+	 */
+	public static function privileged_decision( $rule, $path, array $settings ) {
+		if ( '' === $rule || empty( $settings['privileged'] ) ) {
+			return 'ignore';
+		}
+		$excluded = isset( $settings['privileged_exclusions'] ) ? (string) $settings['privileged_exclusions'] : '';
+		foreach ( preg_split( '/[\s,]+/', $excluded, -1, PREG_SPLIT_NO_EMPTY ) as $exclusion ) {
+			if ( 0 === strpos( $rule, $exclusion ) ) {
+				return 'ignore';
+			}
+		}
+		if ( 'block' !== ( $settings['mode'] ?? 'block' ) || empty( $settings['privileged_enforce'] ) ) {
+			return 'detect';
+		}
+		if ( in_array( $path, self::content_writer_paths(), true ) ) {
+			return 'detect';
+		}
+		foreach ( preg_split( '/[\s,]+/', isset( $settings['exclusions'] ) ? (string) $settings['exclusions'] : '', -1, PREG_SPLIT_NO_EMPTY ) as $exclusion ) {
+			if ( $path === $exclusion ) {
+				return 'detect';
+			}
+		}
+		return 'block';
+	}
+
+	/**
+	 * Inspect authenticated request payloads when the administrator has opted in.
+	 *
+	 * Scope: logged-in requests only, one bounded pass over non-credential POST/query
+	 * scalars. Detection is the default; enforcement requires both the blocking mode and
+	 * the explicit enable switch, and content-authoring endpoints are never denied.
+	 * Findings record the parameter name, rule and context — never the submitted value.
+	 */
+	public static function inspect_privileged() {
+		if ( ! is_user_logged_in() || ! GWQSH_Settings::is_active() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+			return;
+		}
+		if ( GWQSH_Country_Access::emergency() ) {
+			return;
+		}
+		$advanced = GWQSH_Enterprise_Config::get( 'waf' );
+		if ( empty( $advanced['privileged'] ) || 'disabled' === $advanced['mode'] ) {
+			return;
+		}
+		$importing = defined( 'WP_IMPORTING' ) && WP_IMPORTING;
+		if ( $importing ) {
+			return;
+		}
+		$path = substr( (string) wp_parse_url( isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/', PHP_URL_PATH ), 0, 200 );
+		$ip   = GWQSH_Settings::get_client_ip();
+		if ( GWQSH_Login_Protection::is_ip_allowlisted( $ip ) ) {
+			return;
+		}
+		$context = 'admin';
+		if ( wp_doing_ajax() ) {
+			$context = 'ajax';
+		} elseif ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			$context = 'rest';
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Request evidence is inspected for denial; the dispatcher's own nonce and capability checks still authorize every action.
+		$values = self::privileged_values( wp_unslash( $_POST ), 'post' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Request evidence is inspected for denial, never accepted as a mutation.
+		$values += self::privileged_values( wp_unslash( $_GET ), 'query' );
+		if ( ! $values ) {
+			return;
+		}
+		$rule      = '';
+		$parameter = '';
+		foreach ( $values as $name => $value ) {
+			$matched = self::match(
+				array( $name => $value ),
+				'',
+				'',
+				array(
+					'sql'  => true,
+					'xss'  => true,
+					'bots' => false,
+				)
+			);
+			if ( $matched ) {
+				$rule = 'GWQSH-1006';
+			} elseif ( preg_match( '~(?:\.\.[/\\]){2}|(?:php|expect|phar|data)://~i', $value ) ) {
+				$rule = 'GWQSH-1007';
+			}
+			if ( $rule ) {
+				$parameter = substr( (string) $name, 0, 96 );
+				break;
+			}
+		}
+		$decision = self::privileged_decision( $rule, $path, $advanced );
+		if ( 'ignore' === $decision ) {
+			return;
+		}
+		$dedup = GWQSH_Enterprise_Store::hit( 'waf-privileged', get_current_user_id() . $rule . $parameter, 60 );
+		if ( 1 === $dedup ) {
+			GWQSH_Activity_Logger::log(
+				'block' === $decision ? 'Firewall authenticated request blocked' : 'Firewall authenticated request detected',
+				wp_json_encode(
+					array(
+						'rule'          => $rule,
+						'path'          => $path,
+						'context'       => $context,
+						'parameter'     => $parameter,
+						'rule_metadata' => self::rules()[ $rule ] ?? array(
+							'version'    => 1,
+							'confidence' => 'Review',
+						),
+					)
+				),
+				'Security',
+				'—',
+				$ip
+			);
+		}
+		if ( 'block' !== $decision ) {
+			return;
+		}
+		status_header( 403 );
+		nocache_headers();
+		GWQSH_UI::error( 403, 'Request blocked', 'This request matched a security rule. Review the plugin Firewall settings if this was part of your work.' );
+	}
+
 	/**
 	 * Save after the existing controller verifies nonce and manage_options.
 	 *

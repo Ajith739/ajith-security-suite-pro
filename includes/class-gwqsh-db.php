@@ -12,6 +12,125 @@ defined( 'ABSPATH' ) || exit;
  */
 final class GWQSH_DB {
 	/**
+	 * Report the active database engine family for SQL dialect decisions.
+	 *
+	 * Gracewell targets MySQL/MariaDB, which is what standard WordPress hosting
+	 * provides. WordPress also supports SQLite through the official SQLite Database
+	 * Integration drop-in, and several constructs used for atomic security state are
+	 * MySQL-only. Detecting the family keeps atomic enforcement working instead of
+	 * silently failing on those installations.
+	 *
+	 * @return string 'sqlite' or 'mysql'.
+	 */
+	public static function driver() {
+		static $driver = null;
+		if ( null !== $driver ) {
+			return $driver;
+		}
+		$driver = 'mysql';
+		if ( defined( 'DB_ENGINE' ) && 'sqlite' === DB_ENGINE ) {
+			$driver = 'sqlite';
+		} elseif ( defined( 'DATABASE_TYPE' ) && 'sqlite' === DATABASE_TYPE ) {
+			$driver = 'sqlite';
+		} else {
+			global $wpdb;
+			if ( isset( $wpdb->dbh ) && is_object( $wpdb->dbh ) && class_exists( 'WP_SQLite_DB' ) && $wpdb->dbh instanceof WP_SQLite_DB ) {
+				$driver = 'sqlite';
+			}
+		}
+		return $driver;
+	}
+
+	/**
+	 * Build a portable SQL expression that reads one JSON field from a text column.
+	 *
+	 * Only fixed plugin-owned column names and fixed literal paths are ever passed by
+	 * callers; the expression never contains request data.
+	 *
+	 * @param string $column Fixed column identifier.
+	 * @param string $path   Fixed JSON path without the leading '$.'.
+	 * @return string SQL expression returning text (or NULL).
+	 */
+	public static function json_text( $column, $path ) {
+		$column = preg_replace( '/[^A-Za-z0-9_.]/', '', (string) $column );
+		$path   = preg_replace( '/[^A-Za-z0-9_]/', '', (string) $path );
+		if ( '' === $column || '' === $path ) {
+			return 'NULL';
+		}
+		if ( 'sqlite' === self::driver() ) {
+			// SQLite json_extract() returns NULL for malformed input and for non-JSON text.
+			return "json_extract(CASE WHEN json_valid({$column}) THEN {$column} ELSE '{}' END, '$.{$path}')";
+		}
+		return "JSON_UNQUOTE(JSON_EXTRACT(IF(JSON_VALID({$column}), {$column}, '{}'), '$.{$path}'))";
+	}
+
+	/**
+	 * Cast a text expression to an unsigned integer in a portable way.
+	 *
+	 * @param string $expression Fixed SQL expression.
+	 * @return string SQL expression.
+	 */
+	public static function cast_unsigned( $expression ) {
+		// SQLite numeric coercion ("+ 0") is used instead of CAST(... AS INTEGER) because
+		// the SQLite driver used on those installations cannot parse a CAST around a
+		// nested json_extract() expression; both forms order numeric evidence correctly.
+		return 'sqlite' === self::driver()
+			? "({$expression} + 0)"
+			: "CAST({$expression} AS UNSIGNED)";
+	}
+
+	/**
+	 * Rank a column against an ordered literal list (higher value = later position).
+	 *
+	 * @param string $expression Fixed SQL expression.
+	 * @param array  $values     Ordered literal values (fixed source data).
+	 * @return string SQL expression producing an integer rank.
+	 */
+	public static function enum_rank( $expression, array $values ) {
+		if ( 'sqlite' !== self::driver() ) {
+			$literals = array();
+			foreach ( $values as $value ) {
+				$literals[] = "'" . esc_sql( (string) $value ) . "'";
+			}
+			return 'FIELD(' . $expression . ', ' . implode( ', ', $literals ) . ')';
+		}
+		$cases = '';
+		foreach ( array_values( $values ) as $index => $value ) {
+			$cases .= " WHEN '" . esc_sql( (string) $value ) . "' THEN " . ( $index + 1 );
+		}
+		return "CASE {$expression}{$cases} ELSE 0 END";
+	}
+
+	/**
+	 * Build a portable IP equality predicate for an already-prepared WHERE chain.
+	 *
+	 * MySQL comparisons use INET6_ATON so equivalent IPv6 notations match. SQLite has
+	 * no such function, so the recorded value is compared literally and against the
+	 * canonical notation of the requested address. Values are always prepared.
+	 *
+	 * @param string $column Fixed column identifier.
+	 * @param string $ip     Requested address (already validated by the caller's filter).
+	 * @return string Prepared SQL fragment beginning with ' AND ('.
+	 */
+	public static function ip_filter_sql( $column, $ip ) {
+		global $wpdb;
+		$column = preg_replace( '/[^A-Za-z0-9_.]/', '', (string) $column );
+		if ( 'sqlite' === self::driver() ) {
+			$variants = array( $ip );
+			if ( class_exists( 'GWQSH_Network' ) ) {
+				$variants[] = GWQSH_Network::canonical( $ip );
+				$variants[] = GWQSH_Network::expand( $ip );
+			}
+			$variants = array_values( array_unique( array_filter( array_map( 'strval', $variants ) ) ) );
+			$holders  = implode( ', ', array_fill( 0, count( $variants ), '%s' ) );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Fixed identifier passed by the caller and generated '%s' placeholders only; all address values remain prepared.
+			return $wpdb->prepare( " AND {$column} IN ({$holders})", $variants );
+		}
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Fixed caller-supplied identifier; both address values are prepared placeholders.
+		return $wpdb->prepare( " AND ({$column} = %s OR INET6_ATON({$column}) = INET6_ATON(%s))", $ip, $ip );
+	}
+
+	/**
 	 * Init.
 	 */
 	public static function init() {

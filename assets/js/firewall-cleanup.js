@@ -306,6 +306,80 @@
       },
     );
   });
+  /* ---- Database malware & persistence scan (stored evidence, nothing edited) ---- */
+  let db = data.database && typeof data.database === "object" ? data.database : null;
+
+  function renderDatabase() {
+    const status = $("#qs-db-status"),
+      coverage = $("#qs-db-coverage"),
+      meta = $("#qs-db-meta"),
+      rows = $("#qs-db-rows");
+    if (!status || !db) return;
+    const report = db.report && typeof db.report === "object" ? db.report : { status: "none", findings: [], checks: {} };
+    const state = String(report.status || "none");
+    status.textContent = db.status_label || "Never scanned";
+    status.className =
+      "qs-badge " +
+      (state === "completed" && !(report.findings || []).length
+        ? "qs-badge-good"
+        : state === "completed" || state === "limited"
+          ? "qs-fw-neutral"
+          : "qs-badge-warn");
+    coverage.textContent = db.coverage || "";
+    const limited = Object.values(report.checks || {}).filter((check) => check && check.limited).length;
+    meta.textContent = db.scanned
+      ? `${(report.findings || []).length} finding(s) · ${Number(report.duration_ms || 0)} ms · driver: ${db.driver} · limited checks: ${limited} · approved administrators: ${Number(db.baseline || 0)}`
+      : `No stored report · driver: ${db.driver} · approved administrators: ${Number(db.baseline || 0)}`;
+    const findings = report.findings || [];
+    rows.innerHTML = findings.length
+      ? findings
+          .map(
+            (row) =>
+              `<tr><td data-label="Rule">${esc(row.rule)}</td><td data-label="Severity">${esc(row.severity)} (${esc(row.confidence)})</td><td data-label="Stored in">${esc(row.table)}.${esc(row.column)}</td><td data-label="Record">${esc(row.record)}</td><td data-label="Evidence" title="${esc(row.detail)}">${esc(row.excerpt)}</td></tr>`,
+          )
+          .join("")
+      : `<tr><td colspan="5">${
+          state === "none"
+            ? "No database scan has been run yet. Run one to inspect stored data."
+            : state === "failed"
+              ? "The last scan failed, so its result is unknown. Re-run it before trusting the site."
+              : "No findings in this scan. Coverage limits above still apply."
+        }</td></tr>`;
+    const disclaimer = $("#qs-db-disclaimer");
+    if (disclaimer && db.disclaimer) disclaimer.textContent = db.disclaimer;
+  }
+
+  async function databaseAction(subaction, button, pending) {
+    const note = $("#qs-db-feedback");
+    if (button) button.disabled = true;
+    if (note) note.textContent = pending;
+    const response = await ajax(subaction, {});
+    if (!response || !response.success) {
+      feedback((response && response.data && response.data.message) || "The database scan request failed.");
+      if (note) note.textContent = "";
+    } else {
+      db = response.data;
+      renderDatabase();
+      if (note) note.textContent = "";
+    }
+    if (button) button.disabled = false;
+  }
+
+  $("#qs-db-run")?.addEventListener("click", (event) =>
+    databaseAction("run_database_scan", event.currentTarget, "Inspecting stored data…"),
+  );
+  $("#qs-db-baseline")?.addEventListener("click", (event) => {
+    const trigger = event.currentTarget;
+    confirm(
+      "Approve the current administrators?",
+      "The accounts that hold administrator access right now become the review baseline. Later additions are reported for review; this does not certify them as trustworthy.",
+      "Approve baseline",
+      () => databaseAction("approve_admin_baseline", trigger, "Recording the current administrators…"),
+    );
+  });
+
+  renderDatabase();
+
   const integrity = window.GWQSH_PAGES["file-integrity"];
   $$("[data-tool]").forEach((button) =>
     button.addEventListener("click", () => {

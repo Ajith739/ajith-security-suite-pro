@@ -25,6 +25,29 @@ final class GWQSH_Network {
 	}
 
 	/**
+	 * Expand an IPv6 address to its full eight-group notation.
+	 *
+	 * Used for portable address comparison where the database cannot normalise
+	 * binary form itself. Returns '' for anything that is not IPv6.
+	 *
+	 * @param mixed $ip ip value.
+	 */
+	public static function expand( $ip ) {
+		if ( ! is_string( $ip ) || ! filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) ) {
+			return '';
+		}
+		$packed = inet_pton( $ip );
+		if ( ! $packed || 16 !== strlen( $packed ) ) {
+			return '';
+		}
+		$groups = array();
+		foreach ( str_split( bin2hex( $packed ), 4 ) as $group ) {
+			$groups[] = $group;
+		}
+		return strtolower( implode( ':', $groups ) );
+	}
+
+	/**
 	 * Compare an address against a validated exact IP or CIDR range.
 	 *
 	 * @param mixed $ip ip value.

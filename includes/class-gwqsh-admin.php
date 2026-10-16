@@ -333,7 +333,9 @@ final class GWQSH_Admin {
 				return GWQSH_Two_Factor_View_Data::get();
 
 			case 'firewall-cleanup':
-				return GWQSH_Firewall::data();
+				$data             = GWQSH_Firewall::data();
+				$data['database'] = GWQSH_Database_View_Data::get();
+				return $data;
 
 			case 'file-integrity':
 				GWQSH_Quarantine_Manager::reconcile();
