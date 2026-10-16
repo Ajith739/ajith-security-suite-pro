@@ -48,6 +48,26 @@ already uses (`qs-card`, `qs-fw-*`, `qs-badge`, `qs-fw-table-scroll`, `qs-button
   the browser, so a stored payload rendered as `&lt;script&gt;` instead of the payload. Escaping now
   happens once, at render, and both layers assert it.
 
+## Reproducing the evidence
+
+```bash
+# PHP suites (PHP 8.5 via php-wasm, WordPress fixture on SQLite)
+GWQSH_TEST_WP_ROOT=/home/user/.cache/wp \
+  .cache/phpwasm/node_modules/.bin/php-wasm-cli \
+  .cache/tools/vendor/phpunit/phpunit/phpunit -c phpunit.xml.dist --no-coverage
+# focused: --filter 'DatabaseScanPageTest|PrivilegedWafTest'
+
+# Rendered-markup DOM harness for the database-scan card
+php-wasm-cli tests/database-page-capture.php /tmp/gwqsh-page     # needs a loaded WP fixture
+GWQSH_PAGE_DIR=/tmp/gwqsh-page NODE_PATH=<dir with jsdom> node tests/jsdom-database-card.cjs
+
+# Coding standard
+phpcs --standard=phpcs.xml.dist --runtime-set installed_paths <wpcs,phpcsextra,phpcsutils> \
+  includes/class-gwqsh-database-view-data.php includes/class-gwqsh-enterprise-config.php \
+  includes/class-gwqsh-enterprise-ui.php includes/class-gwqsh-firewall.php \
+  admin/views/firewall-cleanup.php
+```
+
 ## Explicit non-goals for this increment
 
 Virtual patching, rule download/rollback, multisite verification, browser automation
