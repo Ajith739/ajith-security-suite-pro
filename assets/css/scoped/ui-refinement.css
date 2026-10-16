@@ -1,0 +1,327 @@
+/* Reference layouts. Loaded after the shared theme; all rules stay inside the plugin. */
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-dashboard-grid {
+    grid-template-columns: minmax(0, 2.48fr) minmax(280px, 1fr);
+    gap: 10px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-analytics-row {
+    grid-template-columns: minmax(0, .84fr) minmax(0, 1fr);
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-bottom-row {
+    grid-template-columns: minmax(0, 1fr);
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-history-row {
+    display: grid;
+    grid-template-columns: minmax(0, .6fr) minmax(0, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-card {
+    padding: 10px 12px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-card-head {
+    margin-bottom: 8px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-score-body {
+    gap: 16px;
+    padding: 6px 2px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-gauge {
+    width: clamp(120px, 12vw, 150px);
+    height: clamp(120px, 12vw, 150px);
+    flex-shrink: 0;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-score-details {
+    min-width: 0;
+    flex: 1;
+}
+/* Compact scan history table, matching the supplied dashboard reference. */
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table {
+    width: 100%;
+    min-width: 520px;
+    font-size: 11px;
+    line-height: 1.4;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table th {
+    padding: 4px 6px;
+    font-size: 9px;
+    background: var(--surface-3, #f1f6fc);
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table td {
+    padding: 3px 6px;
+    vertical-align: middle;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table :is(th, td):first-child {
+    width: 24px;
+    padding-inline: 3px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table th:first-child {
+    border-radius: 6px 0 0 6px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table th:last-child {
+    border-radius: 0 6px 6px 0;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table a {
+    color: var(--qs-navy);
+    font-weight: 500;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table a:hover {
+    color: var(--qs-primary);
+    text-decoration: underline;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-shield {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: var(--qs-primary);
+    background: #edf5ff;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-shield .qs-icon {
+    width: 16px;
+    height: 16px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table .qs-badge {
+    padding: 2px 7px;
+    font-size: 10px;
+    border-radius: 4px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-table-scroll:focus-visible {
+    outline: 2px solid var(--qs-primary);
+    outline-offset: 3px;
+}
+html[data-theme="dark"] #gracewell-security-suite-pro-app[data-page="dashboard"] .qs-scan-shield {
+    background: var(--surface-3);
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .qs-checklist small {
+    display: block;
+}
+@container qs-dashboard (min-width: 1000px) {
+    #gracewell-security-suite-pro-app[data-page="dashboard"] .qs-analytics-row {
+        grid-template-columns: minmax(0, .84fr) minmax(0, 1fr);
+    }
+    #gracewell-security-suite-pro-app[data-page="dashboard"] .qs-events-row {
+        grid-template-columns: minmax(0, 1.36fr) minmax(0, 1fr);
+    }
+}
+@container qs-dashboard (max-width: 999px) {
+    #gracewell-security-suite-pro-app[data-page="dashboard"] .qs-dashboard-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    #gracewell-security-suite-pro-app[data-page="dashboard"] .qs-side-column {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@container qs-dashboard (max-width: 700px) {
+    #gracewell-security-suite-pro-app[data-page="dashboard"] :is(.qs-analytics-row, .qs-side-column, .qs-history-row) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    #gracewell-security-suite-pro-app[data-page="dashboard"] .qs-checklist li {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 8px 12px;
+    }
+    #gracewell-security-suite-pro-app[data-page="dashboard"] .qs-checklist small {
+        grid-column: 2;
+    }
+}
+
+/* Keep existing hero text and live status badges over the supplied artwork. */
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="dashboard"] .hero-pro-card,
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-status-panel {
+    background: linear-gradient(110deg, rgba(255,255,255,.95), rgba(255,255,255,.72)), url('../../img/hero-card-bg.png') center / cover !important;
+    border: 1px solid #d3e6f6 !important;
+    border-radius: 16px !important;
+    padding: 20px 22px !important;
+    box-shadow: 0 8px 24px #173b6610 !important;
+}
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="dashboard"] .hero-pro-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .hero-pro-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .hero-pro-info {
+    min-width: 0;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .hero-pro-head h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    line-height: 1.4;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .hero-pro-info p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+#gracewell-security-suite-pro-app[data-page="dashboard"] .hero-pro-btn {
+    align-self: flex-start;
+    max-width: 100%;
+}
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="dashboard"] .hero-pro-card,
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-status-panel {
+    background: linear-gradient(110deg, rgba(13,28,48,.96), rgba(13,28,48,.78)), url('../../img/hero-card-bg.png') center / cover !important;
+    border-color: var(--line) !important;
+}
+
+/* Access controls use the reference's divided two-column card. */
+#gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-access {
+    padding: 12px;
+}
+#gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-access-columns {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+    gap: 16px;
+}
+#gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-access-columns > * {
+    min-width: 0;
+}
+#gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-field {
+    margin-bottom: 12px;
+}
+#gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-roles > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 14px;
+}
+#gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-roles > div > span {
+    flex-wrap: wrap;
+    gap: 6px;
+}
+@container qs-dashboard (max-width: 600px) {
+    #gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-access-columns {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    #gracewell-security-suite-pro-app[data-page="login-protection"] .qs-login-trust-column {
+        border-left: 0;
+        border-top: 1px solid var(--qs-border);
+        padding: 16px 0 0;
+    }
+}
+
+/* Integrity counts retain their data hooks and never split a label from its value. */
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-overview .fi-stats {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)) !important;
+    gap: 20px !important;
+    padding: 8px 0 16px !important;
+    margin-top: 0 !important;
+}
+#gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .qs-metric-body {
+    min-width: 0;
+    flex: 1;
+}
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .qs-metric-desc {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    margin-top: 8px !important;
+    line-height: 1.6;
+    white-space: normal !important;
+    overflow: visible !important;
+    font-size: 12px !important;
+}
+#gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-detail {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 2px 7px;
+    background: var(--surface-2, #f1f6fc);
+    border: 1px solid var(--line, #deebfa);
+    border-radius: 6px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .qs-metric-desc b {
+    color: var(--ink) !important;
+    font-size: 12px !important;
+}
+
+/* Settings reference proportions, measured against available admin content width. */
+#gracewell-security-suite-pro-app[data-page="settings"] .page {
+    container: qs-settings / inline-size;
+}
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="settings"] .wrap.page {
+    margin-top: -28px;
+    padding-bottom: 28px;
+}
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="settings"] .st-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+}
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="settings"] .st-panels {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+}
+#gracewell-security-suite-pro-app[data-page="settings"] .st-tabs {
+    padding: 6px;
+}
+#gracewell-security-suite-pro-app[data-page="settings"] .tabs-scroll .seg-btn {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+#gracewell-security-suite-pro-app[data-page="settings"] .set-row {
+    padding: 14px 0;
+    gap: 12px;
+}
+#gracewell-security-suite-pro-app[data-page="settings"] .set-row .txt {
+    overflow-wrap: anywhere;
+}
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="settings"] .set-row .ctl.wide {
+    width: clamp(145px, 40%, 200px);
+}
+#gracewell-security-suite-pro-app[data-page="settings"] .set-row .field {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+}
+#gracewell-security-suite-pro-app[data-page="settings"] .gwqsh-config-actions {
+    display: flex;
+    flex-wrap: wrap;
+    width: auto;
+    gap: 8px;
+}
+#gracewell-security-suite-pro-app[data-page="settings"] .info-list dd {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+@container qs-settings (min-width: 1000px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="settings"] .st-grid {
+        grid-template-columns: minmax(0, 2.5fr) minmax(280px, 1fr);
+    }
+}
+@container qs-settings (min-width: 1180px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="settings"] .st-panels:not(.single) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@container qs-settings (max-width: 540px) {
+    #gracewell-security-suite-pro-app[data-page="settings"] .set-row {
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr);
+        align-items: start;
+    }
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="settings"] .set-row > :is(.ctl, .btn) {
+        grid-column: 2;
+        width: 100%;
+        justify-self: start;
+    }
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="settings"] .set-row .ctl.auto {
+        width: auto;
+    }
+    #gracewell-security-suite-pro-app[data-page="settings"] .switch-set .pill {
+        display: inline-flex;
+    }
+    #gracewell-security-suite-pro-app[data-page="settings"] .set-row > .txt:first-child {
+        grid-column: 1 / -1;
+    }
+    #gracewell-security-suite-pro-app[data-page="settings"] .set-row > .txt:first-child + .ctl {
+        grid-column: 1 / -1;
+    }
+}

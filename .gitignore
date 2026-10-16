@@ -1,0 +1,27 @@
+# Ignore all vendor folders (Composer dependencies)
+vendor/
+**/vendor/
+
+# WordPress development files
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+
+# Isolated Pro audit runtime and browser tools
+tests/.runtime/
+tests/.tools/
+tests/.setup-audit.php
+tests/.audit-account.json
+tests/.results/
+.audit-runtime/

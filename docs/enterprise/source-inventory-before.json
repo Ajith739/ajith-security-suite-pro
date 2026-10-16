@@ -1,0 +1,1155 @@
+[
+  {
+    "file": "includes\\class-gwqsh-activity-logger.php",
+    "lines": 351,
+    "hooks": [
+      "wp_login",
+      "wp_login_failed",
+      "wp_logout",
+      "activated_plugin",
+      "deactivated_plugin",
+      "upgrader_process_complete",
+      "set_user_role",
+      "profile_update",
+      "user_register",
+      "deleted_user",
+      "switch_theme",
+      "gwqsh_daily_log_cleanup"
+    ],
+    "options": [],
+    "methods": [
+      "init",
+      "log",
+      "on_login",
+      "on_login_failed",
+      "on_logout",
+      "on_plugin_activated",
+      "on_plugin_deactivated",
+      "on_upgrade_complete",
+      "on_user_role_changed",
+      "on_profile_update",
+      "query_logs",
+      "get_type_breakdown",
+      "clear_all",
+      "prune_expired_logs",
+      "on_user_created",
+      "on_user_deleted",
+      "on_theme_activated"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-activity-view-data.php",
+    "lines": 400,
+    "hooks": [
+      "admin_post_gwqsh_activity_export",
+      "gwqsh_activity_search_backfill"
+    ],
+    "options": [
+      "gwqsh_activity_search_cursor",
+      "gwqsh_activity_search_ready"
+    ],
+    "methods": [
+      "init",
+      "backfill_search",
+      "category_sql",
+      "safe_text",
+      "filters",
+      "where",
+      "record",
+      "counts",
+      "get",
+      "csv_cell",
+      "export",
+      "cleanup_preview",
+      "cleanup"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-admin.php",
+    "lines": 400,
+    "hooks": [
+      "admin_init",
+      "admin_menu",
+      "admin_enqueue_scripts",
+      "admin_body_class",
+      "script_loader_tag",
+      "admin_head"
+    ],
+    "options": [
+      "permalink_structure"
+    ],
+    "methods": [
+      "get_hero_bg",
+      "init",
+      "redirect_legacy_page",
+      "menu",
+      "current_page",
+      "render",
+      "body_class",
+      "theme_bootstrap",
+      "assets",
+      "get_page_initial_data",
+      "get_score_components",
+      "score_from_components",
+      "module_script"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-ajax.php",
+    "lines": 1457,
+    "hooks": [
+      "wp_ajax_gwqsh_action"
+    ],
+    "options": [
+      "gwqsh_engine_lock",
+      "gwqsh_scan_lock",
+      "gwqsh_scan_progress",
+      "gwqsh_two_factor_settings"
+    ],
+    "methods": [
+      "init",
+      "handle_request",
+      "get_dashboard_data",
+      "get_login_data",
+      "toggle_login_protection",
+      "save_login_settings",
+      "unlock_ip",
+      "add_allow_ip",
+      "remove_allow_ip",
+      "clear_allowlist",
+      "save_login_slug",
+      "save_login_access",
+      "get_2fa_data",
+      "generate_2fa_secret",
+      "confirm_2fa_secret",
+      "generate_backup_codes",
+      "enable_user_2fa",
+      "reset_user_2fa",
+      "save_2fa_settings",
+      "two_factor_user_id",
+      "factor_attempt",
+      "disable_own_2fa",
+      "require_user_2fa",
+      "remove_trusted_device",
+      "get_user_2fa_devices",
+      "get_scan_data",
+      "run_scan",
+      "restore_file",
+      "quarantine_file",
+      "quarantine_finding",
+      "bulk_quarantine",
+      "restore_quarantine",
+      "delete_quarantine",
+      "bulk_restore_quarantine",
+      "bulk_delete_quarantine",
+      "clear_all_quarantine",
+      "get_quarantine_list",
+      "accept_current",
+      "restore_trusted",
+      "get_diff",
+      "mark_reviewed",
+      "bulk_mark_reviewed",
+      "get_hardening_data",
+      "toggle_hardening",
+      "reset_hardening",
+      "revert_hardening",
+      "get_activity_logs",
+      "clear_activity_logs",
+      "save_settings",
+      "reset_settings",
+      "rebuild_baseline"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-crypto.php",
+    "lines": 163,
+    "hooks": [],
+    "options": [
+      "gwqsh_db_version",
+      "gwqsh_legacy_pro_crypto",
+      "gwqsh_pro_crypto_initialized",
+      "gwqsh_quarantine_metadata",
+      "gwqsh_site_salt"
+    ],
+    "methods": [
+      "prepare_upgrade",
+      "get_site_salt",
+      "key",
+      "fallback_key",
+      "encrypt",
+      "decrypt"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-customization.php",
+    "lines": 441,
+    "hooks": [
+      "admin_init"
+    ],
+    "options": [
+      "gwqsh_allowlist",
+      "gwqsh_firewall",
+      "gwqsh_recovery_settings",
+      "gwqsh_two_factor_settings"
+    ],
+    "methods": [
+      "init",
+      "register",
+      "schema",
+      "values",
+      "export",
+      "validate",
+      "save",
+      "reset",
+      "settings_without_token",
+      "import"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-dashboard-data.php",
+    "lines": 248,
+    "hooks": [],
+    "options": [
+      "gwqsh_guardian_status",
+      "gwqsh_scan_health"
+    ],
+    "methods": [
+      "get",
+      "flag_url",
+      "geography",
+      "cutoff",
+      "chart"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-db.php",
+    "lines": 164,
+    "hooks": [],
+    "options": [
+      "gwqsh_db_version"
+    ],
+    "methods": [
+      "init",
+      "create_tables",
+      "drop_tables"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-file-integrity.php",
+    "lines": 762,
+    "hooks": [
+      "gwqsh_continue_integrity_scan"
+    ],
+    "options": [
+      "gwqsh_last_scan_core_total",
+      "gwqsh_last_scan_duration",
+      "gwqsh_last_scan_scope_counts",
+      "gwqsh_last_scan_time",
+      "gwqsh_last_scan_total",
+      "gwqsh_last_scan_upload_php_total",
+      "gwqsh_manual_scan_migration",
+      "gwqsh_scan_health",
+      "gwqsh_scan_progress"
+    ],
+    "methods": [
+      "init",
+      "get_core_checksums",
+      "core_only_checksums",
+      "get_scan_history",
+      "run_full_scan",
+      "get_scan_issues_paged",
+      "get_scan_issues",
+      "get_summary",
+      "resolve_scan_path",
+      "restore_core_file",
+      "quarantine_file",
+      "render_complete_diff",
+      "diff_line",
+      "get_file_diff",
+      "review_findings",
+      "mark_as_reviewed"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-firewall.php",
+    "lines": 205,
+    "hooks": [
+      "init"
+    ],
+    "options": [
+      "gwqsh_firewall",
+      "gwqsh_scan_health"
+    ],
+    "methods": [
+      "settings",
+      "init",
+      "match",
+      "inspect",
+      "save",
+      "data"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-guardian.php",
+    "lines": 264,
+    "hooks": [
+      "admin_init",
+      "admin_init",
+      "upgrader_process_complete"
+    ],
+    "options": [
+      "gwqsh_guardian_status",
+      "gwqsh_quarantine_metadata"
+    ],
+    "methods": [
+      "root",
+      "state_dir",
+      "source",
+      "install",
+      "init",
+      "remove",
+      "baseline",
+      "events",
+      "events_locked"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-hardening-data.php",
+    "lines": 298,
+    "hooks": [],
+    "options": [
+      "gwqsh_hardening_csp"
+    ],
+    "methods": [
+      "expected_headers",
+      "fingerprint",
+      "evidence",
+      "assessment",
+      "checks",
+      "get",
+      "csp",
+      "save_csp",
+      "emit_headers",
+      "verify"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-hardening-rules.php",
+    "lines": 155,
+    "hooks": [],
+    "options": [
+      "gwqsh_hardening_uploads_backup",
+      "gwqsh_hardening_uploads_last_backup"
+    ],
+    "methods": [
+      "block",
+      "server",
+      "path",
+      "inspect",
+      "sync"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-hardening.php",
+    "lines": 349,
+    "hooks": [
+      "xmlrpc_enabled",
+      "the_generator",
+      "wp_headers",
+      "init",
+      "user_has_cap",
+      "script_loader_src",
+      "style_loader_src",
+      "template_redirect",
+      "rest_endpoints",
+      "send_headers",
+      "wp_handle_upload_prefilter",
+      "wp_handle_sideload_prefilter"
+    ],
+    "options": [
+      "gwqsh_hardening_csp",
+      "gwqsh_hardening_settings_backup"
+    ],
+    "methods": [
+      "get_defaults",
+      "get_all",
+      "get_checks",
+      "get_risk",
+      "is_enabled",
+      "set",
+      "reset_defaults",
+      "revert_all",
+      "persist_change",
+      "init",
+      "active",
+      "xmlrpc_enabled",
+      "generator",
+      "guard_upload",
+      "remove_pingback_header",
+      "block_xmlrpc_requests",
+      "remove_editor_caps",
+      "remove_version_param",
+      "block_author_scan",
+      "restrict_rest_users",
+      "send_security_headers",
+      "sync_uploads_protection",
+      "inspect_upload",
+      "asset_version"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-ip-blocks.php",
+    "lines": 163,
+    "hooks": [
+      "init",
+      "authenticate"
+    ],
+    "options": [],
+    "methods": [
+      "install",
+      "init",
+      "blocked",
+      "save",
+      "remove",
+      "history",
+      "log_denial",
+      "authenticate",
+      "enforce"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-login-protection.php",
+    "lines": 707,
+    "hooks": [
+      "gwqsh_cleanup_lockouts",
+      "authenticate",
+      "wp_login_failed",
+      "wp_login",
+      "login_errors",
+      "wp_loaded",
+      "site_url",
+      "network_site_url"
+    ],
+    "options": [
+      "admin_email",
+      "gwqsh_recovery_seed",
+      "permalink_structure",
+      "siteurl"
+    ],
+    "methods": [
+      "protects_account",
+      "get_defaults",
+      "get_settings",
+      "update_settings",
+      "valid_slug",
+      "reset_defaults",
+      "get_allowlist",
+      "is_ip_allowlisted",
+      "cidr_match",
+      "add_to_allowlist",
+      "remove_from_allowlist",
+      "clear_allowlist",
+      "init",
+      "cleanup_lockouts",
+      "check_lockout_before_auth",
+      "record_failed_attempt",
+      "on_successful_login",
+      "filter_login_errors",
+      "handle_custom_login_url",
+      "custom_login_url",
+      "custom_login_base",
+      "filter_login_url",
+      "recovery_key",
+      "recovery_url",
+      "rotate_recovery_key",
+      "is_locked",
+      "get_ip_lock_info",
+      "get_remaining_lockout_text",
+      "get_currently_locked_ips",
+      "unlock_ip",
+      "get_failed_attempts_24h",
+      "get_activity_chart_data"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-login-view-data.php",
+    "lines": 156,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "get",
+      "chart"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-malware-analyzer.php",
+    "lines": 180,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "analyze",
+      "has_php",
+      "references",
+      "image_magic"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-migration.php",
+    "lines": 187,
+    "hooks": [],
+    "options": [
+      "cron",
+      "gwqsh_prefix_migration",
+      "gwqsh_prefix_migration_lock"
+    ],
+    "methods": [
+      "run",
+      "query",
+      "tables",
+      "keys",
+      "cron",
+      "request_compatibility"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-network.php",
+    "lines": 165,
+    "hooks": [
+      "gwqsh_geo_lookup"
+    ],
+    "options": [],
+    "methods": [
+      "canonical",
+      "matches",
+      "trusted",
+      "trusted_ip",
+      "init",
+      "country",
+      "resolve"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-passkeys.php",
+    "lines": 369,
+    "hooks": [
+      "wp_ajax_gwqsh_passkey_login",
+      "wp_ajax_nopriv_gwqsh_passkey_login",
+      "authenticate",
+      "login_enqueue_scripts"
+    ],
+    "options": [],
+    "methods": [
+      "install",
+      "name",
+      "init",
+      "assets",
+      "available",
+      "verifier",
+      "records",
+      "listing",
+      "b64",
+      "decode",
+      "origin",
+      "issue",
+      "consume",
+      "management",
+      "login_ajax",
+      "resume"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-path-guard.php",
+    "lines": 343,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "reset_cache",
+      "root",
+      "normalize",
+      "is_safe",
+      "allowed_roots",
+      "is_within_allowed_roots",
+      "validate",
+      "detect_component",
+      "regular_file"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-pro-compatibility.php",
+    "lines": 50,
+    "hooks": [],
+    "options": [
+      "active_plugins"
+    ],
+    "methods": [
+      "conflicts",
+      "notice",
+      "activation_error"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-quarantine-manager.php",
+    "lines": 1364,
+    "hooks": [],
+    "options": [
+      "gwqsh_intentional_removals",
+      "gwqsh_quarantine_orphans"
+    ],
+    "methods": [
+      "synchronize",
+      "locked",
+      "path_key",
+      "display_path",
+      "sentinel",
+      "is_owned_sentinel",
+      "get_active_quarantine_for_path",
+      "is_path_quarantined",
+      "absence_state",
+      "requires_official_restoration",
+      "resolve_absent_findings",
+      "record_resolution",
+      "retain_trusted_text",
+      "trusted_copy",
+      "quarantine_by_finding",
+      "restore_quarantined",
+      "delete_quarantined",
+      "clear_all_quarantine",
+      "accept_current",
+      "restore_trusted",
+      "replace_verified",
+      "reconcile",
+      "error_message",
+      "quarantine_by_finding_locked",
+      "list_quarantined",
+      "restore_quarantined_locked",
+      "restore_quarantine",
+      "delete_quarantine",
+      "delete_quarantined_locked",
+      "clear_all_quarantine_locked",
+      "accept_current_locked",
+      "restore_trusted_locked",
+      "quarantine_dir",
+      "ensure_quarantine_dir",
+      "validate_page_size"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-recovery.php",
+    "lines": 264,
+    "hooks": [
+      "wp_ajax_gwqsh_recovery_send",
+      "wp_ajax_nopriv_gwqsh_recovery_send",
+      "gwqsh_daily_log_cleanup",
+      "gwqsh_auth_cleanup"
+    ],
+    "options": [
+      "gwqsh_recovery_settings"
+    ],
+    "methods": [
+      "settings",
+      "public_settings",
+      "save_settings",
+      "init",
+      "cleanup",
+      "data",
+      "sms",
+      "send",
+      "verify",
+      "management",
+      "login_send"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-scan-engine.php",
+    "lines": 889,
+    "hooks": [],
+    "options": [
+      "gwqsh_baseline_time",
+      "gwqsh_core_update_available",
+      "gwqsh_engine_lock",
+      "gwqsh_last_scan_",
+      "gwqsh_last_scan_core_total",
+      "gwqsh_last_scan_scope_counts",
+      "gwqsh_last_scan_upload_php_total",
+      "gwqsh_next_scan_options",
+      "gwqsh_scan_health",
+      "gwqsh_scan_progress",
+      "gwqsh_scheduled_scan_status"
+    ],
+    "methods": [
+      "load",
+      "save",
+      "clear",
+      "roots",
+      "label",
+      "scope",
+      "files",
+      "inspect",
+      "archive",
+      "finding",
+      "run",
+      "batch",
+      "enumerate_batch",
+      "scan_directory",
+      "covered_label",
+      "summary",
+      "trust_baseline",
+      "resolve_label"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-scheduler.php",
+    "lines": 182,
+    "hooks": [
+      "cron_schedules",
+      "gwqsh_run_integrity_now"
+    ],
+    "options": [
+      "gwqsh_engine_lock",
+      "gwqsh_next_scan_options",
+      "gwqsh_scan_schedule",
+      "gwqsh_scheduled_scan_last",
+      "gwqsh_scheduled_scan_status"
+    ],
+    "methods": [
+      "init",
+      "intervals",
+      "settings",
+      "validate",
+      "save",
+      "data",
+      "run"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-security-runtime.php",
+    "lines": 354,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "safe_path",
+      "token_budget",
+      "code",
+      "syntax",
+      "calls",
+      "analyze",
+      "atomic_write",
+      "protect",
+      "preserve"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-settings.php",
+    "lines": 241,
+    "hooks": [],
+    "options": [
+      "gwqsh_per_user_2fa_migration",
+      "gwqsh_settings",
+      "gwqsh_two_factor_settings"
+    ],
+    "methods": [
+      "migrate_removed_features",
+      "get_defaults",
+      "get_all",
+      "get",
+      "can_manage_updates",
+      "set",
+      "normalize",
+      "update_all",
+      "critical_notice",
+      "reset_defaults",
+      "get_client_ip",
+      "forwarded_ip",
+      "is_active"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-time.php",
+    "lines": 36,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "timestamp",
+      "format"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-two-factor-view-data.php",
+    "lines": 209,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "get",
+      "state",
+      "invalidate",
+      "metadata_changed"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-two-factor.php",
+    "lines": 908,
+    "hooks": [
+      "authenticate",
+      "authenticate",
+      "login_form",
+      "template_redirect",
+      "admin_init",
+      "rest_pre_dispatch"
+    ],
+    "options": [
+      "gwqsh_two_factor_settings"
+    ],
+    "methods": [
+      "coverage_counts",
+      "init",
+      "get_settings",
+      "required",
+      "effective_enabled",
+      "needs_setup",
+      "restrict_incomplete_setup",
+      "restrict_rest",
+      "self_service_actions",
+      "generate_secret",
+      "base32_decode",
+      "calculate_totp",
+      "verify_totp",
+      "get_totp_uri",
+      "generate_backup_codes",
+      "get_user_backup_codes",
+      "get_stored_backup_codes",
+      "save_user_backup_codes",
+      "verify_and_burn_backup_code",
+      "matches_backup_hash",
+      "compare_and_swap_meta",
+      "is_user_2fa_enabled",
+      "get_user_secret",
+      "save_user_secret",
+      "get_setup_secret",
+      "get_provisioning_secret",
+      "enable_user_2fa",
+      "reset_user_2fa",
+      "get_all_users_2fa_list",
+      "get_trusted_devices",
+      "remove_trusted_device",
+      "reserve_factor_attempt",
+      "add_2fa_login_field",
+      "resume_challenge",
+      "finish_challenge",
+      "intercept_2fa_login",
+      "matching_totp_slice",
+      "consume_totp",
+      "trusted_device_valid",
+      "maybe_trust_device"
+    ]
+  },
+  {
+    "file": "includes\\class-gwqsh-ui.php",
+    "lines": 47,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "empty_state",
+      "error"
+    ]
+  },
+  {
+    "file": "includes\\guardian-template.php",
+    "lines": 88,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "assets\\js\\activity-log.js",
+    "lines": 152,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "controls",
+      "readControls",
+      "urlState",
+      "message",
+      "showTable",
+      "overview",
+      "load",
+      "detail",
+      "closeMenu",
+      "openMenu"
+    ]
+  },
+  {
+    "file": "assets\\js\\dashboard.js",
+    "lines": 444,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "drawChart",
+      "renderThreatMap",
+      "renderThreatCountryList",
+      "updateDashboard",
+      "refresh"
+    ]
+  },
+  {
+    "file": "assets\\js\\file-integrity.js",
+    "lines": 636,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "switchTable",
+      "counts",
+      "refreshSummary",
+      "refreshCurrentView",
+      "draw",
+      "formatPath",
+      "severityBadge",
+      "doFindingAction",
+      "removeFiles",
+      "acceptCurrent",
+      "reviewChange",
+      "bulkQuarantine",
+      "drawQuarantine",
+      "quarantineAction",
+      "data",
+      "chartScale"
+    ]
+  },
+  {
+    "file": "assets\\js\\firewall-cleanup.js",
+    "lines": 333,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "render",
+      "refresh",
+      "save",
+      "tabSelect",
+      "scan"
+    ]
+  },
+  {
+    "file": "assets\\js\\hardening.js",
+    "lines": 114,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "render",
+      "change",
+      "details",
+      "copyText",
+      "selectTab"
+    ]
+  },
+  {
+    "file": "assets\\js\\hero-birds.js",
+    "lines": 410,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "listen",
+      "observe",
+      "dispose",
+      "resize",
+      "step",
+      "stop"
+    ]
+  },
+  {
+    "file": "assets\\js\\login-protection.js",
+    "lines": 194,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "drawChart",
+      "badge",
+      "update",
+      "feedback",
+      "refresh",
+      "mutate"
+    ]
+  },
+  {
+    "file": "assets\\js\\passkey-login.js",
+    "lines": 32,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "assets\\js\\qrcode.js",
+    "lines": 2378,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "qrPolynomial",
+      "toUTF8Array"
+    ]
+  },
+  {
+    "file": "assets\\js\\qs-core.js",
+    "lines": 473,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "sync",
+      "closeMenus",
+      "openSearch",
+      "smooth",
+      "render"
+    ]
+  },
+  {
+    "file": "assets\\js\\qs-motion.js",
+    "lines": 74,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "frame",
+      "run",
+      "tick"
+    ]
+  },
+  {
+    "file": "assets\\js\\settings.js",
+    "lines": 265,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "paint",
+      "persist",
+      "applySaved",
+      "save",
+      "saveOne",
+      "showTab"
+    ]
+  },
+  {
+    "file": "assets\\js\\two-factor.js",
+    "lines": 206,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "feedback",
+      "filters",
+      "refresh",
+      "mutate",
+      "metric",
+      "syncSetup",
+      "visibleCodes",
+      "syncBackup",
+      "syncMethods",
+      "syncPolicy",
+      "deviceRows",
+      "syncDevices",
+      "revoke",
+      "devicesModal",
+      "syncUsers",
+      "render"
+    ]
+  },
+  {
+    "file": "assets\\js\\upgrade.js",
+    "lines": 79,
+    "hooks": [],
+    "options": [],
+    "methods": [
+      "enhance",
+      "ipRows"
+    ]
+  },
+  {
+    "file": "admin\\views\\activity-log.php",
+    "lines": 189,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\dashboard-icons.php",
+    "lines": 99,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\dashboard.php",
+    "lines": 656,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\file-integrity.php",
+    "lines": 759,
+    "hooks": [],
+    "options": [
+      "gwqsh_last_scan_core_total"
+    ],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\firewall-cleanup.php",
+    "lines": 262,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\footer.php",
+    "lines": 25,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\hardening.php",
+    "lines": 348,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\login-protection.php",
+    "lines": 362,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\navigation.php",
+    "lines": 23,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\pro.php",
+    "lines": 27,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\settings.php",
+    "lines": 411,
+    "hooks": [],
+    "options": [
+      "admin_email"
+    ],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\two-factor.php",
+    "lines": 386,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  },
+  {
+    "file": "admin\\views\\upgrade-panels.php",
+    "lines": 9,
+    "hooks": [],
+    "options": [],
+    "methods": []
+  }
+]

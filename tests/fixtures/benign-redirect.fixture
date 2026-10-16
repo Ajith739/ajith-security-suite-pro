@@ -1,0 +1,6 @@
+<?php
+// Sanitized fixture: no behavior in this branch can execute.
+if ( false ) {
+wp_redirect('https://example.invalid/new-location');
+}
+$GLOBALS["gwqsh_fixture_executed"] = true;

@@ -1,0 +1,350 @@
+/* ============================================================
+   Gracewell Security Suite Pro — Cross-Page UI Fixes (Scoped)
+   ------------------------------------------------------------
+   Loaded AFTER dashboard.css + page-specific CSS.
+   Applies to: activity-log, file-integrity, hardening,
+               login-protection, settings, two-factor.
+   Does NOT affect dashboard.html — that page keeps its own
+   layout untouched.
+   ============================================================ */
+
+/* ---------- Prevent any accidental page-level horizontal scroll ---------- */
+#gracewell-security-suite-pro-app {
+    overflow-x: hidden;
+}
+
+#gracewell-security-suite-pro-app main {
+    overflow-x: clip;
+}
+
+/* ============================================================
+   2. HERO — consistent vertical stack, no wrap collisions
+   ============================================================ */
+#gracewell-security-suite-pro-app .hero-in {
+    align-items: flex-end;
+}
+
+#gracewell-security-suite-pro-app .hero-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .hero .eyebrow {
+    margin: 0 0 6px;
+    line-height: 1.2;
+}
+
+#gracewell-security-suite-pro-app .hero .h1 {
+    margin: 0;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+#gracewell-security-suite-pro-app .hero .lede {
+    margin: 6px 0 0;
+    line-height: 1.5;
+    max-width: 62ch;
+    overflow-wrap: anywhere;
+}
+
+/* ============================================================
+   3. CARD HEAD — consistent alignment, wrap-safe toolbar
+   ============================================================ */
+#gracewell-security-suite-pro-app main .card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+    min-width: 0;
+    margin-bottom: 14px;
+}
+
+#gracewell-security-suite-pro-app main .card-head .ttl {
+    flex: 1 1 180px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+#gracewell-security-suite-pro-app main .card-head h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+#gracewell-security-suite-pro-app main .card-head p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--muted);
+}
+
+/* Toolbar drops to its own row on narrow cards */
+#gracewell-security-suite-pro-app main .card-head .toolbar {
+    flex: 1 1 100%;
+    order: 3;
+    min-width: 0;
+}
+
+@media (min-width: 900px) {
+    #gracewell-security-suite-pro-app main .card-head .toolbar {
+        flex: 1 1 auto;
+        order: 0;
+        justify-content: flex-end;
+        max-width: 100%;
+    }
+}
+
+/* ============================================================
+   4. FORM CONTROLS
+   Page CSS already defines the correct 40px / 34px heights.
+   Only ensure box-sizing + line-height are predictable.
+   ============================================================ */
+#gracewell-security-suite-pro-app main .field,
+#gracewell-security-suite-pro-app main input.field,
+#gracewell-security-suite-pro-app main select.field,
+#gracewell-security-suite-pro-app main textarea.field {
+    box-sizing: border-box;
+    line-height: 1.4;
+}
+
+#gracewell-security-suite-pro-app main .err-text {
+    margin: 6px 0 0;
+    line-height: 1.4;
+}
+
+#gracewell-security-suite-pro-app main .switch {
+    flex: none;
+}
+
+/* --- Set rows: labels never touch controls, mobile-friendly --- */
+#gracewell-security-suite-pro-app main .set-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app main .set-row .txt {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app main .set-row .txt b {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+    margin: 0 0 2px;
+    overflow-wrap: anywhere;
+}
+
+#gracewell-security-suite-pro-app main .set-row .txt small {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+#gracewell-security-suite-pro-app main .set-row .ctl {
+    flex: none;
+    width: clamp(120px, 38%, 180px);
+    min-width: 0;
+}
+
+@media (max-width: 560px) {
+    #gracewell-security-suite-pro-app main .set-row.wrap-sm {
+        flex-wrap: wrap;
+    }
+
+    #gracewell-security-suite-pro-app main .set-row.wrap-sm .ctl {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+}
+
+/* --- Stepper: input + vertical +/- buttons stay aligned --- */
+#gracewell-security-suite-pro-app main .stepper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+#gracewell-security-suite-pro-app main .stepper input.field {
+    width: 100%;
+    padding-right: 32px;
+}
+
+#gracewell-security-suite-pro-app main .stepper-btns {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    bottom: 2px;
+    width: 24px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--line);
+    border-radius: 0 6px 6px 0;
+    overflow: hidden;
+}
+
+#gracewell-security-suite-pro-app main .stepper-btns button {
+    flex: 1;
+    border: 0;
+    background: none;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+#gracewell-security-suite-pro-app main .stepper-btns button:hover {
+    background: var(--surface-3);
+    color: var(--ink);
+}
+
+/* ============================================================
+   5. TOOLBAR — one baseline, wraps safely on mobile
+   ============================================================ */
+#gracewell-security-suite-pro-app main .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app main .toolbar .search {
+    flex: 1 1 180px;
+    max-width: 260px;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app main .toolbar select.field {
+    flex: 0 1 auto;
+    min-width: 110px;
+    max-width: 180px;
+}
+
+@media (max-width: 560px) {
+    #gracewell-security-suite-pro-app main .toolbar .search {
+        flex-basis: 100%;
+        max-width: none;
+    }
+
+    #gracewell-security-suite-pro-app main .toolbar select.field {
+        flex: 1 1 120px;
+        max-width: none;
+    }
+}
+
+/* ============================================================
+   6. SEGMENTED TABS — consistent size + alignment
+   ============================================================ */
+#gracewell-security-suite-pro-app main .seg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+#gracewell-security-suite-pro-app main .seg-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+    padding: 0 12px;
+    font-size: 12.5px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+#gracewell-security-suite-pro-app main .seg-btn b {
+    font-weight: inherit;
+}
+
+#gracewell-security-suite-pro-app main .seg-btn .i {
+    flex: none;
+}
+
+/* ============================================================
+   7. TABLES — contained horizontal scroll only
+   ============================================================ */
+#gracewell-security-suite-pro-app main .table-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+}
+
+#gracewell-security-suite-pro-app main .table td {
+    vertical-align: middle;
+    overflow-wrap: anywhere;
+}
+
+#gracewell-security-suite-pro-app main .table th {
+    vertical-align: middle;
+}
+
+/* ============================================================
+   8. GRID STRETCH — cards in the same row share height
+   ============================================================ */
+#gracewell-security-suite-pro-app main .grid,
+#gracewell-security-suite-pro-app main .stack {
+    align-items: stretch;
+}
+
+#gracewell-security-suite-pro-app main .grid>.card,
+#gracewell-security-suite-pro-app main .grid>section.card,
+#gracewell-security-suite-pro-app main .grid>.stack>.card {
+    min-width: 0;
+}
+
+/* ============================================================
+   9. MOBILE POLISH
+   ============================================================ */
+@media (max-width: 480px) {
+    #gracewell-security-suite-pro-app main .card {
+        padding: 14px;
+    }
+
+    #gracewell-security-suite-pro-app main .card-head h2 {
+        font-size: 14px;
+    }
+
+    #gracewell-security-suite-pro-app .stats>.stat {
+        padding: 14px 16px 12px;
+    }
+
+    #gracewell-security-suite-pro-app .stats>.stat .stat-num {
+        font-size: 22px;
+    }
+
+    #gracewell-security-suite-pro-app .tf-stats>.stat {
+        padding: 14px 16px;
+    }
+
+    #gracewell-security-suite-pro-app main .seg-btn {
+        height: 32px;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+}
+
+/* ---------- Two-factor / settings stat paragraph sizing ---------- */
+#gracewell-security-suite-pro-app main .stat-meta {
+    font-size: 12.5px;
+    line-height: 1.45;
+}

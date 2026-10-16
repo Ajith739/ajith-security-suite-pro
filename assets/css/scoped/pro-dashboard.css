@@ -1,0 +1,2858 @@
+/* Security Suite Pro dashboard. Scoped tokens, components and responsive layouts. */
+#gracewell-security-suite-pro-app .qs-pro-dashboard {
+    --qs-primary: #0755ff;
+    --qs-navy: #090b52;
+    --qs-muted: #53659a;
+    --qs-border: #deebfa;
+    --qs-bg: #f2f8fe;
+    --qs-success: #00c888;
+    --qs-warning: #ff9f00;
+    --qs-danger: #ff384b;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--qs-navy);
+    background: var(--qs-bg);
+    min-height: calc(100vh - 32px);
+    container-type: inline-size;
+    container-name: qs-dashboard;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard :is(h1, h2, h3, p, ul) {
+    margin: 0;
+    padding: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard :is(a, button, select) {
+    font-family: inherit;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard a {
+    color: var(--qs-primary);
+    text-decoration: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard button {
+    cursor: pointer;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard :is(a, button, select, [tabindex]):focus-visible {
+    outline: 2px solid var(--qs-primary);
+    outline-offset: 3px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard [hidden] {
+    display: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-icon {
+    width: 19px;
+    height: 19px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-skip {
+    position: absolute;
+    left: 12px;
+    top: -100px;
+    background: white;
+    padding: 10px;
+    z-index: 400;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-skip:focus {
+    top: 5px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-header {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    gap: 24px;
+    position: relative;
+    z-index: 20;
+    background: linear-gradient(90deg, #f7fbff, #eefaff 75%, #f8fbff);
+    border-bottom: 1px solid #e3effb;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    color: var(--qs-navy);
+    flex: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-brand img {
+    width: 38px;
+    height: 42px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-brand b {
+    display: block;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -.8px;
+    line-height: 1.1;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-brand small {
+    display: block;
+    color: var(--qs-muted);
+    font-size: 10px;
+    margin-top: 3px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex: 1;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 7px;
+    color: var(--qs-navy);
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background .15s;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav a[aria-current],
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav a:hover {
+    background: #e7f2ff;
+    color: var(--qs-primary);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav a:last-child .qs-icon {
+    color: #ffab00;
+    fill: #ffbf31;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-left: auto;
+    flex: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-icon-button {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 36px;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--qs-navy);
+    position: relative;
+    border-radius: 7px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-icon-button:hover {
+    background: #e7f2ff;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-avatar {
+    width: 38px;
+    height: 38px;
+    background: var(--qs-navy);
+    color: white;
+    border: 0;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-burger {
+    display: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-menu-wrap {
+    position: relative;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-menu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    width: 280px;
+    max-width: calc(100vw - 32px);
+    padding: 16px;
+    border: 1px solid var(--qs-border);
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 8px 28px #0a245320;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-menu :is(p, a) {
+    display: block;
+    padding: 8px 0;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-notification-dot {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--qs-danger);
+    top: 6px;
+    right: 5px;
+    border: 1px solid white;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 156px;
+    padding: 18px 32px 16px;
+    background-image: linear-gradient(90deg, #f7fbff 0%, #f7fbffe8 31%, #f7fbff22 65%), url('../../img/header.png?v=2');
+    background-size: cover;
+    background-position: center, center 47%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    position: relative;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-copy {
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-eyebrow {
+    text-transform: uppercase;
+    font-size: 11px;
+    color: #46558d;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    margin-bottom: 6px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero h1 {
+    font-size: clamp(25px, 2.05vw, 36px);
+    font-weight: 800;
+    letter-spacing: -1.15px;
+    line-height: 1.2;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero h1 span {
+    color: var(--qs-primary);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-lede {
+    font-size: 16px;
+    color: var(--qs-muted);
+    margin-top: 3px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-button {
+    border: 1px solid #d6e5fa;
+    border-radius: 6px;
+    min-height: 39px;
+    padding: 0 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #ffffffec;
+    color: var(--qs-navy);
+    font-size: 12px;
+    font-weight: 600;
+    transition: background .15s, box-shadow .15s;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-primary {
+    background: var(--qs-primary);
+    border-color: var(--qs-primary);
+    color: white;
+    box-shadow: 0 3px 9px #0755ff18;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-button:hover {
+    box-shadow: 0 3px 12px #0755ff22;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-button:disabled {
+    cursor: wait;
+    opacity: .7;
+}
+
+#gracewell-security-suite-pro-app .qs-scan-status:empty,
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-scan-status:empty {
+    display: none;
+}
+
+#gracewell-security-suite-pro-app .qs-scan-status,
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-scan-status {
+    margin-top: 8px;
+    color: var(--muted, #53659a);
+    font-size: 13px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-status {
+    flex: 0 0 345px;
+    display: flex;
+    gap: 13px;
+    position: relative;
+    align-items: flex-start;
+    background: #ffffffdf;
+    border: 1px solid #ffffffd9;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 8px 22px #1b639018;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-status b {
+    font-size: 14px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-status p {
+    font-size: 12px;
+    color: var(--qs-muted);
+    margin-top: 2px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-status>.qs-badge {
+    margin-left: auto;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-crown {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 9px;
+    background: #fff4df;
+    color: #ff9900;
+    flex: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-crown .qs-icon {
+    width: 29px;
+    height: 29px;
+    fill: #ffbc38;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-content {
+    padding: 0 14px 20px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-card {
+    border: 1px solid var(--qs-border);
+    border-radius: 12px;
+    background: linear-gradient(120deg, #fff, #fcfdff);
+    padding: 8px 12px;
+    min-width: 0;
+    box-shadow: 0 2px 5px #16459b03;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 29px;
+    margin-bottom: 4px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-card-head h2 {
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: 750;
+    letter-spacing: -.3px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-tile {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    background: #eef5ff;
+    color: var(--qs-primary);
+    border-radius: 50%;
+    flex: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-small-button {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d7e4fa;
+    border-radius: 6px;
+    min-height: 27px;
+    padding: 3px 9px;
+    font-size: 10px;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-small-button .qs-icon {
+    width: 13px;
+    height: 13px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 7px;
+    font-size: 11px;
+    line-height: 1.45;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-good {
+    background: #dcfaed;
+    color: #00864b;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-warning {
+    background: #fff2de;
+    color: #a95800;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-danger {
+    background: #ffedf0;
+    color: #e51b30;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-blue-badge {
+    background: #e7f0ff;
+    color: #0755e8;
+}
+
+/* ============================================================
+   SECURITY OVERVIEW — Phoenix / Ecommerce Stats Row Redesign
+   ============================================================ */
+#gracewell-security-suite-pro-app :is(.qs-overview, .qs-pro-dashboard .qs-overview) {
+    padding: 16px 0 10px;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin-bottom: 20px;
+    box-shadow: none !important;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-overview-head, .qs-pro-dashboard .qs-overview-head) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-overview-title-group, .qs-pro-dashboard .qs-overview-title-group) h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.4px;
+    line-height: 1.2;
+    margin: 0 0 4px 0;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-overview-subtitle, .qs-pro-dashboard .qs-overview-subtitle) {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.4;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-overview-actions, .qs-pro-dashboard .qs-overview-actions) {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-updated, .qs-pro-dashboard .qs-updated) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-live-dot, .qs-pro-dashboard .qs-live-dot) {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    display: inline-block;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+#gracewell-security-suite-pro-app :is(.qs-overview-actions, .qs-pro-dashboard .qs-overview-actions) .qs-select {
+    min-height: 34px;
+    height: 34px;
+    line-height: 1.4;
+    padding: 4px 30px 4px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-overview-actions, .qs-pro-dashboard .qs-overview-actions) .qs-select:hover {
+    border-color: #94a3b8;
+    background-color: #ffffff;
+}
+
+/* Metrics Grid Layout (Default 4 columns matches 4+3 dashboard layout) */
+#gracewell-security-suite-pro-app :is(.qs-metrics, .qs-pro-dashboard .qs-metrics) {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    row-gap: 22px;
+    column-gap: 32px;
+    padding: 6px 16px 16px;
+    width: 100%;
+}
+
+/* Screen-specific 5-column grids */
+#gracewell-security-suite-pro-app :is(.qs-login-metrics, .qs-tf-metrics, .fi-stats, .al-metrics, .qs-fw-metrics) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+#gracewell-security-suite-pro-app .hd-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+#gracewell-security-suite-pro-app :is(.qs-metric, .qs-pro-dashboard .qs-metric) {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    text-decoration: none;
+    transition: transform 0.15s ease;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-metric, .qs-pro-dashboard .qs-metric):hover {
+    transform: translateY(-1px);
+}
+
+/* Stacked Icon Component (Phoenix Reference Design) */
+#gracewell-security-suite-pro-app .qs-stack-icon {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+#gracewell-security-suite-pro-app .qs-stack-square {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    left: 3px;
+    bottom: 3px;
+    border-radius: 8px;
+    transform: rotate(-10deg);
+    transition: transform 0.2s ease;
+}
+
+#gracewell-security-suite-pro-app .qs-metric:hover .qs-stack-square {
+    transform: rotate(-14deg) scale(1.04);
+}
+
+#gracewell-security-suite-pro-app .qs-stack-circle {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    right: 2px;
+    top: 2px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+#gracewell-security-suite-pro-app .qs-stack-circle .qs-icon {
+    width: 15px;
+    height: 15px;
+}
+
+/* Color palettes per tone matching the reference image */
+/* 1. Green (Success) */
+#gracewell-security-suite-pro-app .qs-metric-green .qs-stack-square {
+    background-color: #86efac;
+}
+
+#gracewell-security-suite-pro-app .qs-metric-green .qs-stack-circle {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+/* 2. Yellow / Amber (Warning) */
+#gracewell-security-suite-pro-app :is(.qs-metric-yellow, .qs-metric-amber, .qs-metric-orange) .qs-stack-square {
+    background-color: #fde047;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-metric-yellow, .qs-metric-amber, .qs-metric-orange) .qs-stack-circle {
+    background-color: #fef9c3;
+    color: #d97706;
+}
+
+/* 3. Red (Danger) */
+#gracewell-security-suite-pro-app .qs-metric-red .qs-stack-square {
+    background-color: #fca5a5;
+}
+
+#gracewell-security-suite-pro-app .qs-metric-red .qs-stack-circle {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+/* 4. Blue (Primary) */
+#gracewell-security-suite-pro-app .qs-metric-blue .qs-stack-square {
+    background-color: #93c5fd;
+}
+
+#gracewell-security-suite-pro-app .qs-metric-blue .qs-stack-circle {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+/* 5. Cyan (Info) */
+#gracewell-security-suite-pro-app :is(.qs-metric-cyan, .qs-metric-teal) .qs-stack-square {
+    background-color: #a5f3fc;
+}
+
+#gracewell-security-suite-pro-app :is(.qs-metric-cyan, .qs-metric-teal) .qs-stack-circle {
+    background-color: #e0f2fe;
+    color: #0284c7;
+}
+
+/* 6. Purple */
+#gracewell-security-suite-pro-app .qs-metric-purple .qs-stack-square {
+    background-color: #d8b4fe;
+}
+
+#gracewell-security-suite-pro-app .qs-metric-purple .qs-stack-circle {
+    background-color: #f3e8ff;
+    color: #7c3aed;
+}
+
+/* Typography matching reference image */
+#gracewell-security-suite-pro-app .qs-metric-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-metric-heading {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.25;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+#gracewell-security-suite-pro-app .qs-metric-heading strong {
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.2px;
+}
+
+#gracewell-security-suite-pro-app .qs-metric-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    white-space: nowrap;
+}
+
+#gracewell-security-suite-pro-app .qs-metric-desc {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    font-weight: 400;
+    color: #64748b;
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+/* Badges inside heading */
+#gracewell-security-suite-pro-app .qs-badge-good {
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #d1fae5;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 9999px;
+}
+
+#gracewell-security-suite-pro-app .qs-badge-warning {
+    background: #fffbeb;
+    color: #d97706;
+    border: 1px solid #fef3c7;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 9999px;
+}
+
+/* Bottom divider line matching reference image */
+#gracewell-security-suite-pro-app .qs-overview-divider {
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+    margin: 18px 0 6px 0;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1280px) {
+    #gracewell-security-suite-pro-app :is(.qs-metrics, .qs-login-metrics, .fi-stats, .al-metrics, .qs-fw-metrics) {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    #gracewell-security-suite-pro-app .qs-overview {
+        padding: 14px 0 10px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-overview-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    #gracewell-security-suite-pro-app :is(.qs-metrics, .qs-login-metrics, .qs-tf-metrics, .fi-stats, .al-metrics, .qs-fw-metrics, .hd-stats) {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-metric-desc {
+        white-space: normal;
+    }
+}
+
+/* Dark mode for Security Overview */
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-overview {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-overview-title-group h2,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-heading strong,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-title {
+    color: #f8fafc;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-overview-subtitle,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-updated,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-desc {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-overview-actions .qs-select {
+    background-color: #162744;
+    border-color: #314565;
+    color: #dce8ff;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-overview-divider {
+    border-top-color: #263854;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-green .qs-stack-circle {
+    background-color: #14532d;
+    color: #4ade80;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-metric-yellow, .qs-metric-amber, .qs-metric-orange) .qs-stack-circle {
+    background-color: #713f12;
+    color: #facc15;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-red .qs-stack-circle {
+    background-color: #7f1d1d;
+    color: #f87171;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-blue .qs-stack-circle {
+    background-color: #1e3a8a;
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-metric-cyan, .qs-metric-teal) .qs-stack-circle {
+    background-color: #164e63;
+    color: #38bdf8;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-purple .qs-stack-circle {
+    background-color: #581c87;
+    color: #c084fc;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2.28fr) minmax(300px, 1fr);
+    gap: 10px;
+    align-items: start;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard :is(.qs-main-column, .qs-side-column) {
+    display: grid;
+    gap: 9px;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-analytics-row {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1fr);
+    gap: 9px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-events-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.23fr) minmax(0, 1fr);
+    gap: 9px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-bottom-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.48fr) minmax(0, .97fr) minmax(0, 1fr);
+    gap: 9px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 5px;
+    min-height: 168px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge {
+    position: relative;
+    width: 164px;
+    height: 164px;
+    flex: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge circle {
+    fill: none;
+    stroke-width: 18px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge-track {
+    stroke: #e5f9f1;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge>div {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge strong {
+    font-size: 39px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge span {
+    font-size: 12px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge b {
+    color: #008b51;
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-details {
+    flex: 1;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-details h3 {
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-details p {
+    color: var(--qs-muted);
+    font-size: 12px;
+    margin: 4px 0 8px;
+    line-height: 1.4;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-details ul {
+    list-style: none;
+    display: grid;
+    gap: 5px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-details li {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-details li b {
+    margin-left: auto;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-series-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    background: var(--qs-primary);
+    border-radius: 50%;
+    flex: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard :is(.qs-dot-login, .qs-dot-tfa, .qs-dot-hardening) {
+    background: var(--qs-success);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard :is(.qs-dot-file, .qs-dot-files) {
+    background: var(--qs-warning);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-dot-malware {
+    background: #ff2039;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-activity-chart {
+    position: relative;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-chart-select {
+    position: absolute;
+    right: 13px;
+    top: 9px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    font-size: 10px;
+    color: var(--qs-muted);
+    margin: 5px 0 6px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-chart {
+    height: 130px;
+    position: relative;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-chart>svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-chart text {
+    fill: var(--qs-muted);
+    font-size: 10px;
+    font-family: inherit;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-chart-tooltip {
+    position: absolute;
+    padding: 8px 10px;
+    background: #fffffff5;
+    border: 1px solid #d7e5fb;
+    border-radius: 9px;
+    box-shadow: 0 3px 12px #11256716;
+    font-size: 10px;
+    z-index: 2;
+    pointer-events: none;
+    min-width: 130px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-chart-tooltip span {
+    display: block;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard :is(.qs-chart-note, .qs-feed-note) {
+    font-size: 9px;
+    color: var(--qs-muted);
+    display: block;
+    margin-top: 3px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-table-scroll {
+    overflow: auto;
+    max-width: 100%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+    line-height: 1.35;
+    table-layout: auto;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-table th {
+    font-weight: 700;
+    font-size: 9px;
+    text-transform: uppercase;
+    text-align: left;
+    background: #f7faff;
+    color: var(--qs-muted);
+    padding: 3px 6px;
+    white-space: nowrap;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-table td {
+    padding: 3px 6px;
+    border-bottom: 1px solid #f0f4fc;
+    color: var(--qs-muted);
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-event {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--qs-primary);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-detail {
+    display: block;
+    max-width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-danger-text {
+    color: #e51b30 !important;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-danger-text .qs-series-dot {
+    background: #ff233b;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-empty {
+    padding: 24px 8px;
+    text-align: center;
+    color: var(--qs-muted);
+    font-size: 12px;
+    white-space: normal;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-table .qs-empty {
+    height: 80px;
+    padding: 18px 8px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-bottom-row .qs-card-head {
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-bottom-row .qs-card-head h2 {
+    font-size: 12px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-bottom-row .qs-tile {
+    width: 26px;
+    height: 26px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-bottom-row .qs-badge {
+    font-size: 9px;
+    padding: 2px 6px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-bottom-row .qs-small-button {
+    font-size: 9px;
+    min-height: 24px;
+    padding: 2px 7px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist {
+    list-style: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 8px;
+    border-bottom: 1px solid #f0f4fc;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist li:hover {
+    background: #f1f6fd;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-toggle-status {
+    width: 29px;
+    height: 14px;
+    background: #b8c7dd;
+    border-radius: 12px;
+    flex: none;
+    position: relative;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-toggle-status:after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-toggle-status.is-on {
+    background: var(--qs-success);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-toggle-status.is-on:after {
+    left: 17px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist b {
+    font-size: 10px;
+    font-weight: 500;
+    flex: 1;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist small {
+    font-size: 10px;
+    color: var(--qs-muted);
+    flex: 1.2;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-scan-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid #f0f4fc;
+    color: var(--qs-navy);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-scan-row>span:nth-child(2) {
+    flex: 1;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-scan-row :is(b, small) {
+    display: block;
+    font-size: 9px;
+    line-height: 1.3;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-scan-row small {
+    color: var(--qs-muted);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-scan-row time {
+    font-size: 8px;
+    color: var(--qs-muted);
+    max-width: 75px;
+}
+
+/* ============================================================
+   GLOBAL THREAT SOURCES (Interactive Vector Map & Stats)
+   ============================================================ */
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geography {
+    position: relative;
+    padding-bottom: 16px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geography .qs-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-tile-radar {
+    background: #eff6ff;
+    color: #2563eb;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geo-select {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #374151;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geo-select:hover,
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geo-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-threat-map-wrap {
+    position: relative;
+    width: 100%;
+    min-height: 160px;
+    margin: 0 0 16px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fafcff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-threat-map-svg {
+    width: 100%;
+    height: auto;
+    max-height: 190px;
+    display: block;
+}
+
+/* Radar pulse animation rings */
+#gracewell-security-suite-pro-app .qs-threat-map-svg .qs-pulse-ring-1 {
+    transform-origin: center;
+    animation: qsPulseWave 2.4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+
+#gracewell-security-suite-pro-app .qs-threat-map-svg .qs-pulse-ring-2 {
+    transform-origin: center;
+    animation: qsPulseWave 2.4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite 0.8s;
+}
+
+#gracewell-security-suite-pro-app .qs-threat-map-svg .qs-pulse-dot {
+    cursor: pointer;
+    transition: r 0.2s ease, filter 0.2s ease;
+}
+
+#gracewell-security-suite-pro-app .qs-threat-map-svg .qs-pulse-dot:hover,
+#gracewell-security-suite-pro-app .qs-threat-map-svg .qs-pulse-group:hover .qs-pulse-dot,
+#gracewell-security-suite-pro-app .qs-threat-map-svg .qs-pulse-group.is-highlighted .qs-pulse-dot {
+    r: 6px;
+    filter: drop-shadow(0 0 6px currentColor);
+}
+
+@keyframes qsPulseWave {
+    0% {
+        r: 3px;
+        opacity: 0.85;
+    }
+
+    60% {
+        opacity: 0.4;
+    }
+
+    100% {
+        r: 22px;
+        opacity: 0;
+    }
+}
+
+/* Tooltip on map */
+#gracewell-security-suite-pro-app .qs-geo-tooltip {
+    position: absolute;
+    z-index: 10;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    line-height: 1.4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    transform: translate(-50%, -100%);
+    white-space: nowrap;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px 5px 0 5px;
+    border-style: solid;
+    border-color: #0f172a transparent transparent transparent;
+}
+
+/* Country breakdown list */
+#gracewell-security-suite-pro-app .qs-threat-country-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-row {
+    display: grid;
+    grid-template-columns: 140px 48px 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+    cursor: pointer;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-row:hover,
+#gracewell-security-suite-pro-app .qs-geo-row.is-hovered {
+    background: #f1f5f9;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-col-country {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-flag {
+    width: 20px;
+    height: 14px;
+    object-fit: cover;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-name {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-col-percent {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #334155;
+    text-align: right;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-col-bar {
+    width: 100%;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-progress-track {
+    height: 7px;
+    width: 100%;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================
+   PRO FEATURES & QUICK ACTIONS (Image 3 Grid Matching)
+   ============================================================ */
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-pro-tools {
+    margin-top: 14px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-pro-tools .qs-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-pro-tools .qs-card-head h2 {
+    color: #1e3a8a;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-pro-tools .t-amber {
+    background: #fff7ed;
+    color: #f59e0b;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #0f172a;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    border-color: #cbd5e1;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.25;
+}
+
+/* Color palettes per quick action matching Image 3 */
+#gracewell-security-suite-pro-app .qs-action-green .qs-action-icon {
+    background: #ecfdf5;
+    color: #10b981;
+    border: 1px solid #d1fae5;
+}
+
+#gracewell-security-suite-pro-app .qs-action-purple .qs-action-icon {
+    background: #f5f3ff;
+    color: #8b5cf6;
+    border: 1px solid #ede9fe;
+}
+
+#gracewell-security-suite-pro-app .qs-action-blue .qs-action-icon {
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #dbeafe;
+}
+
+#gracewell-security-suite-pro-app .qs-action-cyan .qs-action-icon {
+    background: #f0f9ff;
+    color: #0284c7;
+    border: 1px solid #e0f2fe;
+}
+
+#gracewell-security-suite-pro-app .qs-action-orange .qs-action-icon {
+    background: #fff7ed;
+    color: #ea580c;
+    border: 1px solid #ffedd5;
+}
+
+/* ============================================================
+   LICENSE, SUPPORT & UPDATES (Image 3 Matching)
+   ============================================================ */
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license {
+    margin-top: 14px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license .qs-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license .qs-tile-blue {
+    background: #eff6ff;
+    color: #2563eb;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-active-pill {
+    margin-left: auto;
+    background: #dcfce7 !important;
+    color: #15803d !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 3px 10px !important;
+    border-radius: 12px !important;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-body {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0 4px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-left {
+    flex: 1 1 auto;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-title {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-sub {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-right {
+    flex: 1 1 auto;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-checklist li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #334155;
+    margin: 0;
+    padding: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-check-svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 14px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-link {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s, transform 0.15s;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-link:hover {
+    color: #1d4ed8;
+    transform: translateX(2px);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-link .qs-arrow {
+    display: inline-block;
+    transition: transform 0.15s ease;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-link:hover .qs-arrow {
+    transform: translateX(3px);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-load-error {
+    background: #fff0f2;
+    color: #bc1830;
+    border: 1px solid #ffcfda;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-load-error button {
+    color: inherit;
+    border: 1px solid currentColor;
+    background: white;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+@container qs-dashboard (max-width:1400px) {
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-header {
+        padding: 0 20px;
+        gap: 15px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav {
+        gap: 0;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav a {
+        padding: 9px 8px;
+        gap: 6px;
+        font-size: 11px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-brand b {
+        font-size: 18px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric {
+        gap: 8px;
+        padding: 0 12px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric-value strong {
+        font-size: 23px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric-value {
+        gap: 5px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+        gap: 12px;
+        padding: 0;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge {
+        width: 140px;
+        height: 140px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-bottom-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hardening {
+        grid-column: 1 / -1;
+    }
+}
+
+@container qs-dashboard (max-width:1160px) {
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav {
+        display: none;
+        position: absolute;
+        top: 49px;
+        right: 12px;
+        background: white;
+        border: 1px solid var(--qs-border);
+        border-radius: 9px;
+        width: 260px;
+        box-shadow: 0 8px 25px #17295a20;
+        padding: 8px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav.is-open {
+        display: grid;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-burger {
+        display: grid;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-status {
+        flex-basis: 270px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-status>.qs-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-status b {
+        display: block;
+        padding-right: 30px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero h1 {
+        font-size: 27px;
+        max-width: 650px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-lede {
+        font-size: 13px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metrics {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px 0;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric:nth-child(4) {
+        border-right: 0;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-overview-description {
+        display: none;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-dashboard-grid {
+        grid-template-columns: minmax(0, 1fr) 300px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-analytics-row {
+        grid-template-columns: 1fr;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+        min-height: 158px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-events-row {
+        grid-template-columns: 1fr;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero::after {
+        display: none;
+    }
+}
+
+@container qs-dashboard (max-width:900px) {
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-analytics-row {
+        grid-template-columns: minmax(0, .95fr) minmax(0, 1fr);
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+        gap: 12px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge {
+        width: 125px;
+        height: 125px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-side-column {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license {
+        grid-column: 1 / -1;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero-status {
+        display: none;
+    }
+}
+
+@container qs-dashboard (max-width:700px) {
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-header {
+        padding: 0 14px;
+        gap: 8px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-header-actions {
+        gap: 5px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-brand {
+        gap: 8px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-brand small {
+        display: none;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero {
+        min-height: 195px;
+        padding: 20px 18px;
+        background-image: linear-gradient(90deg, #f7fbfff5, #f7fbffb5), url('../../img/header.png?v=2');
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero h1 {
+        font-size: 27px;
+        letter-spacing: -.8px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-content {
+        padding: 0 10px 18px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-overview-head {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-overview-head h2 {
+        font-size: 16px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-updated {
+        margin-left: 0;
+        font-size: 10px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-overview-head .qs-select {
+        margin-left: auto;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric:nth-child(2n) {
+        border-right: 0;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric h3 {
+        margin: 4px 0 9px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard :is(.qs-analytics-row, .qs-bottom-row, .qs-side-column) {
+        grid-template-columns: 1fr;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+        padding: 6px 2px;
+        min-height: 182px;
+        gap: 16px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge {
+        width: 144px;
+        height: 144px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-info {
+        padding-left: 4px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geography {
+        min-height: 270px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-table {
+        min-width: 420px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-quarantine .qs-table {
+        min-width: 300px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist small {
+        display: none;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard :is(.qs-icon-button, .qs-avatar) {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-small-button {
+        min-height: 34px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-select {
+        min-height: 44px;
+        height: 44px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-chart {
+        height: 180px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric {
+        gap: 7px;
+        padding: 0 10px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric-icon {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+@container qs-dashboard (max-width:400px) {
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-brand b {
+        font-size: 15px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-brand img {
+        width: 29px;
+        height: 33px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-header-actions {
+        gap: 0;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-header-actions>.qs-icon-button:first-child {
+        display: none;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+        gap: 10px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge {
+        width: 125px;
+        height: 125px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-details h3 {
+        font-size: 12px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-details :is(p, li) {
+        font-size: 11px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric {
+        gap: 7px;
+        padding: 0 10px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric h3 {
+        font-size: 11px;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    #gracewell-security-suite-pro-app .qs-pro-dashboard * {
+        transition: none;
+    }
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard :is(h1, h2, h3) {
+    color: var(--qs-navy);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-pro-tools h2 {
+    color: var(--qs-primary);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric-value .qs-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+}
+
+@container qs-dashboard (min-width:1401px) {
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-metric p {
+        font-size: 10px;
+        line-height: 1.35;
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard [data-metric="schedule"] strong {
+        white-space: nowrap;
+        font-size: 16px;
+    }
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-hero::after {
+    content: "Stronger Sites\A Safer Tomorrows";
+    width: 200px;
+    white-space: pre;
+    position: absolute;
+    top: 0;
+    left: 62%;
+    padding: 8px 16px;
+    background: linear-gradient(90deg, #daf1fc, #ddf3fc);
+    border-left: 2px solid #0755ff;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #214375;
+}
+
+/* ==========================================================================
+   Security Suite Pro — Dashboard Grid v2 (Exact Reference Layout)
+   ========================================================================== */
+#gracewell-security-suite-pro-app .qs-dashboard-grid-v2 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1480px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#gracewell-security-suite-pro-app .qs-grid-row {
+    display: grid;
+    gap: 20px;
+    align-items: stretch;
+    width: 100%;
+}
+
+#gracewell-security-suite-pro-app .qs-row-analytics {
+    grid-template-columns: minmax(310px, 1.05fr) minmax(360px, 1.35fr) minmax(330px, 1.15fr);
+}
+
+#gracewell-security-suite-pro-app .qs-row-events {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+}
+
+#gracewell-security-suite-pro-app .qs-row-security {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+#gracewell-security-suite-pro-app .qs-row-bottom {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+}
+
+/* Base Card Styling */
+#gracewell-security-suite-pro-app .qs-card {
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--line, #e2e8f0);
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: 0 1px 3px rgba(15, 26, 69, 0.04);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+    box-sizing: border-box;
+}
+
+#gracewell-security-suite-pro-app .qs-card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+#gracewell-security-suite-pro-app .qs-card-head h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy, #0f1b4d);
+    margin: 0;
+    letter-spacing: -0.2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#gracewell-security-suite-pro-app .qs-card-head .qs-tile,
+#gracewell-security-suite-pro-app .qs-card-head .qs-tile-blue {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #eef4ff;
+    color: #2f5bea;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-card-head-txt {
+    flex: 1;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-card-subtitle {
+    margin: 2px 0 0;
+    font-size: 11.5px;
+    color: var(--muted, #64748b);
+}
+
+#gracewell-security-suite-pro-app .qs-select {
+    padding: 5px 28px 5px 10px;
+    border: 1px solid var(--field-line, #d9dfec);
+    border-radius: 7px;
+    background: var(--surface, #ffffff);
+    color: var(--ink, #0f1a45);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    appearance: none;
+}
+
+#gracewell-security-suite-pro-app .qs-small-button {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2f5bea;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#gracewell-security-suite-pro-app .qs-small-button:hover {
+    text-decoration: underline;
+}
+
+/* Security Score Card */
+#gracewell-security-suite-pro-app .qs-score-body {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+#gracewell-security-suite-pro-app .qs-gauge {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-gauge svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+#gracewell-security-suite-pro-app .qs-gauge-track {
+    fill: none;
+    stroke: var(--track, #e8ecf5);
+    stroke-width: 12;
+}
+
+#gracewell-security-suite-pro-app #qs-score-ring {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s ease-out;
+}
+
+#gracewell-security-suite-pro-app .qs-gauge-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.1;
+}
+
+#gracewell-security-suite-pro-app #qs-score-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--navy, #0f1b4d);
+}
+
+#gracewell-security-suite-pro-app .qs-score-max {
+    font-size: 11px;
+    color: var(--muted, #64748b);
+    font-weight: 500;
+}
+
+#gracewell-security-suite-pro-app #qs-score-status {
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #10b981;
+}
+
+#gracewell-security-suite-pro-app .qs-score-details {
+    flex: 1;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-score-details h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--navy, #0f1b4d);
+}
+
+#gracewell-security-suite-pro-app .qs-score-subtext {
+    font-size: 11.5px;
+    color: var(--muted, #64748b);
+    margin: 0 0 12px;
+    line-height: 1.4;
+}
+
+#gracewell-security-suite-pro-app .qs-score-breakdown {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#gracewell-security-suite-pro-app .qs-score-breakdown li {
+    display: flex;
+    align-items: center;
+    font-size: 11.5px;
+    gap: 8px;
+}
+
+#gracewell-security-suite-pro-app .qs-score-label {
+    flex: 1;
+    color: var(--ink-2, #2b3553);
+}
+
+#gracewell-security-suite-pro-app .qs-score-num {
+    font-weight: 700;
+    color: var(--navy, #0f1b4d);
+}
+
+/* Security Activity Card */
+#gracewell-security-suite-pro-app .qs-legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    color: var(--muted, #64748b);
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+#gracewell-security-suite-pro-app .qs-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#gracewell-security-suite-pro-app .qs-series-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+#gracewell-security-suite-pro-app .qs-dot-blue {
+    background: #0755ff;
+}
+
+#gracewell-security-suite-pro-app .qs-dot-green {
+    background: #00c888;
+}
+
+#gracewell-security-suite-pro-app .qs-dot-red {
+    background: #ff384b;
+}
+
+#gracewell-security-suite-pro-app .qs-dot-amber {
+    background: #ff9f00;
+}
+
+#gracewell-security-suite-pro-app .qs-chart {
+    height: 170px;
+    width: 100%;
+    position: relative;
+}
+
+#gracewell-security-suite-pro-app .qs-chart svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+#gracewell-security-suite-pro-app .qs-chart-note {
+    font-size: 10.5px;
+    color: var(--muted, #94a3b8);
+    margin: 8px 0 0;
+}
+
+/* Threat Sources by Country */
+#gracewell-security-suite-pro-app .qs-geo-legend-bar {
+    display: flex;
+    gap: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted, #64748b);
+    margin-bottom: 8px;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-dot-high {
+    background: #ef4444;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-dot-medium {
+    background: #f59e0b;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-dot-low {
+    background: #3b82f6;
+}
+
+#gracewell-security-suite-pro-app .qs-threat-map-wrap {
+    height: 140px;
+    position: relative;
+    margin-bottom: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#gracewell-security-suite-pro-app .qs-threat-map-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#gracewell-security-suite-pro-app .qs-pulse-dot {
+    cursor: pointer;
+    transition: r 0.2s;
+}
+
+#gracewell-security-suite-pro-app .qs-pulse-ring-1,
+#gracewell-security-suite-pro-app .qs-pulse-ring-2 {
+    animation: qsRadarPulse 2.4s ease-out infinite;
+    transform-origin: center;
+}
+
+@keyframes qsRadarPulse {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+#gracewell-security-suite-pro-app .qs-geo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted, #94a3b8);
+    letter-spacing: 0.5px;
+    padding: 6px 6px;
+    border-bottom: 1px solid var(--line, #e2e8f0);
+}
+
+#gracewell-security-suite-pro-app .qs-geo-table td {
+    padding: 6px 6px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--line, #f1f5f9);
+}
+
+#gracewell-security-suite-pro-app .qs-geo-td-num {
+    width: 20px;
+    color: var(--muted, #94a3b8);
+    font-size: 11px;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-td-country {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 600;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-flag {
+    border-radius: 2px;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-td-threats {
+    min-width: 90px;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-progress-track {
+    height: 5px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 2px;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-threat-count {
+    font-size: 10.5px;
+    color: var(--muted, #64748b);
+}
+
+#gracewell-security-suite-pro-app .qs-geo-td-share {
+    text-align: right;
+    font-weight: 600;
+    width: 45px;
+    font-size: 11px;
+}
+
+#gracewell-security-suite-pro-app .qs-geo-empty {
+    text-align: center;
+    padding: 18px 10px;
+    color: var(--muted, #64748b);
+}
+
+#gracewell-security-suite-pro-app .qs-geo-empty h4 {
+    margin: 8px 0 4px;
+    font-size: 13px;
+    color: var(--navy, #0f1b4d);
+}
+
+#gracewell-security-suite-pro-app .qs-geo-empty p {
+    font-size: 11px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Recent Activity & Threat Tables */
+#gracewell-security-suite-pro-app .qs-table-scroll {
+    overflow-x: auto;
+    width: 100%;
+}
+
+#gracewell-security-suite-pro-app .qs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+#gracewell-security-suite-pro-app .qs-table th {
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--muted, #94a3b8);
+    letter-spacing: 0.5px;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line, #e2e8f0);
+}
+
+#gracewell-security-suite-pro-app .qs-table td {
+    padding: 9px 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--line, #f1f5f9);
+    color: var(--ink, #0f1a45);
+}
+
+#gracewell-security-suite-pro-app .qs-td-time {
+    white-space: nowrap;
+    color: var(--muted, #64748b);
+    font-size: 11.5px;
+}
+
+#gracewell-security-suite-pro-app .qs-td-ip {
+    font-family: var(--mono, monospace);
+    font-size: 11.5px;
+    color: var(--ink-2, #2b3553);
+}
+
+#gracewell-security-suite-pro-app .qs-td-detail .qs-detail {
+    font-size: 11.5px;
+    color: var(--muted, #64748b);
+}
+
+#gracewell-security-suite-pro-app .qs-badge {
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+    line-height: 1.2;
+}
+
+#gracewell-security-suite-pro-app .qs-blue-badge {
+    background: #e0edff;
+    color: #1d4ed8;
+}
+
+#gracewell-security-suite-pro-app .qs-good {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+#gracewell-security-suite-pro-app .qs-warning {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+#gracewell-security-suite-pro-app .qs-danger {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Hardening Checklist */
+#gracewell-security-suite-pro-app .qs-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#gracewell-security-suite-pro-app .qs-checklist li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--line, #f1f5f9);
+}
+
+#gracewell-security-suite-pro-app .qs-checklist li:last-child {
+    border-bottom: none;
+}
+
+#gracewell-security-suite-pro-app .qs-checklist-info {
+    flex: 1;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-checklist-info b {
+    display: block;
+    font-size: 12.5px;
+    color: var(--navy, #0f1b4d);
+}
+
+#gracewell-security-suite-pro-app .qs-checklist-info small {
+    display: block;
+    font-size: 11px;
+    color: var(--muted, #64748b);
+}
+
+/* 8-Tile Pro Features & Quick Actions Grid */
+#gracewell-security-suite-pro-app .qs-action-grid-v2 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 6px;
+}
+
+#gracewell-security-suite-pro-app .qs-action-tile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--line, #e2e8f0);
+    background: var(--surface-2, #f8fafc);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-sizing: border-box;
+}
+
+#gracewell-security-suite-pro-app .qs-action-tile:hover {
+    border-color: #93c5fd;
+    box-shadow: 0 3px 10px rgba(7, 85, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+#gracewell-security-suite-pro-app .qs-tile-icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-icon-box-green {
+    background: #e6f9f0;
+    color: #10b981;
+}
+
+#gracewell-security-suite-pro-app .qs-icon-box-purple {
+    background: #f3e8ff;
+    color: #a855f7;
+}
+
+#gracewell-security-suite-pro-app .qs-icon-box-blue {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+#gracewell-security-suite-pro-app .qs-icon-box-cyan {
+    background: #ecfeff;
+    color: #06b6d4;
+}
+
+#gracewell-security-suite-pro-app .qs-icon-box-orange {
+    background: #fff7ed;
+    color: #f97316;
+}
+
+#gracewell-security-suite-pro-app .qs-tile-label-box {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-tile-label-box strong {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--navy, #0f1b4d);
+    line-height: 1.25;
+}
+
+#gracewell-security-suite-pro-app .qs-tile-label-box span {
+    font-size: 10.5px;
+    color: var(--muted, #64748b);
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive Rules for Dashboard */
+@media (max-width: 1240px) {
+    #gracewell-security-suite-pro-app .qs-row-analytics {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #gracewell-security-suite-pro-app .qs-card-geography {
+        grid-column: 1 / -1;
+    }
+
+    #gracewell-security-suite-pro-app .qs-action-grid-v2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 960px) {
+
+    #gracewell-security-suite-pro-app .qs-row-events,
+    #gracewell-security-suite-pro-app .qs-row-security,
+    #gracewell-security-suite-pro-app .qs-row-bottom {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    #gracewell-security-suite-pro-app .qs-dashboard-grid-v2 {
+        padding: 8px 12px 24px;
+        gap: 14px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-row-analytics {
+        grid-template-columns: 1fr;
+    }
+
+    #gracewell-security-suite-pro-app .qs-score-body {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #gracewell-security-suite-pro-app .qs-action-grid-v2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dark mode overrides */
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-card {
+    background: var(--surface, #111a40);
+    border-color: var(--line, #243066);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-card-head h2 {
+    color: var(--ink, #eef1ff);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-card-head .qs-tile,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-card-head .qs-tile-blue {
+    background: #1b2a66;
+    color: #7ea2ff;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-select {
+    background-color: var(--surface-2, #152050);
+    border-color: var(--field-line, #2e3b78);
+    color: var(--ink, #eef1ff);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app #qs-score-value {
+    color: var(--ink, #eef1ff);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-score-details h3 {
+    color: var(--ink, #eef1ff);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-score-label {
+    color: var(--ink-2, #c9d0ee);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-score-num {
+    color: var(--ink, #eef1ff);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-threat-map-wrap {
+    background: #0b1440;
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-geo-table th,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-table th {
+    border-color: var(--line, #243066);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-geo-table td,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-table td {
+    border-color: var(--line-2, #1d2858);
+    color: var(--ink, #eef1ff);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-checklist li {
+    border-color: var(--line-2, #1d2858);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-checklist-info b {
+    color: var(--ink, #eef1ff);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-tile {
+    background: var(--surface-2, #152050);
+    border-color: var(--line, #243066);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-tile-label-box strong {
+    color: var(--ink, #eef1ff);
+}

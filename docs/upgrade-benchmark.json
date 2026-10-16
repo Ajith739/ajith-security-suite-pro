@@ -1,0 +1,24 @@
+{
+    "dashboard": {
+        "adapter_ms": 26.24,
+        "queries": 26
+    },
+    "login-protection": {
+        "adapter_ms": 6.08,
+        "queries": 6
+    },
+    "firewall-cleanup": {
+        "adapter_ms": 26.02,
+        "queries": 8
+    },
+    "file-integrity": {
+        "adapter_ms": 287.98,
+        "queries": 7
+    },
+    "representative_state": {
+        "json_bytes": 1480011,
+        "gzip_base64_bytes": 23932,
+        "note": "Representative repetitive metadata; actual compression depends on file hashes and paths."
+    },
+    "optional_hero_bytes": 1286244
+}

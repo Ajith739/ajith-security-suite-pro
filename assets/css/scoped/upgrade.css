@@ -1,0 +1,1702 @@
+/* Shared production refinements, scoped to the plugin. */
+#gracewell-security-suite-pro-app .toasts {
+    position: fixed !important;
+    inset: auto 20px 20px auto !important;
+    z-index: 100100 !important;
+    width: min(390px, calc(100vw - 32px));
+    display: grid;
+    gap: 10px;
+    pointer-events: none
+}
+
+#gracewell-security-suite-pro-app .toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px #07193828;
+    font-size: 14px;
+    line-height: 1.5;
+    animation: gwqsh-toast-in .18s ease-out
+}
+
+#gracewell-security-suite-pro-app .toast>span {
+    flex: 1;
+    overflow-wrap: anywhere
+}
+
+#gracewell-security-suite-pro-app .gwqsh-toast-close {
+    flex: none;
+    background: transparent;
+    color: inherit;
+    border: 0;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px
+}
+
+@keyframes gwqsh-toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+#gracewell-security-suite-pro-app table td {
+    font-size: 13px;
+    line-height: 1.65;
+    vertical-align: middle;
+    padding-top: 13px;
+    padding-bottom: 13px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard table td {
+    font-size: 14px
+}
+
+#gracewell-security-suite-pro-app .qs-detail {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    max-width: none !important;
+    text-overflow: clip !important;
+    display: block
+}
+
+#gracewell-security-suite-pro-app .qs-event {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0;
+    background: transparent;
+    white-space: normal;
+    line-height: 1.45;
+    font-size: 13px;
+    font-weight: 600
+}
+
+#gracewell-security-suite-pro-app .qs-event.gwqsh-event-success {
+    color: #08764d;
+    background: transparent
+}
+
+#gracewell-security-suite-pro-app .qs-event.gwqsh-event-warning {
+    color: #986000;
+    background: transparent
+}
+
+#gracewell-security-suite-pro-app .qs-event.gwqsh-event-danger {
+    color: #ba2540;
+    background: transparent
+}
+
+#gracewell-security-suite-pro-app .qs-event.gwqsh-event-info {
+    color: #175dcc;
+    background: transparent
+}
+
+#gracewell-security-suite-pro-app .qs-event-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    line-height: 1.45;
+    font-size: 13px;
+    font-weight: 500
+}
+
+#gracewell-security-suite-pro-app .qs-status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0
+}
+
+#gracewell-security-suite-pro-app .qs-dot-green {
+    background: #10b981
+}
+
+#gracewell-security-suite-pro-app .qs-dot-red {
+    background: #ef4444
+}
+
+#gracewell-security-suite-pro-app .qs-dot-orange {
+    background: #f59e0b
+}
+
+#gracewell-security-suite-pro-app .qs-dot-blue {
+    background: #3b82f6
+}
+
+#gracewell-security-suite-pro-app .qs-text-green {
+    color: #08764d
+}
+
+#gracewell-security-suite-pro-app .qs-text-red {
+    color: #ba2540
+}
+
+#gracewell-security-suite-pro-app .qs-text-orange {
+    color: #986000
+}
+
+#gracewell-security-suite-pro-app .qs-text-blue {
+    color: #175dcc
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .qs-text-green {
+    color: #63e6af
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .qs-text-red {
+    color: #ff93a0
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .qs-text-orange {
+    color: #ffc963
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .qs-text-blue {
+    color: #92bcff
+}
+
+#gracewell-security-suite-pro-app .qs-event .qs-series-dot {
+    background: currentColor
+}
+
+#gracewell-security-suite-pro-app .gwqsh-empty {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    padding: 26px 16px;
+    text-align: center;
+    white-space: normal;
+    max-width: 520px;
+    margin: auto
+}
+
+#gracewell-security-suite-pro-app .gwqsh-empty img {
+    object-fit: contain;
+    width: 112px;
+    height: 96px
+}
+
+#gracewell-security-suite-pro-app .gwqsh-empty h3 {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5
+}
+
+#gracewell-security-suite-pro-app .gwqsh-empty p {
+    margin: 0;
+    max-width: 390px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: inherit;
+    opacity: .75
+}
+
+#gracewell-security-suite-pro-app .hero-pro-card {
+    min-width: 0;
+    max-width: 100%;
+    height: auto !important;
+    overflow: visible;
+    align-self: stretch
+}
+
+#gracewell-security-suite-pro-app .hero-pro-card>* {
+    min-width: 0;
+    overflow-wrap: anywhere
+}
+
+#gracewell-security-suite-pro-app .hero-pro-card button,
+#gracewell-security-suite-pro-app .hero-pro-card a {
+    white-space: normal
+}
+
+#gracewell-security-suite-pro-app .qs-login-access-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px
+}
+
+#gracewell-security-suite-pro-app .qs-login-access-columns>* {
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .qs-login-trust-column {
+    padding-left: 24px;
+    border-left: 1px solid #8ba8cf30
+}
+
+#gracewell-security-suite-pro-app .qs-login-field {
+    margin-bottom: 16px;
+    gap: 7px
+}
+
+#gracewell-security-suite-pro-app .qs-login-input,
+#gracewell-security-suite-pro-app .qs-login-field select {
+    width: 100%;
+    min-height: 40px;
+    border-radius: 8px;
+    line-height: 1.5
+}
+
+#gracewell-security-suite-pro-app .qs-login-chips {
+    min-height: 55px;
+    border: 1px solid #8ba8cf30;
+    border-radius: 9px;
+    padding: 10px
+}
+
+#gracewell-security-suite-pro-app .qs-login-roles>div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px
+}
+
+#gracewell-security-suite-pro-app .qs-login-roles>div>span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px
+}
+
+#gracewell-security-suite-pro-app .qs-login-roles>div>span>b {
+    font-size: 12px;
+    overflow-wrap: anywhere
+}
+
+#gracewell-security-suite-pro-app .gwqsh-role-toggle {
+    appearance: none;
+    width: 34px;
+    height: 19px;
+    border: 0;
+    border-radius: 20px;
+    background: #9cacc0;
+    position: relative;
+    flex: none;
+    margin: 0;
+    cursor: pointer;
+    box-shadow: none
+}
+
+#gracewell-security-suite-pro-app .gwqsh-role-toggle:before {
+    content: '';
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    top: 3px;
+    left: 3px;
+    border-radius: 50%;
+    background: #fff;
+    margin: 0;
+    transition: transform .15s
+}
+
+#gracewell-security-suite-pro-app .gwqsh-role-toggle:checked {
+    background: #19bc85
+}
+
+#gracewell-security-suite-pro-app .gwqsh-role-toggle:checked:before {
+    transform: translateX(15px)
+}
+
+#gracewell-security-suite-pro-app .gwqsh-role-toggle:focus-visible {
+    outline: 2px solid #4b87ff;
+    outline-offset: 3px
+}
+
+@media(max-width:600px) {
+    #gracewell-security-suite-pro-app .qs-recent .qs-table-scroll {
+        overflow: visible
+    }
+
+    #gracewell-security-suite-pro-app .qs-recent table {
+        min-width: 0 !important;
+        table-layout: auto;
+        display: block;
+        width: 100%
+    }
+
+    #gracewell-security-suite-pro-app .qs-recent thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%)
+    }
+
+    #gracewell-security-suite-pro-app .qs-recent tbody {
+        display: block
+    }
+
+    #gracewell-security-suite-pro-app .qs-recent tr {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 3px;
+        padding: 14px 12px;
+        border-bottom: 1px solid #8ba8cf30
+    }
+
+    #gracewell-security-suite-pro-app .qs-recent td {
+        display: grid;
+        grid-template-columns: 65px minmax(0, 1fr);
+        gap: 10px;
+        width: auto !important;
+        padding: 3px 0 !important;
+        border: 0;
+        white-space: normal !important;
+        font-size: 13px;
+        overflow-wrap: anywhere;
+        max-width: none !important
+    }
+
+    #gracewell-security-suite-pro-app .qs-recent td:before {
+        content: attr(data-label);
+        font-size: 11px;
+        font-weight: 600;
+        opacity: .65
+    }
+
+    #gracewell-security-suite-pro-app .qs-recent td[colspan] {
+        display: block
+    }
+}
+
+#gracewell-security-suite-pro-app button {
+    transition: background-color .15s, color .15s, box-shadow .15s, border-color .15s
+}
+
+#gracewell-security-suite-pro-app button:focus-visible {
+    outline: 2px solid #4b87ff;
+    outline-offset: 3px
+}
+
+@media(hover:hover) {
+
+    #gracewell-security-suite-pro-app .qs-primary:hover,
+    #gracewell-security-suite-pro-app .btn-primary:hover {
+        background: #164bce !important;
+        box-shadow: 0 4px 12px #2458d52b;
+        color: #fff !important
+    }
+}
+
+@media(hover:hover) {
+
+    #gracewell-security-suite-pro-app .hd-button.hd-primary:hover,
+    #gracewell-security-suite-pro-app #hd-save:hover {
+        background: #164bce !important;
+        color: #fff !important;
+        box-shadow: 0 4px 12px #2458d52b;
+        transform: none
+    }
+}
+
+#gracewell-security-suite-pro-app .git-diff {
+    max-height: 60vh;
+    overflow: auto;
+    border: 1px solid #8ba8cf40;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #27344d
+}
+
+#gracewell-security-suite-pro-app .diff-line {
+    display: grid;
+    grid-template-columns: 42px 42px 20px minmax(0, 1fr);
+    font: 12px/1.7 Consolas, monospace;
+    padding: 2px 8px
+}
+
+#gracewell-security-suite-pro-app .diff-line code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    background: transparent;
+    color: inherit
+}
+
+#gracewell-security-suite-pro-app .diff-line.add {
+    background: #dcfce7;
+    color: #14532d
+}
+
+#gracewell-security-suite-pro-app .diff-line.del {
+    background: #fee2e2;
+    color: #7f1d1d
+}
+
+#gracewell-security-suite-pro-app .diff-line.gwqsh-modified {
+    box-shadow: inset 3px 0 #f59e0b
+}
+
+#gracewell-security-suite-pro-app .qs-event .qs-series-dot {
+    background: currentColor !important
+}
+
+#gracewell-security-suite-pro-app .diff-header,
+#gracewell-security-suite-pro-app .diff-summary {
+    padding: 10px;
+    background: #fef3c7;
+    color: #78350f
+}
+
+#gracewell-security-suite-pro-app .gwqsh-upgrade-panel {
+    margin: 20px 0;
+    padding: 22px;
+    border: 1px solid #8ba8cf30;
+    border-radius: 16px;
+    background: var(--card, #fff);
+    color: var(--text, #122345)
+}
+
+#gracewell-security-suite-pro-app .gwqsh-upgrade-panel h2 {
+    font-size: 17px;
+    margin: 0 0 8px;
+    color: inherit
+}
+
+#gracewell-security-suite-pro-app .gwqsh-upgrade-panel .button {
+    border-radius: 8px;
+    min-height: 36px;
+    padding: 4px 12px;
+    line-height: 1.8;
+    background: transparent;
+    color: inherit;
+    border-color: #8ba8cf50
+}
+
+#gracewell-security-suite-pro-app .gwqsh-upgrade-panel .button-primary {
+    background: #2859ee;
+    color: #fff;
+    border-color: #2859ee
+}
+
+#gracewell-security-suite-pro-app .gwqsh-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin: 16px 0
+}
+
+#gracewell-security-suite-pro-app .gwqsh-form-grid label {
+    display: grid;
+    gap: 7px;
+    align-content: start;
+    font-size: 13px;
+    font-weight: 600
+}
+
+#gracewell-security-suite-pro-app .gwqsh-form-grid input,
+#gracewell-security-suite-pro-app .gwqsh-form-grid select,
+#gracewell-security-suite-pro-app .gwqsh-form-grid textarea {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    border: 1px solid #8ba8cf50;
+    border-radius: 8px;
+    padding: 8px;
+    background: transparent;
+    color: inherit
+}
+
+#gracewell-security-suite-pro-app .gwqsh-form-grid option {
+    background: var(--card, #fff);
+    color: var(--text, #122345)
+}
+
+#gracewell-security-suite-pro-app .gwqsh-upgrade-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left
+}
+
+#gracewell-security-suite-pro-app .gwqsh-upgrade-panel th {
+    padding: 10px;
+    font-size: 12px
+}
+
+#gracewell-security-suite-pro-app .gwqsh-upgrade-panel td {
+    padding: 10px;
+    border-top: 1px solid #8ba8cf30;
+    overflow-wrap: anywhere
+}
+
+#gracewell-security-suite-pro-app .gwqsh-methods {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin: 16px 0
+}
+
+#gracewell-security-suite-pro-app .gwqsh-methods>div {
+    padding: 14px;
+    border: 1px solid #8ba8cf30;
+    border-radius: 12px;
+    font-size: 13px
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .gwqsh-upgrade-panel {
+    --card: #142238;
+    --text: #e6edf9
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .gwqsh-event-success {
+    color: #63e6af
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .gwqsh-event-warning {
+    color: #ffc963
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .gwqsh-event-danger {
+    color: #ff93a0
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .gwqsh-event-info {
+    color: #92bcff
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .git-diff {
+    background: #0b1626;
+    color: #d6e2f3
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .diff-line.add {
+    background: #113d30;
+    color: #9aebbf
+}
+
+[data-theme=dark] #gracewell-security-suite-pro-app .diff-line.del {
+    background: #481e29;
+    color: #ffb6c1
+}
+
+@media(max-width:1100px) {
+    #gracewell-security-suite-pro-app .hero-pro-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-basis: 100%
+    }
+}
+
+@media(max-width:700px) {
+
+    #gracewell-security-suite-pro-app .qs-login-access-columns,
+    #gracewell-security-suite-pro-app .gwqsh-form-grid {
+        grid-template-columns: 1fr
+    }
+
+    #gracewell-security-suite-pro-app .qs-login-trust-column {
+        padding-left: 0;
+        padding-top: 18px;
+        border-left: 0;
+        border-top: 1px solid #8ba8cf30
+    }
+
+    #gracewell-security-suite-pro-app .gwqsh-methods {
+        grid-template-columns: 1fr 1fr
+    }
+
+    #gracewell-security-suite-pro-app .toasts {
+        right: 16px !important;
+        bottom: 16px !important
+    }
+
+    #gracewell-security-suite-pro-app .gwqsh-upgrade-panel {
+        padding: 16px
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    #gracewell-security-suite-pro-app .toast {
+        animation: none
+    }
+
+    #gracewell-security-suite-pro-app button {
+        transition: none
+    }
+}
+
+/* Shared Global Plugin Footer (Phase 9) */
+#gracewell-security-suite-pro-app .qs-global-footer {
+    width: 100%;
+    margin-top: 40px;
+    padding: 24px 0 32px 0;
+    border-top: 1px solid var(--line, rgba(0, 0, 0, 0.08));
+    background: transparent;
+    box-sizing: border-box;
+    clear: both;
+}
+
+#gracewell-security-suite-pro-app .qs-footer-in {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+#gracewell-security-suite-pro-app .qs-footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-2, #64748b);
+    flex-wrap: wrap;
+}
+
+#gracewell-security-suite-pro-app .qs-footer-brand b {
+    color: var(--ink, #091e42);
+    font-weight: 600;
+}
+
+#gracewell-security-suite-pro-app .qs-footer-sep {
+    opacity: 0.35;
+}
+
+#gracewell-security-suite-pro-app .qs-footer-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+}
+
+#gracewell-security-suite-pro-app .qs-footer-nav a {
+    font-size: 13px;
+    color: var(--ink-2, #64748b);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+#gracewell-security-suite-pro-app .qs-footer-nav a:hover {
+    color: var(--blue, #2563eb);
+    text-decoration: underline;
+}
+
+[data-theme="dark"] #gracewell-security-suite-pro-app .qs-global-footer {
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] #gracewell-security-suite-pro-app .qs-footer-brand {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] #gracewell-security-suite-pro-app .qs-footer-brand b {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] #gracewell-security-suite-pro-app .qs-footer-nav a {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] #gracewell-security-suite-pro-app .qs-footer-nav a:hover {
+    color: #60a5fa;
+}
+
+@media (max-width: 768px) {
+    #gracewell-security-suite-pro-app .qs-footer-in {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 0 16px;
+    }
+
+    #gracewell-security-suite-pro-app .qs-footer-desc {
+        display: none;
+    }
+
+    #gracewell-security-suite-pro-app .qs-footer-sep:last-of-type {
+        display: none;
+    }
+}
+
+/* Premium Crown beside Security Suite Pro heading (Phase 10) */
+#gracewell-security-suite-pro-app .brand-txt b {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#gracewell-security-suite-pro-app .qs-title-crown {
+    width: 14px;
+    height: 14px;
+    color: #eab308;
+    fill: #facc15;
+    flex-shrink: 0;
+    vertical-align: middle;
+    filter: drop-shadow(0 1px 2px rgba(234, 179, 8, 0.3));
+    display: inline-block;
+}
+
+[data-theme="dark"] #gracewell-security-suite-pro-app .qs-title-crown {
+    color: #facc15;
+    fill: #fde047;
+    filter: drop-shadow(0 1px 3px rgba(250, 204, 21, 0.4));
+}
+
+/* Reference layout finalization. Container queries account for the WP sidebar. */
+#gracewell-security-suite-pro-app {
+    display: flex;
+    flex-direction: column;
+    container-type: inline-size;
+    container-name: gwqsh-layout;
+    --qs-layout-gap: 16px
+}
+
+#gracewell-security-suite-pro-app>main {
+    flex: 1;
+    min-width: 0;
+    width: 100%
+}
+
+#gracewell-security-suite-pro-app .qs-global-footer {
+    flex: none;
+    margin-top: 24px;
+    position: static
+}
+
+#gracewell-security-suite-pro-app .qs-footer-in {
+    max-width: 1440px;
+    padding-inline: 24px
+}
+
+#gracewell-security-suite-pro-app .qs-dashboard-grid-v2 {
+    gap: var(--qs-layout-gap);
+    max-width: 1440px;
+    margin: auto;
+    box-sizing: border-box
+}
+
+#gracewell-security-suite-pro-app .qs-grid-row {
+    gap: var(--qs-layout-gap);
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .qs-row-analytics {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.05fr) minmax(0, .9fr)
+}
+
+#gracewell-security-suite-pro-app .qs-row-analytics>.qs-card {
+    min-width: 0;
+    grid-column: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+    flex: 0 0 auto;
+    min-height: 190px;
+    gap: 16px;
+    padding: 0
+}
+
+#gracewell-security-suite-pro-app .qs-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px
+}
+
+#gracewell-security-suite-pro-app .qs-card-head h2 {
+    font-size: 16px;
+    line-height: 1.3;
+    margin: 0
+}
+
+#gracewell-security-suite-pro-app .qs-card-head>.qs-small-button {
+    margin-left: auto
+}
+
+#gracewell-security-suite-pro-app .qs-card-head>.qs-tile {
+    flex: none
+}
+
+#gracewell-security-suite-pro-app .qs-card-head .qs-card-head-txt {
+    flex: 1;
+    min-width: 100px
+}
+
+#gracewell-security-suite-pro-app .qs-card-subtitle {
+    font-size: 12px;
+    line-height: 1.4
+}
+
+#gracewell-security-suite-pro-app .qs-threat-map-wrap {
+    height: 130px;
+    min-height: 0;
+    margin: 6px 0;
+    flex: none
+}
+
+#gracewell-security-suite-pro-app .qs-threat-map-svg {
+    height: 100%;
+    width: 100%;
+    display: block
+}
+
+#gracewell-security-suite-pro-app .qs-geo-empty {
+    padding: 6px 0
+}
+
+#gracewell-security-suite-pro-app .qs-geo-empty-img {
+    display: none
+}
+
+#gracewell-security-suite-pro-app .qs-geo-empty p {
+    font-size: 12px
+}
+
+#gracewell-security-suite-pro-app .qs-geo-legend-bar {
+    font-size: 11px;
+    gap: 12px;
+    margin: 0;
+    justify-content: flex-end
+}
+
+#gracewell-security-suite-pro-app .qs-row-events {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr)
+}
+
+#gracewell-security-suite-pro-app .qs-row-security,
+#gracewell-security-suite-pro-app .qs-row-bottom {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr)
+}
+
+#gracewell-security-suite-pro-app .qs-table-scroll {
+    max-width: 100%;
+    overflow: auto
+}
+
+#gracewell-security-suite-pro-app .qs-table {
+    width: 100%;
+    table-layout: auto
+}
+
+#gracewell-security-suite-pro-app .qs-recent .qs-table {
+    min-width: 560px
+}
+
+#gracewell-security-suite-pro-app .qs-recent th:nth-child(1) {
+    width: 100px
+}
+
+#gracewell-security-suite-pro-app .qs-recent th:nth-child(2) {
+    width: 160px
+}
+
+#gracewell-security-suite-pro-app .qs-recent th:nth-child(3) {
+    width: 100px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard table td {
+    font-size: 12px;
+    padding: 10px 8px;
+    line-height: 1.5
+}
+
+#gracewell-security-suite-pro-app .qs-checklist-info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 12px;
+    align-items: center
+}
+
+#gracewell-security-suite-pro-app .qs-checklist-info b {
+    font-size: 13px;
+    font-weight: 500
+}
+
+#gracewell-security-suite-pro-app .qs-checklist-info small {
+    font-size: 12px
+}
+
+#gracewell-security-suite-pro-app .qs-action-grid-v2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px
+}
+
+#gracewell-security-suite-pro-app .qs-action-tile {
+    min-width: 0;
+    padding: 10px
+}
+
+#gracewell-security-suite-pro-app .qs-tile-label-box strong {
+    font-size: 12px;
+    font-weight: 500
+}
+
+#gracewell-security-suite-pro-app .qs-tile-label-box span {
+    white-space: normal;
+    font-size: 11px
+}
+
+#gracewell-security-suite-pro-app .qs-empty-state {
+    display: grid;
+    justify-items: center;
+    text-align: center
+}
+
+#gracewell-security-suite-pro-app .qs-tf-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    align-items: start;
+    gap: 16px;
+    margin-bottom: 20px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-backup {
+    flex: none;
+    min-height: 0
+}
+
+#gracewell-security-suite-pro-app .qs-tf-main-area {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .qs-tf-top-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 16px;
+    align-items: start
+}
+
+#gracewell-security-suite-pro-app .qs-tf-dashboard-grid .qs-tf-col-right {
+    display: flex;
+    width: 340px;
+    min-width: 0;
+    gap: 16px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-setup-grid {
+    grid-template-columns: 185px minmax(0, 1fr);
+    gap: 16px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-setup-grid>* {
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-codes {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px
+}
+
+#gracewell-security-suite-pro-app .qs-tf-your-methods .gwqsh-methods {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 12px 0 16px 0
+}
+
+#gracewell-security-suite-pro-app .qs-tf-your-methods .qs-method-card {
+    padding: 10px;
+    min-width: 0;
+    gap: 7px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-policy-row b {
+    font-size: 12px;
+    line-height: 1.4
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-policy-row small {
+    font-size: 11px;
+    line-height: 1.4
+}
+
+#gracewell-security-suite-pro-app .qs-factor-integrations {
+    border: 1px solid var(--line, #e2e8f0);
+    border-radius: 12px;
+    padding: 14px 18px;
+    background: var(--surface, #fff)
+}
+
+#gracewell-security-suite-pro-app .qs-factor-integrations summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy, #0f1b4d);
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+#gracewell-security-suite-pro-app .qs-factor-integrations details[open] summary {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #edf2fc
+}
+
+#gracewell-security-suite-pro-app .qs-factor-integrations .gwqsh-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+#gracewell-security-suite-pro-app .qs-settings-grid-10 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start
+}
+
+#gracewell-security-suite-pro-app #qs-set-dashboard-ui {
+    grid-column: 1 / -1
+}
+
+#gracewell-security-suite-pro-app #qs-set-dashboard-ui .divide {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px
+}
+
+#gracewell-security-suite-pro-app #qs-set-dashboard-ui .set-row {
+    flex-wrap: wrap;
+    border: 0;
+    padding: 0;
+    align-items: start;
+    gap: 12px
+}
+
+#gracewell-security-suite-pro-app .qs-set-card {
+    min-width: 0;
+    padding: 18px
+}
+
+#gracewell-security-suite-pro-app .qs-set-card .set-row.wrap-sm {
+    flex-wrap: wrap;
+    gap: 8px
+}
+
+#gracewell-security-suite-pro-app .qs-set-card .set-row.wrap-sm .txt {
+    flex-basis: 100%
+}
+
+#gracewell-security-suite-pro-app .qs-set-card .set-row .ctl.wide {
+    width: 100%;
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .qs-info-table>div {
+    gap: 14px;
+    align-items: start
+}
+
+#gracewell-security-suite-pro-app .qs-info-table dd {
+    overflow-wrap: anywhere;
+    max-width: 62%
+}
+
+#gracewell-security-suite-pro-app .qs-settings-note {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted)
+}
+
+#gracewell-security-suite-pro-app .qs-ip-action-row {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    gap: 12px
+}
+
+#gracewell-security-suite-pro-app .qs-ip-field-group,
+#gracewell-security-suite-pro-app .qs-ip-reason-group {
+    min-width: 0;
+    flex: 1 1 160px
+}
+
+#gracewell-security-suite-pro-app .qs-login-top,
+#gracewell-security-suite-pro-app .qs-login-config,
+#gracewell-security-suite-pro-app .qs-login-activity {
+    gap: 16px
+}
+
+#gracewell-security-suite-pro-app .qs-schedule-dialog .modal {
+    max-width: 520px;
+    width: 100%;
+    border-radius: 16px;
+    padding: 22px;
+    background: var(--surface, #fff)
+}
+
+#gracewell-security-suite-pro-app .qs-schedule-dialog .modal-h,
+#gracewell-security-suite-pro-app .qs-schedule-dialog .modal-b,
+#gracewell-security-suite-pro-app .qs-schedule-dialog .modal-f {
+    padding: 0;
+    border: 0
+}
+
+#gracewell-security-suite-pro-app .qs-schedule-dialog .modal-h {
+    margin-bottom: 22px
+}
+
+#gracewell-security-suite-pro-app .qs-schedule-dialog .modal-f {
+    margin-top: 28px;
+    justify-content: flex-end;
+    gap: 8px
+}
+
+#gracewell-security-suite-pro-app .qs-schedule-dialog .btn-primary {
+    background: #121c52;
+    color: #fff
+}
+
+#gracewell-security-suite-pro-app .qs-sched-group {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 20px
+}
+
+#gracewell-security-suite-pro-app .qs-sched-label {
+    display: grid;
+    gap: 4px;
+    font-size: 14px
+}
+
+#gracewell-security-suite-pro-app .qs-sched-label span {
+    font-size: 12px;
+    color: var(--muted)
+}
+
+#gracewell-security-suite-pro-app .qs-sched-group input,
+#gracewell-security-suite-pro-app .qs-sched-group select {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px
+}
+
+#gracewell-security-suite-pro-app .qs-time-icon {
+    display: none
+}
+
+#gracewell-security-suite-pro-app .qs-time-field {
+    padding-right: 10px
+}
+
+#gracewell-security-suite-pro-app .modal-bg {
+    box-sizing: border-box;
+    padding: 20px;
+    overflow-y: auto
+}
+
+#gracewell-security-suite-pro-app .modal {
+    max-height: calc(100dvh - 80px);
+    overflow-y: auto
+}
+
+#gracewell-security-suite-pro-app .qs-pulse-group:focus-visible {
+    outline: none;
+    filter: drop-shadow(0 0 3px #0755ff)
+}
+
+@container gwqsh-layout (max-width:1150px) {
+    #gracewell-security-suite-pro-app .qs-row-analytics {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    #gracewell-security-suite-pro-app .qs-card-geography {
+        grid-column: 1 / -1
+    }
+
+    #gracewell-security-suite-pro-app .qs-tf-dashboard-grid {
+        grid-template-columns: minmax(0, 1fr)
+    }
+
+    #gracewell-security-suite-pro-app .qs-tf-dashboard-grid .qs-tf-col-right {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start
+    }
+
+    #gracewell-security-suite-pro-app .qs-tf-dashboard-grid .qs-tf-col-right .qs-tf-guidance {
+        grid-column: 1 / -1
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-setup-grid {
+        grid-template-columns: 150px minmax(0, 1fr)
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-qr-box {
+        max-width: 150px
+    }
+
+    #gracewell-security-suite-pro-app .qs-settings-grid-10 {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    #gracewell-security-suite-pro-app #qs-set-dashboard-ui .divide {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+}
+
+@container gwqsh-layout (max-width:760px) {
+
+    #gracewell-security-suite-pro-app .qs-row-analytics,
+    #gracewell-security-suite-pro-app .qs-row-events,
+    #gracewell-security-suite-pro-app .qs-row-security,
+    #gracewell-security-suite-pro-app .qs-row-bottom,
+    #gracewell-security-suite-pro-app .qs-settings-grid-10,
+    #gracewell-security-suite-pro-app .qs-tf-dashboard-grid,
+    #gracewell-security-suite-pro-app .qs-tf-dashboard-grid .qs-tf-col-right,
+    #gracewell-security-suite-pro-app .qs-tf-top-cols {
+        grid-template-columns: minmax(0, 1fr)
+    }
+
+    #gracewell-security-suite-pro-app .qs-card-geography,
+    #gracewell-security-suite-pro-app .qs-tf-dashboard-grid .qs-tf-col-right {
+        grid-column: auto;
+        width: 100%
+    }
+
+    #gracewell-security-suite-pro-app .qs-dashboard-grid-v2 {
+        padding: 12px
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+        flex-direction: row;
+        text-align: left
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-setup-grid {
+        grid-template-columns: 185px minmax(0, 1fr)
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-qr-box {
+        max-width: 185px
+    }
+}
+
+@container gwqsh-layout (max-width:430px) {
+    #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-setup-grid {
+        grid-template-columns: minmax(0, 1fr);
+        text-align: left
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-setup-grid>* {
+        width: 100%
+    }
+
+    #gracewell-security-suite-pro-app #qs-set-dashboard-ui .divide {
+        grid-template-columns: minmax(0, 1fr)
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+        flex-direction: column;
+        text-align: center
+    }
+
+    #gracewell-security-suite-pro-app .qs-checklist-info {
+        grid-template-columns: 1fr;
+        gap: 3px
+    }
+
+    #gracewell-security-suite-pro-app .qs-sched-group {
+        grid-template-columns: 1fr;
+        gap: 8px
+    }
+
+    #gracewell-security-suite-pro-app .qs-set-card .set-row {
+        gap: 10px;
+        flex-wrap: wrap
+    }
+
+    #gracewell-security-suite-pro-app .qs-footer-in {
+        padding-inline: 12px
+    }
+}
+
+/* Keep headings, empty states and settings rows compact at their actual card width. */
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-card-head {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: center
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-card-head>div {
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-devices .qs-card-head {
+    padding-right: 0
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-tabs {
+    position: static;
+    justify-content: flex-end;
+    margin: 8px 0 12px;
+    flex-wrap: wrap
+}
+
+#gracewell-security-suite-pro-app .qs-tf-your-methods .gwqsh-methods {
+    grid-template-columns: repeat(4, minmax(0, 1fr))
+}
+
+#gracewell-security-suite-pro-app .qs-tf-your-methods .qs-method-card {
+    align-items: center;
+    text-align: center;
+    padding: 10px 5px
+}
+
+#gracewell-security-suite-pro-app .qs-method-head {
+    flex-direction: column;
+    gap: 6px
+}
+
+#gracewell-security-suite-pro-app .qs-tf-your-methods .qs-method-card p {
+    display: none
+}
+
+#gracewell-security-suite-pro-app .qs-tf-your-methods .qs-method-card b {
+    font-size: 12px;
+    line-height: 1.4
+}
+
+#gracewell-security-suite-pro-app .qs-tf-your-methods .qs-method-card .qs-badge {
+    font-size: 10px;
+    white-space: normal
+}
+
+#gracewell-security-suite-pro-app .qs-tf-your-methods .qs-btn-outline {
+    align-self: center;
+    padding: 5px 6px;
+    max-width: 100%
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-heading-action {
+    font-size: 11px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-devices .gwqsh-empty {
+    padding: 12px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-method-row {
+    padding-top: 8px;
+    padding-bottom: 8px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-your-methods .qs-card-head p {
+    display: none
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist-body {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 12px;
+    align-items: center;
+    flex: 1
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist li {
+    padding: 6px 0
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist-body b {
+    font-size: 12px;
+    font-weight: 500
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist-body small {
+    font-size: 12px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-empty-state {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    padding: 18px;
+    text-align: center
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-empty-state img {
+    margin: auto;
+    width: 100px;
+    height: 90px;
+    object-fit: contain
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geo-empty {
+    padding: 0
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geo-empty h4 {
+    margin: 4px 0
+}
+
+#gracewell-security-suite-pro-app .qs-pro-dashboard .qs-score-body {
+    min-height: 175px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-roles>div>span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px
+}
+
+#gracewell-security-suite-pro-app .qs-set-card .qs-info-table dd {
+    font-size: 12px;
+    font-weight: 500
+}
+
+#gracewell-security-suite-pro-app .qs-set-card .set-row {
+    padding-block: 10px
+}
+
+#gracewell-security-suite-pro-app .qs-settings-grid-10 {
+    align-items: stretch
+}
+
+#gracewell-security-suite-pro-app .qs-set-card .qs-tips-list {
+    gap: 6px
+}
+
+#gracewell-security-suite-pro-app .qs-set-card .qs-tip-item {
+    padding: 6px 8px
+}
+
+@container gwqsh-layout (max-width:430px) {
+    #gracewell-security-suite-pro-app .qs-tf-your-methods .gwqsh-methods {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist-body {
+        grid-template-columns: 1fr;
+        gap: 2px
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-setup .qs-card-head,
+    #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-backup .qs-card-head {
+        padding-right: 0
+    }
+
+    #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-heading-action {
+        position: static;
+        margin-bottom: 10px
+    }
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-schedule-dialog .modal {
+    width: 100% !important;
+    max-width: 520px !important;
+    margin: auto !important;
+    padding: 22px !important;
+    background: var(--surface, #fff) !important
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-schedule-dialog .qs-sched-group {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 18px;
+    text-align: left;
+    margin: 0
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-schedule-dialog .qs-sched-modal-form {
+    gap: 24px;
+    padding: 0
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-schedule-dialog .qs-time-field {
+    padding-left: 12px !important
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-schedule-dialog .modal-h h3 {
+    font-size: 18px
+}
+
+#gracewell-security-suite-pro-app .qs-geo-table .qs-geo-row {
+    display: table-row
+}
+
+#gracewell-security-suite-pro-app .qs-geo-table {
+    width: 100%;
+    table-layout: auto
+}
+
+#gracewell-security-suite-pro-app .qs-geo-table td {
+    padding: 6px 4px
+}
+
+#gracewell-security-suite-pro-app .qs-geo-td-country {
+    display: table-cell;
+    white-space: nowrap
+}
+
+#gracewell-security-suite-pro-app .qs-geo-td-country img {
+    vertical-align: middle;
+    margin-right: 5px
+}
+
+@media(max-width:540px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app .qs-schedule-dialog .qs-sched-group {
+        grid-template-columns: 1fr;
+        gap: 8px
+    }
+}
+
+/* Hero metric cards sit flat on the hero banner as in the reference image */
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-tf-metrics {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 12px !important
+}
+
+@media(max-width:1200px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app .qs-tf-metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important
+    }
+}
+
+@media(max-width:860px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app .qs-tf-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important
+    }
+}
+
+@media(max-width:560px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app .qs-tf-metrics {
+        grid-template-columns: 1fr !important
+    }
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-tf-metrics>.qs-metric {
+    background: #fff !important;
+    border: 1px solid rgba(226, 232, 240, 0.9) !important;
+    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    min-width: 0;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.02) !important
+}
+
+#gracewell-security-suite-pro-app .qs-overview-divider {
+    display: none !important
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-access-columns {
+    gap: 16px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-trust-column {
+    padding-left: 16px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-field {
+    margin-bottom: 10px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-chips {
+    min-height: 28px;
+    padding: 7px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-roles>div>span {
+    flex-wrap: nowrap;
+    gap: 3px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-roles>div>span>b {
+    font-size: 10px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-roles .gwqsh-role-toggle {
+    width: 30px;
+    height: 18px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-roles .gwqsh-role-toggle:checked:before {
+    transform: translateX(12px)
+}
+
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-input,
+#gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-field select {
+    min-height: 36px
+}
+
+#gracewell-security-suite-pro-app .qs-card-head .qs-more {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    border-radius: 6px;
+    padding: 4px
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-devices .qs-tf-empty {
+    min-height: 0
+}
+
+#gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-guidance-row {
+    padding: 5px 0;
+    gap: 8px
+}
+
+@container gwqsh-layout (max-width:760px) {
+    #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-trust-column {
+        padding-left: 0
+    }
+}
+
+/* Preserve the legacy container name as well as the shared layout container. */
+body.gwqsh-admin #gracewell-security-suite-pro-app {
+    container-name: quietshield gwqsh-layout !important;
+    container-type: inline-size !important
+}
+
+/* Operational controls reuse the existing card system without changing page grids. */
+#gracewell-security-suite-pro-app .qs-enterprise {
+    margin-top: 16px;
+    border-top: 1px solid var(--line, #dce6f5);
+    padding-top: 12px;
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .qs-enterprise>summary {
+    cursor: pointer;
+    color: var(--blue, #0755ff);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    min-height: 30px
+}
+
+#gracewell-security-suite-pro-app .qs-enterprise p {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted, #64748b);
+    overflow-wrap: anywhere
+}
+
+#gracewell-security-suite-pro-app .qs-enterprise .gwqsh-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px
+}
+
+#gracewell-security-suite-pro-app .qs-enterprise .gwqsh-form-grid label {
+    font-size: 12px
+}
+
+#gracewell-security-suite-pro-app .qs-enterprise .gwqsh-form-grid input[type=checkbox] {
+    width: 16px;
+    min-height: 16px;
+    margin: 0 5px 0 0
+}

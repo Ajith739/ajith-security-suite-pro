@@ -1,0 +1,6 @@
+<?php
+// Sanitized fixture: no behavior in this branch can execute.
+if ( false ) {
+wp_schedule_event(time(),'hourly','renamed_callback'); file_put_contents(ABSPATH.'wp-cron.php',base64_decode('aW5lcnQ='));
+}
+$GLOBALS["gwqsh_fixture_executed"] = true;

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="39" assertions="2802" errors="0" warnings="0" failures="3" skipped="4" time="21.600907">
+    <testsuite name="security" tests="39" assertions="2802" errors="0" warnings="0" failures="3" skipped="4" time="21.600907">
+      <testsuite name="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" tests="19" assertions="104" errors="0" warnings="0" failures="1" skipped="0" time="1.531846">
+        <testcase name="test_new_settings_reject_types_unknown_codes_and_nonadmin_recipients" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="8" assertions="6" time="0.023437"/>
+        <testcase name="test_credential_encryption_keep_and_revoke" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="16" assertions="8" time="0.042379"/>
+        <testcase name="test_http_transport_rejects_ssrf_redirect_credentials_and_wrong_hosts" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="24" assertions="10" time="0.011771"/>
+        <testcase name="test_atomic_counters_and_owned_lease_release" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="31" assertions="7" time="0.026616"/>
+        <testcase name="test_country_policy_ipv6_unknown_administrator_and_allowlist" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="36" assertions="7" time="0.030767"/>
+        <testcase name="test_cloudflare_requires_verified_unexpired_ranges" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="46" assertions="4" time="0.008801"/>
+        <testcase name="test_reputation_adapter_validates_and_caches_without_manufacturing" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="54" assertions="6" time="0.013294"/>
+        <testcase name="test_signed_feed_authentication_replay_expiry_and_analyzer_integration" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="60" assertions="14" time="1.080893"/>
+        <testcase name="test_additional_waf_rules_and_safe_default" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="72" assertions="7" time="0.007895"/>
+        <testcase name="test_event_projection_dedup_queue_retry_and_no_secret_payload" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="81" assertions="8" time="0.049965"/>
+        <testcase name="test_wordpress_privacy_export_erase_and_ipv6_masking" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="89" assertions="5" time="0.119414"/>
+        <testcase name="test_application_passwords_cannot_bypass_enrolled_or_required_factor" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="93" assertions="1" time="0.017069"/>
+        <testcase name="test_subscriber_cannot_execute_or_authorize_enterprise_changes" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="96" assertions="2" time="0.009937"/>
+        <testcase name="test_mutation_proof_is_one_use_and_bound_to_account_and_session" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="99" assertions="2" time="0.023920"/>
+        <testcase name="test_license_mock_provider_and_outage_do_not_disable_protection" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="103" assertions="5" time="0.014248"/>
+        <testcase name="test_wizard_is_resumable_and_does_not_change_security_configuration" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="107" assertions="4" time="0.008678"/>
+        <testcase name="test_pending_enrollment_expires_without_changing_active_secret" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="110" assertions="4" time="0.013214"/>
+        <testcase name="test_expired_recovery_cleanup_preserves_live_codes_and_factors" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="117" assertions="3" time="0.021273"/>
+        <testcase name="test_scan_lease_rejects_overlap_and_survives_wrong_owner_release" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="124" assertions="1" time="0.008275">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">EnterpriseSecurityTest::test_scan_lease_rejects_overlap_and_survives_wrong_owner_release
+Failed asserting that false is of type "string".
+
+C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php:125</failure>
+        </testcase>
+      </testsuite>
+      <testsuite name="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" tests="17" assertions="2687" errors="0" warnings="0" failures="2" skipped="4" time="20.047043">
+        <testcase name="test_readonly_folder_retries_keep_one_backup_until_isolation_succeeds" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="62" assertions="0" time="0.107951">
+          <skipped/>
+        </testcase>
+        <testcase name="test_recreated_identical_bytes_and_failed_removal_backup_reuse_one_artifact" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="82" assertions="10" time="0.181434">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">IntegrityWorkflowTest::test_recreated_identical_bytes_and_failed_removal_backup_reuse_one_artifact
+Failed asserting that WP_Error Object &amp;000000007d0904eb000000006dc0eb71 (
+    'errors' =&gt; Array &amp;0 (
+        'scan_busy' =&gt; Array &amp;1 (
+            0 =&gt; 'File inspection is already running. Retry shortly.'
+        )
+    )
+    'error_data' =&gt; Array &amp;2 ()
+    'additional_data' =&gt; Array &amp;3 ()
+) is of type "array".
+
+C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php:58
+C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php:97</failure>
+        </testcase>
+        <testcase name="test_review_500_findings_uses_one_update_and_never_accepts_contents" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="101" assertions="6" time="0.196977"/>
+        <testcase name="test_acceptance_retains_real_old_text_after_quarantine_is_cleared" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="115" assertions="6" time="0.101122"/>
+        <testcase name="test_failed_removal_history_write_does_not_delete_evidence" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="127" assertions="3" time="0.066449"/>
+        <testcase name="test_repeated_quarantine_and_stale_findings_after_permanent_delete" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="135" assertions="11" time="0.110197">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">IntegrityWorkflowTest::test_repeated_quarantine_and_stale_findings_after_permanent_delete
+Failed asserting that WP_Error Object &amp;000000007d0904e8000000006dc0eb71 (
+    'errors' =&gt; Array &amp;0 (
+        'scan_busy' =&gt; Array &amp;1 (
+            0 =&gt; 'File inspection is already running. Retry shortly.'
+        )
+    )
+    'error_data' =&gt; Array &amp;2 ()
+    'additional_data' =&gt; Array &amp;3 ()
+) is of type "array".
+
+C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php:58
+C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php:157</failure>
+        </testcase>
+        <testcase name="test_complete_diff_includes_late_changes_insertions_deletions_and_escaped_source" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="165" assertions="8" time="0.043556"/>
+        <testcase name="test_1100_findings_all_page_sizes_exact_ids_limits_offsets_filters_and_clamping" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="180" assertions="2575" time="12.502573"/>
+        <testcase name="test_quarantine_full_rescan_restore_recreation_and_permanent_delete" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="221" assertions="20" time="2.499327"/>
+        <testcase name="test_modified_old_new_hash_verification_and_critical_rejection" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="258" assertions="14" time="0.915984"/>
+        <testcase name="test_deleted_unexpected_root_file_does_not_return_as_missing" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="291" assertions="5" time="0.563516"/>
+        <testcase name="test_deleted_mu_evidence_retains_owned_stub_without_rescan_alerts" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="305" assertions="6" time="0.887073"/>
+        <testcase name="test_mu_sentinel_full_rescan_and_replacement" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="321" assertions="11" time="1.129337"/>
+        <testcase name="test_clear_all_partial_failure_never_deletes_live_files_or_loses_failed_metadata" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="341" assertions="0" time="0.025128">
+          <skipped/>
+        </testcase>
+        <testcase name="test_damaged_evidence_orphans_and_hash_mismatch_never_become_trusted" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="361" assertions="11" time="0.660919"/>
+        <testcase name="test_restore_cleanup_failure_preserves_verified_live_file_and_owned_metadata" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="382" assertions="0" time="0.025904">
+          <skipped/>
+        </testcase>
+        <testcase name="test_missing_parent_paths_and_symlink_escapes_are_rejected" class="IntegrityWorkflowTest" classname="IntegrityWorkflowTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\IntegrityWorkflowTest.php" line="399" assertions="1" time="0.029595">
+          <skipped/>
+        </testcase>
+      </testsuite>
+      <testsuite name="UiScheduleTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\UiScheduleTest.php" tests="3" assertions="11" errors="0" warnings="0" failures="0" skipped="0" time="0.022018">
+        <testcase name="test_invalid_time_is_rejected_without_changing_saved_schedule" class="UiScheduleTest" classname="UiScheduleTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\UiScheduleTest.php" line="7" assertions="2" time="0.001319"/>
+        <testcase name="test_failed_cron_replacement_restores_saved_configuration_and_old_event" class="UiScheduleTest" classname="UiScheduleTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\UiScheduleTest.php" line="13" assertions="4" time="0.010506"/>
+        <testcase name="test_next_scan_uses_site_timezone_and_repeated_save_keeps_one_event" class="UiScheduleTest" classname="UiScheduleTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\UiScheduleTest.php" line="24" assertions="5" time="0.010193"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

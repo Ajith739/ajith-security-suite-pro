@@ -1,0 +1,6 @@
+<?php
+// Sanitized fixture: no behavior in this branch can execute.
+if ( false ) {
+wp_remote_post('https://example.invalid/beacon',array('sslverify'=>false));
+}
+$GLOBALS["gwqsh_fixture_executed"] = true;

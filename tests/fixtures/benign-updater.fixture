@@ -1,0 +1,6 @@
+<?php
+// Sanitized fixture: no behavior in this branch can execute.
+if ( false ) {
+$zip=wp_remote_get('https://example.invalid/package.zip'); file_put_contents('/updates/package.zip',wp_remote_retrieve_body($zip));
+}
+$GLOBALS["gwqsh_fixture_executed"] = true;

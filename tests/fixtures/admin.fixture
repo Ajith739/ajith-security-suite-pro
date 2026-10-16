@@ -1,0 +1,6 @@
+<?php
+// Sanitized fixture: no behavior in this branch can execute.
+if ( false ) {
+add_filter('all_plugins','hide_me'); wp_insert_user(array('role'=>'administrator'));
+}
+$GLOBALS["gwqsh_fixture_executed"] = true;

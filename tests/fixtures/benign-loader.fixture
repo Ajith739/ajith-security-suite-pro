@@ -1,0 +1,6 @@
+<?php
+// Sanitized fixture: no behavior in this branch can execute.
+if ( false ) {
+add_action('init','safe_callback'); require_once __DIR__.'/platform/bootstrap.php';
+}
+$GLOBALS["gwqsh_fixture_executed"] = true;

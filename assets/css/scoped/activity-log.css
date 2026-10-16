@@ -1,0 +1,1994 @@
+/* Additional variables not in dashboard.css */
+#gracewell-security-suite-pro-app {
+    --navy-800: #0F1B4D;
+    --navy-700: #1A2A6C;
+    --navy-500: #3B4FA8;
+    --blue-600: #2F5BEA;
+    --blue-500: #3B82F6;
+    --blue-100: #DCE6FF;
+    --purple-600: #7C3AED;
+    --purple-500: #9D4EDD;
+    --purple-100: #E9DDFD;
+    --purple-50: #F3EEFE;
+    --orange-500: #F97316;
+    --green-600: #16A34A;
+    --green-100: #CFF3DC;
+    --red-600: #DC2626;
+    --red-100: #FCD9D9;
+    --amber-600: #D97706;
+    --amber-100: #FDE7C3;
+    --script: "Segoe Print", "Segoe Script", "Bradley Hand", cursive;
+    --fs-11: 11px;
+    --fs-12: 12px;
+    --fs-13: 13px;
+    --fs-14: 14px;
+    --fs-16: 16px;
+    --fs-18: 18px;
+    --fs-22: 22px;
+    --fs-28: 28px;
+    --fs-h1: clamp(28px, 3.2vw + 12px, 42px);
+    --s1: 4px;
+    --s2: 8px;
+    --s3: 12px;
+    --s4: 16px;
+    --s5: 20px;
+    --s6: 24px;
+    --s8: 32px;
+    --s10: 40px;
+    --s12: 48px;
+    --card-pad: var(--s5);
+    --row-y: 12px;
+    --r-pill: 999px;
+    --r-lg: 16px;
+    --t-fast: .16s;
+    --t-med: .28s;
+}
+
+@media (min-width:1024px) {
+    #gracewell-security-suite-pro-app {
+        --card-pad: var(--s6);
+        --gap: var(--s5)
+    }
+}
+
+html[data-density="compact"] #gracewell-security-suite-pro-app {
+    --card-pad: var(--s4);
+    --row-y: 8px;
+    --gap: var(--s3)
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app {
+    --purple-50: #2A2166;
+    --purple-100: #3B2D86;
+    --blue-600: #7EA2FF;
+    --green-100: #155A45;
+    --red-100: #5E2138;
+    --amber-100: #5A3E1A;
+    --navy-800: #3B5BDB;
+    --navy-700: #4C6BEA;
+}
+
+/* ---------- Layout */
+#gracewell-security-suite-pro-app .page {
+    position: relative;
+    z-index: 3;
+    padding-bottom: var(--s8)
+}
+
+#gracewell-security-suite-pro-app .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap)
+}
+
+#gracewell-security-suite-pro-app .grid {
+    display: grid;
+    gap: var(--gap)
+}
+
+#gracewell-security-suite-pro-app .grid>*,
+#gracewell-security-suite-pro-app .stack>*,
+#gracewell-security-suite-pro-app .hd-grid>* {
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .stats {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 1fr;
+    margin-bottom: var(--gap)
+}
+
+@media (min-width:560px) {
+    #gracewell-security-suite-pro-app .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+}
+
+/* ---------- Card */
+#gracewell-security-suite-pro-app .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow);
+    padding: var(--card-pad);
+    min-width: 0;
+    position: relative
+}
+
+#gracewell-security-suite-pro-app .card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s3);
+    margin-bottom: var(--s4);
+    flex-wrap: wrap
+}
+
+#gracewell-security-suite-pro-app .card-head .ttl {
+    flex: 1 1 190px;
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .card-head h2,
+#gracewell-security-suite-pro-app .card-head h3 {
+    font-size: var(--fs-18);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.25;
+    letter-spacing: -.01em
+}
+
+#gracewell-security-suite-pro-app .card-head p {
+    font-size: var(--fs-13);
+    color: var(--muted);
+    margin-top: 2px
+}
+
+#gracewell-security-suite-pro-app .card-head .act {
+    display: flex;
+    gap: var(--s2);
+    align-items: center;
+    flex-wrap: wrap
+}
+
+#gracewell-security-suite-pro-app .panel {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: var(--s4)
+}
+
+#gracewell-security-suite-pro-app .divide>*+* {
+    border-top: 1px solid var(--line-2)
+}
+
+/* Icon tiles */
+#gracewell-security-suite-pro-app .tile {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    flex: none
+}
+
+#gracewell-security-suite-pro-app .tile .i {
+    width: 22px;
+    height: 22px
+}
+
+#gracewell-security-suite-pro-app .tile.sm {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px
+}
+
+#gracewell-security-suite-pro-app .tile.sm .i {
+    width: 18px;
+    height: 18px
+}
+
+#gracewell-security-suite-pro-app .tile.xs {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px
+}
+
+#gracewell-security-suite-pro-app .tile.xs .i {
+    width: 15px;
+    height: 15px
+}
+
+#gracewell-security-suite-pro-app .tile.round {
+    border-radius: 50%
+}
+
+#gracewell-security-suite-pro-app .tile.xl {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%
+}
+
+#gracewell-security-suite-pro-app .tile.xl .i {
+    width: 28px;
+    height: 28px
+}
+
+@media (min-width:1024px) {
+    #gracewell-security-suite-pro-app .tile.xl {
+        width: 64px;
+        height: 64px
+    }
+
+    #gracewell-security-suite-pro-app .tile.xl .i {
+        width: 30px;
+        height: 30px
+    }
+}
+
+#gracewell-security-suite-pro-app .t-purple {
+    background: var(--purple-50);
+    color: var(--purple-600)
+}
+
+#gracewell-security-suite-pro-app .t-green {
+    background: var(--green-50);
+    color: var(--green-600)
+}
+
+#gracewell-security-suite-pro-app .t-red {
+    background: var(--red-50);
+    color: var(--red-500)
+}
+
+#gracewell-security-suite-pro-app .t-amber {
+    background: var(--amber-50);
+    color: var(--amber-500)
+}
+
+#gracewell-security-suite-pro-app .t-blue {
+    background: var(--blue-50);
+    color: var(--blue-600)
+}
+
+#gracewell-security-suite-pro-app .t-navy {
+    background: var(--blue-50);
+    color: var(--navy-800)
+}
+
+#gracewell-security-suite-pro-app .t-gray {
+    background: var(--surface-3);
+    color: var(--faint)
+}
+
+/* Stat card */
+#gracewell-security-suite-pro-app .stat {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: var(--s4) var(--card-pad)
+}
+
+@media (min-width:1024px) {
+    #gracewell-security-suite-pro-app .stat {
+        padding: var(--s5) 18px
+    }
+}
+
+#gracewell-security-suite-pro-app .stat-body {
+    min-width: 0;
+    flex: 1
+}
+
+#gracewell-security-suite-pro-app .stat-lbl {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .stat-num {
+    font-size: var(--fs-28);
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -.02em;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums
+}
+
+#gracewell-security-suite-pro-app .stat-num small {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--muted)
+}
+
+#gracewell-security-suite-pro-app .stat-meta {
+    font-size: var(--fs-12);
+    color: var(--muted);
+    margin-top: 2px
+}
+
+#gracewell-security-suite-pro-app .trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 13px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums
+}
+
+#gracewell-security-suite-pro-app .trend .i {
+    width: 14px;
+    height: 14px
+}
+
+#gracewell-security-suite-pro-app .trend.up {
+    color: var(--green-600)
+}
+
+#gracewell-security-suite-pro-app .trend.bad {
+    color: var(--red-500)
+}
+
+#gracewell-security-suite-pro-app .stat-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 8px;
+    flex-wrap: wrap
+}
+
+#gracewell-security-suite-pro-app .legend-mini {
+    display: grid;
+    gap: 4px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    flex: none
+}
+
+#gracewell-security-suite-pro-app .legend-mini li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none
+}
+
+#gracewell-security-suite-pro-app .legend-mini b {
+    font-weight: 700;
+    min-width: 34px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .legend-mini ul {
+    margin: 0;
+    padding: 0
+}
+
+/* Dots */
+#gracewell-security-suite-pro-app .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
+    background: currentColor
+}
+
+#gracewell-security-suite-pro-app .c-green {
+    color: var(--green-500)
+}
+
+#gracewell-security-suite-pro-app .c-red {
+    color: var(--red-500)
+}
+
+#gracewell-security-suite-pro-app .c-amber {
+    color: var(--amber-500)
+}
+
+#gracewell-security-suite-pro-app .c-blue {
+    color: var(--blue-500)
+}
+
+#gracewell-security-suite-pro-app .c-purple {
+    color: var(--purple-600)
+}
+
+#gracewell-security-suite-pro-app .c-muted {
+    color: var(--muted)
+}
+
+/* Pills */
+#gracewell-security-suite-pro-app .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: var(--r-pill);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    line-height: 1
+}
+
+#gracewell-security-suite-pro-app .pill .i {
+    width: 13px;
+    height: 13px
+}
+
+#gracewell-security-suite-pro-app .p-green {
+    background: var(--green-50);
+    color: var(--green-600)
+}
+
+#gracewell-security-suite-pro-app .p-red {
+    background: var(--red-50);
+    color: var(--red-600)
+}
+
+#gracewell-security-suite-pro-app .p-amber {
+    background: var(--amber-50);
+    color: var(--amber-600)
+}
+
+#gracewell-security-suite-pro-app .p-blue {
+    background: var(--blue-50);
+    color: var(--blue-600)
+}
+
+#gracewell-security-suite-pro-app .p-purple {
+    background: var(--purple-50);
+    color: var(--purple-600)
+}
+
+#gracewell-security-suite-pro-app .p-gray {
+    background: var(--surface-3);
+    color: var(--muted)
+}
+
+#gracewell-security-suite-pro-app .p-status {
+    min-width: 84px;
+    justify-content: center;
+    border-radius: 6px;
+    height: 26px
+}
+
+#gracewell-security-suite-pro-app .p-dot::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor
+}
+
+#gracewell-security-suite-pro-app .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 600;
+    font-size: 13px
+}
+
+#gracewell-security-suite-pro-app .status::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor
+}
+
+/* Progress */
+#gracewell-security-suite-pro-app .bar {
+    height: 6px;
+    border-radius: 99px;
+    background: var(--track);
+    overflow: hidden;
+    flex: 1
+}
+
+#gracewell-security-suite-pro-app .bar>span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--blue-600), #5B8CFF);
+    width: 0
+}
+
+#gracewell-security-suite-pro-app .bar.amber>span {
+    background: linear-gradient(90deg, var(--amber-500), #FDBA3C)
+}
+
+#gracewell-security-suite-pro-app .bar.green>span {
+    background: linear-gradient(90deg, var(--green-600), var(--green-500))
+}
+
+#gracewell-security-suite-pro-app .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums
+}
+
+/* Buttons */
+#gracewell-security-suite-pro-app .btn {
+    --bh: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: var(--bh);
+    padding: 0 18px;
+    border-radius: var(--r-sm);
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background var(--t-fast), border-color var(--t-fast), transform var(--t-fast), color var(--t-fast);
+    text-decoration: none !important;
+    user-select: none
+}
+
+#gracewell-security-suite-pro-app .btn .i {
+    width: 17px;
+    height: 17px
+}
+
+#gracewell-security-suite-pro-app .btn:active {
+    transform: translateY(1px)
+}
+
+#gracewell-security-suite-pro-app .btn[disabled] {
+    opacity: .55;
+    pointer-events: none
+}
+
+#gracewell-security-suite-pro-app .btn-sm {
+    --bh: 32px;
+    padding: 0 12px;
+    font-size: 13px
+}
+
+#gracewell-security-suite-pro-app .btn-lg {
+    --bh: 46px;
+    padding: 0 24px;
+    font-size: 15px
+}
+
+#gracewell-security-suite-pro-app .btn-block {
+    width: 100%
+}
+
+#gracewell-security-suite-pro-app .btn-primary {
+    background: var(--navy-800);
+    color: #fff
+}
+
+#gracewell-security-suite-pro-app .btn-primary:hover {
+    background: var(--navy-700)
+}
+
+#gracewell-security-suite-pro-app .btn-outline {
+    background: var(--surface);
+    color: var(--blue-600);
+    border-color: #C9D5F7
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .btn-outline {
+    border-color: var(--blue-100)
+}
+
+#gracewell-security-suite-pro-app .btn-outline:hover {
+    background: var(--blue-50);
+    border-color: var(--blue-600)
+}
+
+#gracewell-security-suite-pro-app .btn-neutral {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--field-line)
+}
+
+#gracewell-security-suite-pro-app .btn-neutral:hover {
+    background: var(--surface-3)
+}
+
+#gracewell-security-suite-pro-app .btn-ghost {
+    background: none;
+    color: var(--blue-600);
+    padding: 0 8px
+}
+
+#gracewell-security-suite-pro-app .btn-ghost:hover {
+    background: var(--blue-50)
+}
+
+#gracewell-security-suite-pro-app .btn-danger {
+    background: var(--red-50);
+    color: var(--red-600);
+    border-color: var(--red-100)
+}
+
+#gracewell-security-suite-pro-app .btn-danger:hover {
+    background: var(--red-100)
+}
+
+#gracewell-security-suite-pro-app .btn-done {
+    background: var(--green-50);
+    color: var(--green-600);
+    border-color: var(--green-100);
+    cursor: default
+}
+
+#gracewell-security-suite-pro-app .link-btn {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--blue-600);
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px
+}
+
+#gracewell-security-suite-pro-app .link-btn:hover {
+    text-decoration: underline
+}
+
+#gracewell-security-suite-pro-app .link-btn .i {
+    width: 16px;
+    height: 16px
+}
+
+#gracewell-security-suite-pro-app .kebab {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: none;
+    border-radius: 8px;
+    color: var(--muted)
+}
+
+#gracewell-security-suite-pro-app .kebab:hover {
+    background: var(--surface-3);
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .copy-btn {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: none;
+    border-radius: 7px;
+    color: var(--blue-600)
+}
+
+#gracewell-security-suite-pro-app .copy-btn:hover {
+    background: var(--blue-50)
+}
+
+#gracewell-security-suite-pro-app .copy-btn .i {
+    width: 16px;
+    height: 16px
+}
+
+/* Switch */
+#gracewell-security-suite-pro-app .switch {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    border-radius: 99px;
+    border: 0;
+    background: var(--switch-off);
+    flex: none;
+    padding: 0;
+    transition: background var(--t-med) var(--ease)
+}
+
+#gracewell-security-suite-pro-app .switch::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(15, 26, 69, .3);
+    transition: transform var(--t-med) var(--ease)
+}
+
+#gracewell-security-suite-pro-app .switch[aria-checked="true"] {
+    background: var(--green-500)
+}
+
+#gracewell-security-suite-pro-app .switch[aria-checked="true"]::after {
+    transform: translateX(20px)
+}
+
+#gracewell-security-suite-pro-app .switch.lg {
+    width: 56px;
+    height: 32px
+}
+
+#gracewell-security-suite-pro-app .switch.lg::after {
+    width: 26px;
+    height: 26px
+}
+
+#gracewell-security-suite-pro-app .switch.lg[aria-checked="true"]::after {
+    transform: translateX(24px)
+}
+
+#gracewell-security-suite-pro-app .switch-set {
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+#gracewell-security-suite-pro-app .switch-set .pill {
+    min-width: 76px;
+    justify-content: center;
+    border-radius: 7px;
+    height: 28px
+}
+
+/* Fields */
+#gracewell-security-suite-pro-app .field {
+    height: 40px;
+    border: 1px solid var(--field-line);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    padding: 0 12px;
+    font-size: 14px;
+    color: var(--ink);
+    width: 100%;
+    min-width: 0;
+    transition: border-color var(--t-fast), box-shadow var(--t-fast)
+}
+
+#gracewell-security-suite-pro-app .field:hover {
+    border-color: #B9C3DA
+}
+
+#gracewell-security-suite-pro-app .field:focus {
+    outline: none;
+    border-color: var(--blue-600);
+    box-shadow: var(--ring)
+}
+
+#gracewell-security-suite-pro-app .field.invalid {
+    border-color: var(--red-500)
+}
+
+#gracewell-security-suite-pro-app .field-sm {
+    height: 34px;
+    font-size: 13px
+}
+
+#gracewell-security-suite-pro-app select.field {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 34px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230F1A45' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app select.field {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23EEF1FF' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+}
+
+#gracewell-security-suite-pro-app .search {
+    position: relative;
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .search .i {
+    position: absolute;
+    left: 11px;
+    top: 67%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+    pointer-events: none
+}
+
+#gracewell-security-suite-pro-app .search .field {
+    padding-left: 34px
+}
+
+#gracewell-security-suite-pro-app .stepper {
+    position: relative
+}
+
+#gracewell-security-suite-pro-app .stepper .field {
+    padding-right: 34px;
+    -moz-appearance: textfield
+}
+
+#gracewell-security-suite-pro-app .stepper .field::-webkit-inner-spin-button,
+#gracewell-security-suite-pro-app .stepper .field::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0
+}
+
+#gracewell-security-suite-pro-app .stepper-btns {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+    display: flex;
+    flex-direction: column;
+    width: 22px
+}
+
+#gracewell-security-suite-pro-app .stepper-btns button {
+    flex: 1;
+    border: 0;
+    background: none;
+    display: grid;
+    place-items: center;
+    border-radius: 4px;
+    color: var(--ink);
+    padding: 0
+}
+
+#gracewell-security-suite-pro-app .stepper-btns button:hover {
+    background: var(--surface-3)
+}
+
+#gracewell-security-suite-pro-app .stepper-btns .i {
+    width: 12px;
+    height: 12px;
+    stroke-width: 3
+}
+
+#gracewell-security-suite-pro-app .input-group {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--field-line);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    overflow: hidden
+}
+
+#gracewell-security-suite-pro-app .input-group:focus-within {
+    border-color: var(--blue-600);
+    box-shadow: var(--ring)
+}
+
+#gracewell-security-suite-pro-app .input-group .pre {
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    color: var(--muted);
+    font-size: 13.5px;
+    white-space: nowrap
+}
+
+#gracewell-security-suite-pro-app .input-group input {
+    border: 0;
+    background: none;
+    height: 40px;
+    padding: 0 8px 0 0;
+    flex: 1;
+    min-width: 0;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .input-group input:focus {
+    outline: none
+}
+
+#gracewell-security-suite-pro-app .input-group input[readonly] {
+    cursor: default
+}
+
+#gracewell-security-suite-pro-app .input-group .copy-btn {
+    margin: 5px;
+    border-left: 0
+}
+
+#gracewell-security-suite-pro-app .code-inline {
+    white-space: nowrap;
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--surface-3);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    accent-color: var(--blue-600);
+    margin: 0;
+    cursor: pointer
+}
+
+#gracewell-security-suite-pro-app .err-text {
+    color: var(--red-600);
+    font-size: 12px;
+    margin-top: 4px;
+    display: none
+}
+
+#gracewell-security-suite-pro-app .err-text.show {
+    display: block
+}
+
+/* Setting rows */
+#gracewell-security-suite-pro-app .set-row {
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
+    padding: var(--row-y) 0
+}
+
+#gracewell-security-suite-pro-app .set-row .txt {
+    flex: 1;
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .set-row .txt b {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .set-row .txt small {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.4
+}
+
+#gracewell-security-suite-pro-app .set-row .ctl {
+    flex: none;
+    width: clamp(120px, 36%, 150px)
+}
+
+#gracewell-security-suite-pro-app .set-row .ctl.wide {
+    width: clamp(140px, 40%, 180px)
+}
+
+#gracewell-security-suite-pro-app .set-row .ctl.auto {
+    width: auto
+}
+
+@media (max-width:420px) {
+    #gracewell-security-suite-pro-app .set-row.wrap-sm {
+        flex-wrap: wrap
+    }
+
+    #gracewell-security-suite-pro-app .set-row.wrap-sm .ctl {
+        width: 100%
+    }
+}
+
+/* Tables */
+#gracewell-security-suite-pro-app .table-wrap {
+    position: relative;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    -webkit-overflow-scrolling: touch
+}
+
+#gracewell-security-suite-pro-app .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 640px
+}
+
+#gracewell-security-suite-pro-app .table.tight th,
+#gracewell-security-suite-pro-app .table.tight td {
+    padding-left: 10px;
+    padding-right: 10px
+}
+
+#gracewell-security-suite-pro-app .table.tight th {
+    white-space: normal
+}
+
+#gracewell-security-suite-pro-app .table th {
+    background: var(--surface-2);
+    text-align: left;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 14px;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--line)
+}
+
+#gracewell-security-suite-pro-app .table td {
+    padding: var(--row-y) 14px;
+    border-bottom: 1px solid var(--line-2);
+    color: var(--ink-2);
+    white-space: nowrap;
+    vertical-align: middle
+}
+
+#gracewell-security-suite-pro-app .table tr:last-child td {
+    border-bottom: 0
+}
+
+#gracewell-security-suite-pro-app .table tbody tr {
+    transition: background var(--t-fast)
+}
+
+#gracewell-security-suite-pro-app .table tbody tr:hover {
+    background: var(--surface-2)
+}
+
+#gracewell-security-suite-pro-app .table .strong {
+    color: var(--ink);
+    font-weight: 600
+}
+
+#gracewell-security-suite-pro-app .th-sort {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px
+}
+
+#gracewell-security-suite-pro-app .th-sort .i {
+    width: 12px;
+    height: 12px
+}
+
+#gracewell-security-suite-pro-app .empty-row td {
+    text-align: center;
+    color: var(--muted);
+    padding: 28px 12px !important;
+    white-space: normal
+}
+
+/* Tabs */
+#gracewell-security-suite-pro-app .seg {
+    display: flex;
+    gap: var(--s2);
+    flex-wrap: wrap
+}
+
+#gracewell-security-suite-pro-app .seg-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 14px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
+    position: relative;
+    transition: background var(--t-fast), border-color var(--t-fast)
+}
+
+#gracewell-security-suite-pro-app .seg-btn:hover {
+    background: var(--surface-2)
+}
+
+#gracewell-security-suite-pro-app .seg-btn .i {
+    width: 17px;
+    height: 17px
+}
+
+#gracewell-security-suite-pro-app .seg-btn[aria-selected="true"] {
+    background: var(--blue-50);
+    border-color: var(--blue-100);
+    color: var(--blue-600);
+    font-weight: 700
+}
+
+#gracewell-security-suite-pro-app .seg-btn[aria-selected="true"]::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--blue-600)
+}
+
+#gracewell-security-suite-pro-app .seg.slim .seg-btn {
+    height: 32px;
+    border-color: transparent;
+    background: none
+}
+
+#gracewell-security-suite-pro-app .seg.slim .seg-btn[aria-selected="true"] {
+    background: var(--blue-50)
+}
+
+/* Toolbar */
+#gracewell-security-suite-pro-app .toolbar {
+    display: flex;
+    gap: var(--s2);
+    flex-wrap: wrap;
+    align-items: center
+}
+
+#gracewell-security-suite-pro-app .toolbar .search {
+    flex: 1 1 180px;
+    max-width: 240px
+}
+
+#gracewell-security-suite-pro-app .toolbar select.field {
+    width: auto;
+    flex: 0 1 150px
+}
+
+@media (max-width:560px) {
+    #gracewell-security-suite-pro-app .toolbar .search {
+        max-width: none;
+        flex-basis: 100%
+    }
+
+    #gracewell-security-suite-pro-app .toolbar select.field {
+        flex: 1 1 120px
+    }
+}
+
+/* Info note */
+#gracewell-security-suite-pro-app .note {
+    display: flex;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: var(--r-md);
+    font-size: 13px;
+    line-height: 1.55
+}
+
+#gracewell-security-suite-pro-app .note .i {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px
+}
+
+#gracewell-security-suite-pro-app .note-blue {
+    background: var(--blue-50);
+    color: var(--ink-2)
+}
+
+#gracewell-security-suite-pro-app .note-blue .i {
+    color: var(--blue-600)
+}
+
+#gracewell-security-suite-pro-app .note-amber {
+    background: var(--amber-50);
+    color: var(--ink-2);
+    border: 1px solid var(--amber-100)
+}
+
+#gracewell-security-suite-pro-app .note-amber .i {
+    color: var(--amber-500)
+}
+
+#gracewell-security-suite-pro-app .note b {
+    color: var(--ink)
+}
+
+/* List rows with tiles */
+#gracewell-security-suite-pro-app .lrow {
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
+    padding: 10px 0
+}
+
+#gracewell-security-suite-pro-app .lrow .txt {
+    flex: 1;
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .lrow .txt b {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .lrow .txt small {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.4
+}
+
+#gracewell-security-suite-pro-app a.lrow,
+#gracewell-security-suite-pro-app button.lrow {
+    width: 100%;
+    border: 0;
+    background: none;
+    text-align: left;
+    color: inherit;
+    border-radius: 10px;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin: 0 -6px;
+    width: calc(100% + 12px);
+    transition: background var(--t-fast)
+}
+
+#gracewell-security-suite-pro-app a.lrow:hover,
+#gracewell-security-suite-pro-app button.lrow:hover {
+    background: var(--surface-2);
+    text-decoration: none
+}
+
+#gracewell-security-suite-pro-app .lrow .chev {
+    color: var(--blue-600);
+    width: 18px;
+    height: 18px
+}
+
+/* Toast */
+#gracewell-security-suite-pro-app .toasts {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+    pointer-events: none
+}
+
+#gracewell-security-suite-pro-app .toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: min(380px, calc(100vw - 32px));
+    padding: 12px 14px;
+    background: var(--navy-900);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: var(--shadow-pop);
+    font-size: 13.5px;
+    font-weight: 500
+}
+
+#gracewell-security-suite-pro-app .toast .i {
+    width: 18px;
+    height: 18px;
+    flex: none
+}
+
+#gracewell-security-suite-pro-app .toast.ok .i {
+    color: #4ADE80
+}
+
+#gracewell-security-suite-pro-app .toast.warn .i {
+    color: #FBBF24
+}
+
+#gracewell-security-suite-pro-app .toast.err .i {
+    color: #F87171
+}
+
+#gracewell-security-suite-pro-app .toast.info .i {
+    color: #93C5FD
+}
+
+#gracewell-security-suite-pro-app .toast button {
+    margin-left: 6px;
+    background: none;
+    border: 0;
+    color: #A9B8FF;
+    font-weight: 700;
+    font-size: 13px
+}
+
+/* Modal */
+#gracewell-security-suite-pro-app .modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 20, 64, .45);
+    z-index: 80;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    backdrop-filter: blur(2px)
+}
+
+#gracewell-security-suite-pro-app .modal {
+    width: min(520px, 100%);
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-pop);
+    border: 1px solid var(--line)
+}
+
+#gracewell-security-suite-pro-app .modal.wide {
+    width: min(720px, 100%)
+}
+
+#gracewell-security-suite-pro-app .modal-h {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 22px 0
+}
+
+#gracewell-security-suite-pro-app .modal-h h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    flex: 1
+}
+
+#gracewell-security-suite-pro-app .modal-b {
+    padding: 14px 22px 6px;
+    color: var(--ink-2);
+    font-size: 14px
+}
+
+#gracewell-security-suite-pro-app .modal-b p+p {
+    margin-top: 8px
+}
+
+#gracewell-security-suite-pro-app .modal-f {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 16px 22px 20px;
+    flex-wrap: wrap
+}
+
+#gracewell-security-suite-pro-app .code-block {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    background: #0E163F;
+    color: #D7DEFF;
+    border-radius: 10px;
+    padding: 14px 16px;
+    overflow: auto;
+    white-space: pre;
+    margin-top: 8px;
+    max-height: 320px
+}
+
+#gracewell-security-suite-pro-app .code-block .add {
+    color: #86EFAC;
+    background: rgba(34, 197, 94, .12);
+    display: block
+}
+
+#gracewell-security-suite-pro-app .code-block .del {
+    color: #FCA5A5;
+    background: rgba(239, 68, 68, .12);
+    display: block
+}
+
+#gracewell-security-suite-pro-app .code-block .cm {
+    color: #8C98CC
+}
+
+/* Search palette */
+#gracewell-security-suite-pro-app .palette {
+    width: min(560px, 100%);
+    align-self: start;
+    margin-top: 10vh
+}
+
+#gracewell-security-suite-pro-app .palette input {
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    height: 56px;
+    font-size: 16px;
+    padding: 0 20px 0 48px;
+    width: 100%;
+    background: none;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .palette input:focus {
+    outline: none
+}
+
+#gracewell-security-suite-pro-app .palette .search .i {
+    left: 18px;
+    width: 20px;
+    height: 20px
+}
+
+#gracewell-security-suite-pro-app .palette ul {
+    list-style: none;
+    margin: 0;
+    padding: 8px;
+    max-height: 50vh;
+    overflow: auto
+}
+
+#gracewell-security-suite-pro-app .palette li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .palette li a small {
+    color: var(--muted);
+    margin-left: auto;
+    font-size: 12px
+}
+
+#gracewell-security-suite-pro-app .palette li a.active,
+#gracewell-security-suite-pro-app .palette li a:hover {
+    background: var(--blue-50);
+    text-decoration: none
+}
+
+/* Chart */
+#gracewell-security-suite-pro-app .chart {
+    position: relative;
+    width: 100%
+}
+
+#gracewell-security-suite-pro-app .chart svg {
+    overflow: visible
+}
+
+#gracewell-security-suite-pro-app .chart .ax {
+    font-size: 11px;
+    fill: var(--muted);
+    font-family: var(--font)
+}
+
+#gracewell-security-suite-pro-app .chart .gl {
+    stroke: var(--line-2);
+    stroke-width: 1
+}
+
+#gracewell-security-suite-pro-app .chart-legend {
+    display: flex;
+    gap: 18px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    margin-bottom: 6px
+}
+
+#gracewell-security-suite-pro-app .chart-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px
+}
+
+#gracewell-security-suite-pro-app .chart-legend.left {
+    justify-content: flex-start
+}
+
+#gracewell-security-suite-pro-app .tip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-pop);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+    white-space: nowrap;
+    z-index: 3;
+    transform: translate(-50%, -100%);
+    transition: left .15s var(--ease), top .15s var(--ease)
+}
+
+#gracewell-security-suite-pro-app .tip b {
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .tip .t {
+    color: var(--muted);
+    margin-bottom: 4px
+}
+
+#gracewell-security-suite-pro-app .tip div {
+    display: flex;
+    align-items: center;
+    gap: 7px
+}
+
+/* Ring (conic) */
+#gracewell-security-suite-pro-app .ring {
+    --p: 0;
+    --c1: var(--green-500);
+    --c2: #34D399;
+    --w: 16px;
+    position: relative;
+    width: var(--size, 180px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--c1), var(--c2) calc(var(--p)*1%), var(--track) 0);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--w)), #000 calc(100% - var(--w) + 1px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - var(--w)), #000 calc(100% - var(--w) + 1px));
+    flex: none
+}
+
+#gracewell-security-suite-pro-app .ring-box {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: none
+}
+
+#gracewell-security-suite-pro-app .ring-center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    text-align: center
+}
+
+#gracewell-security-suite-pro-app .ring-center b {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums
+}
+
+#gracewell-security-suite-pro-app .ring-center small {
+    font-size: 13px;
+    color: var(--muted)
+}
+
+/* Pagination */
+#gracewell-security-suite-pro-app .pager {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap
+}
+
+@media (max-width:480px) {
+    #gracewell-security-suite-pro-app .pager button {
+        min-width: 30px;
+        height: 30px
+    }
+
+    #gracewell-security-suite-pro-app .pager {
+        gap: 2px
+    }
+}
+
+#gracewell-security-suite-pro-app .pager button {
+    min-width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 0;
+    background: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+    display: grid;
+    place-items: center;
+    font-variant-numeric: tabular-nums
+}
+
+#gracewell-security-suite-pro-app .pager button:hover {
+    background: var(--surface-3)
+}
+
+#gracewell-security-suite-pro-app .pager button[aria-current="page"] {
+    background: var(--blue-50);
+    color: var(--blue-600);
+    box-shadow: inset 0 0 0 1px var(--blue-100)
+}
+
+#gracewell-security-suite-pro-app .pager button[disabled] {
+    opacity: .35;
+    pointer-events: none
+}
+
+#gracewell-security-suite-pro-app .pager .gap {
+    padding: 0 4px;
+    color: var(--muted)
+}
+
+#gracewell-security-suite-pro-app .pager .i {
+    width: 16px;
+    height: 16px
+}
+
+/* Footer */
+#gracewell-security-suite-pro-app .foot {
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    padding: 14px 0;
+    margin-top: auto
+}
+
+#gracewell-security-suite-pro-app .foot-in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 13px
+}
+
+#gracewell-security-suite-pro-app .foot-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .foot-brand .logo-mark {
+    width: 24px;
+    height: 27px
+}
+
+#gracewell-security-suite-pro-app .foot-brand b {
+    font-weight: 700
+}
+
+#gracewell-security-suite-pro-app .sep {
+    width: 1px;
+    height: 14px;
+    background: var(--line)
+}
+
+#gracewell-security-suite-pro-app .foot-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0
+}
+
+#gracewell-security-suite-pro-app .foot-links>* {
+    padding: 2px 16px;
+    border-left: 1px solid var(--line);
+    color: var(--ink-2);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px
+}
+
+#gracewell-security-suite-pro-app .foot-links>*:first-child {
+    border-left: 0;
+    padding-left: 0
+}
+
+#gracewell-security-suite-pro-app .foot-links a:hover {
+    color: var(--blue-600)
+}
+
+#gracewell-security-suite-pro-app .heart {
+    width: 16px;
+    height: 16px
+}
+
+@media (max-width:640px) {
+
+    #gracewell-security-suite-pro-app .foot-brand .sep,
+    #gracewell-security-suite-pro-app .foot-brand .muted:last-child {
+        display: none
+    }
+
+    #gracewell-security-suite-pro-app .foot-links>* {
+        padding: 2px 10px
+    }
+}
+
+#gracewell-security-suite-pro-app .hide {
+    display: none !important
+}
+
+#gracewell-security-suite-pro-app .tips-card.tips-off {
+    display: none
+}
+
+@media (prefers-reduced-motion:reduce) {
+
+    #gracewell-security-suite-pro-app *,
+    #gracewell-security-suite-pro-app *::before,
+    #gracewell-security-suite-pro-app *::after {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important
+    }
+}
+
+/* ---- page ---- */
+#gracewell-security-suite-pro-app .al-stats {
+    grid-template-columns: 1fr
+}
+
+@media (min-width:560px) {
+    #gracewell-security-suite-pro-app .al-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+}
+
+@media (min-width:900px) {
+    #gracewell-security-suite-pro-app .al-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr))
+    }
+}
+
+@media (min-width:1280px) {
+    #gracewell-security-suite-pro-app .al-stats {
+        grid-template-columns: repeat(5, minmax(0, 1fr))
+    }
+
+    #gracewell-security-suite-pro-app .al-stats .tile.xl {
+        width: 56px;
+        height: 56px
+    }
+
+    #gracewell-security-suite-pro-app .al-stats .tile.xl .i {
+        width: 26px;
+        height: 26px
+    }
+
+    #gracewell-security-suite-pro-app .al-stats .stat {
+        gap: 12px
+    }
+}
+
+#gracewell-security-suite-pro-app .al-grid {
+    grid-template-columns: 1fr
+}
+
+@media (min-width:1200px) {
+    #gracewell-security-suite-pro-app .al-grid {
+        grid-template-columns: 2.55fr 1fr
+    }
+}
+
+@media (min-width:768px) and (max-width:1199px) {
+    #gracewell-security-suite-pro-app .al-side {
+        display: grid;
+        grid-template-columns: 1fr 1fr
+    }
+
+    #gracewell-security-suite-pro-app .al-side .help {
+        grid-column: 1/-1
+    }
+}
+
+#gracewell-security-suite-pro-app #log .toolbar .search {
+    max-width: 190px;
+    flex-basis: 150px
+}
+
+#gracewell-security-suite-pro-app #log .toolbar select.field {
+    flex-basis: 118px
+}
+
+#gracewell-security-suite-pro-app .tab-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px
+}
+
+#gracewell-security-suite-pro-app .tab-row .seg-btn b {
+    font-weight: inherit
+}
+
+#gracewell-security-suite-pro-app .log-table {
+    min-width: 860px
+}
+
+#gracewell-security-suite-pro-app .log-table td {
+    padding-top: 9px;
+    padding-bottom: 9px
+}
+
+#gracewell-security-suite-pro-app .log-table th,
+#gracewell-security-suite-pro-app .log-table td {
+    padding-left: 10px;
+    padding-right: 10px
+}
+
+#gracewell-security-suite-pro-app .log-table {
+    min-width: 820px
+}
+
+#gracewell-security-suite-pro-app .ev {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .ev .i {
+    width: 17px;
+    height: 17px
+}
+
+#gracewell-security-suite-pro-app .log-table .det {
+    color: var(--ink-2)
+}
+
+#gracewell-security-suite-pro-app .type {
+    display: inline-block;
+    min-width: 66px;
+    text-align: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600
+}
+
+#gracewell-security-suite-pro-app .res-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    font-size: 13px
+}
+
+#gracewell-security-suite-pro-app .ev-stats {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center
+}
+
+#gracewell-security-suite-pro-app .donut-box {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    flex: none
+}
+
+#gracewell-security-suite-pro-app .donut-box .ring-center b {
+    font-size: 26px
+}
+
+#gracewell-security-suite-pro-app .donut-box .ring-center small {
+    font-size: 12px
+}
+
+#gracewell-security-suite-pro-app .d-legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+    font-size: 13px;
+    flex: 1 1 150px
+}
+
+#gracewell-security-suite-pro-app .d-legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+#gracewell-security-suite-pro-app .d-legend span {
+    flex: 1;
+    color: var(--ink-2)
+}
+
+#gracewell-security-suite-pro-app .d-legend b {
+    font-weight: 500;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums
+}
+
+#gracewell-security-suite-pro-app .rec-ev {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 9px 0;
+    font-size: 12.5px
+}
+
+#gracewell-security-suite-pro-app .rec-ev .txt {
+    flex: 1;
+    min-width: 0
+}
+
+#gracewell-security-suite-pro-app .rec-ev b {
+    display: block;
+    color: var(--ink);
+    font-size: 13px
+}
+
+#gracewell-security-suite-pro-app .rec-ev small {
+    color: var(--muted);
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+#gracewell-security-suite-pro-app .rec-ev time {
+    color: var(--muted);
+    white-space: nowrap;
+    font-size: 12px
+}
+
+#gracewell-security-suite-pro-app .help {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap
+}
+
+#gracewell-security-suite-pro-app .help .txt {
+    flex: 1 1 160px
+}
+
+#gracewell-security-suite-pro-app .help h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink)
+}
+
+#gracewell-security-suite-pro-app .help p {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 2px
+}
+
+#gracewell-security-suite-pro-app .kv2 {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 8px 12px;
+    font-size: 13.5px
+}
+
+#gracewell-security-suite-pro-app .kv2 dt {
+    color: var(--muted)
+}
+
+#gracewell-security-suite-pro-app .kv2 dd {
+    margin: 0;
+    color: var(--ink);
+    word-break: break-word
+}

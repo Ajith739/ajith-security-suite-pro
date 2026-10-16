@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="16" assertions="85" errors="0" warnings="0" failures="2" skipped="0" time="1.477411">
+    <testsuite name="security" tests="16" assertions="85" errors="0" warnings="0" failures="2" skipped="0" time="1.477411">
+      <testsuite name="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" tests="16" assertions="85" errors="0" warnings="0" failures="2" skipped="0" time="1.477411">
+        <testcase name="test_new_settings_reject_types_unknown_codes_and_nonadmin_recipients" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="8" assertions="6" time="0.018108"/>
+        <testcase name="test_credential_encryption_keep_and_revoke" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="16" assertions="8" time="0.049091"/>
+        <testcase name="test_http_transport_rejects_ssrf_redirect_credentials_and_wrong_hosts" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="24" assertions="10" time="0.007882"/>
+        <testcase name="test_atomic_counters_and_owned_lease_release" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="31" assertions="7" time="0.023942"/>
+        <testcase name="test_country_policy_ipv6_unknown_administrator_and_allowlist" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="36" assertions="7" time="0.023864"/>
+        <testcase name="test_cloudflare_requires_verified_unexpired_ranges" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="46" assertions="4" time="0.011357"/>
+        <testcase name="test_reputation_adapter_validates_and_caches_without_manufacturing" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="54" assertions="6" time="0.013018"/>
+        <testcase name="test_signed_feed_authentication_replay_expiry_and_analyzer_integration" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="60" assertions="11" time="1.161573"/>
+        <testcase name="test_additional_waf_rules_and_safe_default" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="70" assertions="7" time="0.009426"/>
+        <testcase name="test_event_projection_dedup_queue_retry_and_no_secret_payload" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="79" assertions="1" time="0.028366">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">EnterpriseSecurityTest::test_event_projection_dedup_queue_retry_and_no_secret_payload
+Failed asserting that actual size 2 matches expected size 1.
+
+C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php:82</failure>
+        </testcase>
+        <testcase name="test_wordpress_privacy_export_erase_and_ipv6_masking" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="87" assertions="4" time="0.052598">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">EnterpriseSecurityTest::test_wordpress_privacy_export_erase_and_ipv6_masking
+Failed asserting that an array is empty.
+
+C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php:89</failure>
+        </testcase>
+        <testcase name="test_application_passwords_cannot_bypass_enrolled_or_required_factor" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="91" assertions="1" time="0.022523"/>
+        <testcase name="test_subscriber_cannot_execute_or_authorize_enterprise_changes" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="94" assertions="2" time="0.008769"/>
+        <testcase name="test_mutation_proof_is_one_use_and_bound_to_account_and_session" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="97" assertions="2" time="0.023769"/>
+        <testcase name="test_license_mock_provider_and_outage_do_not_disable_protection" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="101" assertions="5" time="0.014938"/>
+        <testcase name="test_wizard_is_resumable_and_does_not_change_security_configuration" class="EnterpriseSecurityTest" classname="EnterpriseSecurityTest" file="C:\xampp\htdocs\wordpress\wp-content\plugins\gracewell-security-suite-pro\tests\EnterpriseSecurityTest.php" line="105" assertions="4" time="0.008187"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

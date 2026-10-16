@@ -1,0 +1,976 @@
+/* File Integrity Pro composition. Loaded only for this admin page. */
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .qs-pro-integrity {
+    --ink: var(--qs-navy);
+    --muted: var(--qs-muted);
+    --line: var(--qs-border);
+    --blue-600: var(--qs-primary);
+    --green-500: var(--qs-success);
+    --amber-500: var(--qs-warning);
+    --red-500: var(--qs-danger);
+    --card-pad: 14px;
+    --gap: 10px !important;
+    --r-lg: 10px;
+    --shadow: 0 3px 12px rgba(31, 72, 135, .04);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .wrap {
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero {
+    position: relative !important;
+    overflow: hidden !important;
+    margin-bottom: -60px;
+    min-height: 325px !important;
+    margin-top: calc(var(--top-h, 50px) * -1) !important;
+    padding-top: calc(var(--top-h, 50px) + 28px) !important;
+    padding-bottom: 56px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+    background-color: var(--bg, #f4f6fa) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-in {
+    position: relative !important;
+    z-index: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 32px !important;
+    min-height: 140px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-content {
+    flex: 1 1 480px !important;
+    max-width: 620px !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .eyebrow {
+    display: block !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: .08em !important;
+    text-transform: uppercase !important;
+    color: var(--muted, #64748b) !important;
+    margin: 0 0 6px 0 !important;
+    line-height: 1.2 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero .h1 {
+    font-size: clamp(26px, 1.8vw + 15px, 36px) !important;
+    font-weight: 800 !important;
+    letter-spacing: -.025em !important;
+    line-height: 1.15 !important;
+    margin: 0 0 8px 0 !important;
+    color: var(--ink, #091e42) !important;
+    max-width: 24ch !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero .hl {
+    color: #0755ff !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero .lede {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    max-width: 580px !important;
+    color: var(--muted, #50617a) !important;
+    margin: 0 0 16px 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-actions {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-top: 2px !important;
+    flex-wrap: wrap !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-actions .btn {
+    border-radius: 9px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 9px 18px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    line-height: 1.3 !important;
+    transition: all .2s ease !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-actions .btn-primary {
+    background: #0755ff !important;
+    color: #ffffff !important;
+    border: 1px solid #0755ff !important;
+    box-shadow: 0 2px 8px rgba(7, 85, 255, .25) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-actions .btn-primary:hover {
+    background: #0043d9 !important;
+    border-color: #0043d9 !important;
+    box-shadow: 0 4px 14px rgba(7, 85, 255, .35) !important;
+    transform: translateY(-1px) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-actions .btn-neutral {
+    background: #ffffff !important;
+    color: #091e42 !important;
+    border: 1px solid rgba(9, 30, 66, .14) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-actions .btn-neutral:hover {
+    background: #f8fafc !important;
+    border-color: rgba(9, 30, 66, .22) !important;
+    transform: translateY(-1px) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-actions .btn .i {
+    width: 14px !important;
+    height: 14px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection {
+    position: relative !important;
+    overflow: hidden !important;
+    z-index: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 16px !important;
+    padding: 16px 22px !important;
+    border-radius: 18px !important;
+    border: 1.5px solid rgba(255, 255, 255, .9) !important;
+    background: linear-gradient(90deg, rgba(255, 255, 255, .95) 0%, rgba(255, 255, 255, .90) 45%, rgba(255, 255, 255, .35) 80%, rgba(255, 255, 255, .15) 100%), url('../../img/hero-card-bg.png') right center/cover no-repeat !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    box-shadow: 0 10px 30px rgba(7, 85, 255, .12), 0 2px 8px rgba(0, 0, 0, .04) !important;
+    min-height: 84px !important;
+    box-sizing: border-box !important;
+    transition: transform .2s ease, box-shadow .2s ease !important;
+    flex: 0 1 450px !important;
+    max-width: 470px !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 36px rgba(7, 85, 255, .16), 0 4px 12px rgba(0, 0, 0, .05) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection .tile {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: #e6f9f0 !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, .18) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection .tile svg,
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection .tile .i {
+    color: #059669 !important;
+    width: 22px !important;
+    height: 22px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection>div,
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection .fi-protection-body {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-wrap: wrap !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fiProtectionTitle {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #091e42 !important;
+    letter-spacing: -.015em !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fiProtectionBadge {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 2px 8px !important;
+    border-radius: 10px !important;
+    height: auto !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fiProtectionBadge.p-blue {
+    background: #e0edff !important;
+    color: #0755ff !important;
+    border: 1px solid rgba(7, 85, 255, .16) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fiProtectionBadge.p-amber {
+    background: #fef3c7 !important;
+    color: #d97706 !important;
+    border: 1px solid rgba(217, 119, 6, .2) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fiProtectionBadge.p-green {
+    background: #dcfce7 !important;
+    color: #16a34a !important;
+    border: 1px solid rgba(22, 163, 74, .2) !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection p,
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fiProtectionDescription {
+    font-size: 12px !important;
+    color: #50617a !important;
+    line-height: 1.4 !important;
+    margin: 4px 0 0 !important;
+}
+
+
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero .h1 {
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .eyebrow {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero .lede {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection {
+    background: linear-gradient(90deg, rgba(13, 22, 54, .95) 0%, rgba(13, 22, 54, .88) 48%, rgba(13, 22, 54, .42) 80%, rgba(13, 22, 54, .25) 100%), url('../../img/hero-card-bg.png') right center/cover no-repeat !important;
+    border-color: rgba(255, 255, 255, .16) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .45) !important;
+}
+
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fiProtectionTitle {
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fiProtectionDescription {
+    color: #94a3b8 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .page {
+    padding-top: 18px !important;
+    padding-bottom: 24px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat {
+    padding: 10px 13px 12px !important;
+    min-height: 146px !important;
+    border-radius: 10px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat>.stat-head {
+    margin: 0 0 5px;
+    gap: 9px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .tile {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 10px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .tile .i {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat>.stat-head .stat-title {
+    font-size: 12px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .pill {
+    height: 22px !important;
+    padding: 0 11px !important;
+    font-size: 10px !important;
+    font-weight: 500;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat>.stat-main {
+    margin: 0 0 6px;
+    align-items: flex-end;
+    gap: 5px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat .stat-num {
+    font-size: 26px !important;
+    line-height: 1.15 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat .stat-lbl {
+    font-size: 11px !important;
+    font-weight: 400;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat .mini-bars {
+    width: 48px !important;
+    height: 29px !important;
+    margin-bottom: 5px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat>.legend-mini {
+    padding-top: 9px;
+    gap: 6px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat>.legend-mini .lbl {
+    font-size: 10px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat>.legend-mini b {
+    font-size: 13px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-engine .stat-num {
+    font-size: 20px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-engine-foot {
+    margin-top: auto;
+    border-top: 1px solid var(--line);
+    padding-top: 7px;
+    font-size: 10px !important;
+    text-align: right;
+    color: var(--muted);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row1 {
+    grid-template-columns: 1.18fr 1.44fr 1fr !important;
+    gap: 8px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row1>:nth-child(2) {
+    grid-column: auto !important;
+    order: 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row1>.card {
+    padding: 10px 14px 12px !important;
+    min-height: 210px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .card-head {
+    gap: 10px !important;
+    margin-bottom: 8px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .card-head .ttl {
+    flex: 1 1 0;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .card-head h2 {
+    font-size: 13px !important;
+    font-weight: 750;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .card-head p {
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .sum {
+    flex-wrap: nowrap !important;
+    gap: 22px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .sum-txt {
+    flex: 1 1 0;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .sum-txt h3 {
+    font-size: 13px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .sum-txt p {
+    font-size: 11px !important;
+    line-height: 1.45 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .sum-list {
+    margin-top: 9px;
+    gap: 7px !important;
+    font-size: 11px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .sum-list li {
+    grid-template-columns: 16px 48px 1fr !important;
+    gap: 8px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .ring-center b {
+    font-size: 26px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .ring-center small {
+    font-size: 11px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .chart-legend {
+    font-size: 10px !important;
+    gap: 20px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .chart-legend>.muted {
+    display: none !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #scanChart {
+    min-width: 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .chart svg {
+    overflow: hidden;
+    max-width: 100% !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .kv {
+    margin-bottom: 12px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .kv>div {
+    grid-template-columns: 1fr auto !important;
+    font-size: 11px !important;
+    padding: 10px 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .kv dd {
+    font-weight: 650;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #runScan {
+    --bh: 38px;
+    font-size: 12px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-switch {
+    margin-bottom: 0 !important;
+    gap: 10px !important;
+    background: none;
+    padding: 0 6px !important;
+    border: 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-switch .seg-btn {
+    padding: 8px 16px !important;
+    border-radius: 7px 7px 0 0;
+    border: 1px solid transparent !important;
+    font-size: 11px !important;
+    background: var(--surface);
+    color: var(--muted);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-switch .seg-btn[aria-selected="true"] {
+    color: var(--qs-primary);
+    border-color: var(--line);
+    border-top-color: var(--qs-primary);
+    border-bottom-color: var(--surface);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results {
+    padding: 10px 13px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .card-head {
+    flex-wrap: nowrap !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .card-head .ttl {
+    flex: 0 0 180px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .toolbar {
+    display: flex !important;
+    flex: 1 1 0;
+    gap: 8px !important;
+    margin: 0 0 0 auto;
+    min-width: 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .toolbar .search {
+    flex: 1.3;
+    max-width: none !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .toolbar select.field {
+    flex: 1;
+    width: 0 !important;
+    min-width: 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .field-sm {
+    height: 30px !important;
+    font-size: 10px !important;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 25px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fTabs {
+    gap: 8px !important;
+    background: none;
+    padding: 0 !important;
+    margin-bottom: 6px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fTabs .seg-btn {
+    border: 1px solid var(--line) !important;
+    border-radius: 5px;
+    padding: 4px 12px !important;
+    font-size: 10px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table {
+    min-width: 960px !important;
+    table-layout: fixed;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table :is(th, td) {
+    padding: 5px 9px !important;
+    font-size: 10px !important;
+    vertical-align: middle !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table :is(th, td):first-child {
+    width: 30px !important;
+    padding: 5px 9px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table :is(th, td):nth-child(2) {
+    width: 36% !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table :is(th, td):nth-child(6) {
+    width: 16% !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table :is(th, td):nth-child(7) {
+    width: 12% !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table :is(th, td):last-child {
+    width: 50px !important;
+    padding: 5px 3px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results td.path .path-wrap {
+    font-size: 10px !important;
+    background: var(--surface-2);
+    border: 1px solid var(--line-2) !important;
+    border-radius: 4px;
+    padding: 1px 4px !important;
+    line-height: 1.35 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .pill {
+    border-radius: 4px;
+    height: 18px !important;
+    display: inline-flex !important;
+    margin: 0;
+    padding: 0 9px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .btn-sm {
+    --bh: 22px;
+    font-size: 10px !important;
+    min-width: 0 !important;
+    padding: 0 9px !important;
+    width: 100% !important;
+    margin: 0;
+    border-radius: 4px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .btn-danger {
+    background: var(--surface);
+    border-color: var(--qs-danger);
+    color: var(--qs-danger);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .kebab {
+    width: 22px !important;
+    height: 22px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .res-foot {
+    font-size: 10px !important;
+    margin-top: 7px;
+    gap: 8px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .pager button {
+    min-width: 22px !important;
+    height: 22px !important;
+    font-size: 10px !important;
+    border-radius: 4px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .pager button[aria-current="page"] {
+    background: var(--qs-primary);
+    color: #fff;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row2>.stack {
+    gap: 8px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row2>.stack>.card {
+    padding: 8px 14px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row2>.stack .divide {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 24px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row2>.stack .divide>* {
+    border-top: 0;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row2>.stack .divide>*:nth-child(n+3) {
+    border-top: 1px solid var(--line-2);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .lrow {
+    padding: 8px 0 !important;
+    gap: 10px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .lrow .txt b {
+    font-size: 10px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .lrow .txt small {
+    font-size: 10px !important;
+    color: var(--muted);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .foot {
+    background: var(--surface);
+    padding: 10px 0 !important;
+    font-size: 10px !important;
+    border-top: 1px solid var(--line);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .foot-in {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .foot-links {
+    display: flex !important;
+    gap: 22px !important;
+}
+
+@media(max-width:1279px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row1 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row1>:nth-child(2) {
+        grid-column: 1/-1 !important;
+        order: 3 !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .card-head {
+        flex-wrap: wrap !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .toolbar {
+        flex: 1 1 100%;
+        margin-top: 5px;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection {
+        max-width: 440px !important;
+    }
+}
+
+@media(max-width:1023px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero-in {
+        align-items: flex-start !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-protection {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero .h1 {
+        font-size: 28px !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .sum {
+        gap: 12px !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .sum .ring {
+        --size: 120px !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row2>.stack {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media(max-width:767px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .wrap {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row1 {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row1>:nth-child(2) {
+        grid-column: auto !important;
+        order: 0 !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .toolbar {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .toolbar select.field {
+        width: 100% !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row2>.stack .divide {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-row2>.stack .divide>*+* {
+        border-top: 1px solid var(--line-2);
+    }
+
+    /* Keep the existing mobile row cards instead of the desktop minimum width. */
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table tbody td:nth-child(n) {
+        width: auto !important;
+        padding: 4px 0 !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .integrity-workspace #results .table thead th:first-child {
+        width: 100% !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .foot-brand .tagline {
+        display: none !important;
+    }
+}
+
+@media(max-width:559px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero .h1 {
+        font-size: 29px !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .hero .lede {
+        font-size: 12px !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-stats .stat {
+        min-height: 140px !important;
+    }
+
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #fTabs {
+        flex-wrap: wrap !important;
+    }
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .card-head .ttl {
+    flex: 1 1 0 !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] #results .card-head .ttl {
+    flex: 0 0 180px !important;
+}
+
+/* File Integrity Overview redesign matching reference design */
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-overview {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 16px 0 10px !important;
+    margin-bottom: 20px !important;
+    width: 100% !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-overview .qs-overview-head {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 20px !important;
+    width: 100% !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-overview :is(.fi-stats, .stats) {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important;
+    row-gap: 22px !important;
+    column-gap: 32px !important;
+    padding: 6px 16px 16px !important;
+    width: 100% !important;
+    margin-top: -35px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-overview :is(.fi-stats, .stats)>.stat.qs-metric {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    gap: 13px !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-overview .stat.qs-metric .qs-metric-desc b {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #1e293b;
+}
+
+@media (max-width: 768px) {
+    body.gwqsh-admin #gracewell-security-suite-pro-app[data-page="file-integrity"] .fi-overview :is(.fi-stats, .stats) {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Schedule scan modal (Matching download(20261015-052446).png) */
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-sched-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 8px 0 4px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-sched-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-sched-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-sched-label b {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink, #091e42);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-sched-label span {
+    font-size: 12px;
+    color: var(--ink-2, #64748b);
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-time-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-time-icon {
+    position: absolute;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+    color: var(--ink-2, #64748b);
+    pointer-events: none;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-time-field {
+    padding-left: 38px !important;
+    height: 42px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-sched-select {
+    height: 42px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-scan-actions-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+body.gwqsh-admin #gracewell-security-suite-pro-app .qs-scan-actions-group .btn {
+    white-space: nowrap;
+}

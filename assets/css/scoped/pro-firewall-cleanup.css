@@ -1,0 +1,1001 @@
+/* Firewall screen only; the completed Pro screens retain their own styles. */
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup {
+  container-name: qs-dashboard qs-firewall;
+  --qs-tone: #0755ff;
+  --qs-tint: #eaf3ff;
+  color: var(--qs-navy);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup * {
+  box-sizing: border-box;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-header {
+  gap: 12px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-brand {
+  min-width: 230px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-nav {
+  gap: 3px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-nav a {
+  padding: 8px 8px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-hero {
+  min-height: 146px;
+  padding: 20px 28px;
+  position: relative;
+  background-position: center 46%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-hero h1 {
+  font-size: 36px;
+  line-height: 1.15;
+  margin: 9px 0 5px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-lede {
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 640px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-motto {
+  position: absolute;
+  right: 25%;
+  top: 17px;
+  border-left: 2px solid var(--qs-primary);
+  padding-left: 10px;
+  font-size: 15px;
+  color: #0646a5;
+  line-height: 1.35;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-content {
+  padding: 0 14px 14px;
+  display: grid;
+  gap: 13px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-feedback:empty {
+  display: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-feedback {
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--qs-border);
+  background: #fff;
+  border-radius: 8px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-feedback[data-error="true"] {
+  color: #b52135;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-card {
+  padding: 12px 14px;
+  border-radius: 12px;
+  min-width: 0;
+  box-shadow: 0 3px 10px #284b8f06;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-overview {
+  margin-bottom: 20px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  row-gap: 22px;
+  column-gap: 32px;
+  padding: 6px 16px 16px;
+  width: 100%;
+  margin-top: -10px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric {
+  position: relative;
+  min-height: 111px;
+  padding: 13px 12px;
+  display: flex;
+  gap: 12px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-metric-icon {
+  width: 39px;
+  height: 39px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--qs-tint);
+  color: var(--qs-tone);
+  display: grid;
+  place-items: center;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-green {
+  --qs-tone: #00bc7d;
+  --qs-tint: #e2faef;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-red {
+  --qs-tone: #ff344a;
+  --qs-tint: #ffe8ed;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-purple {
+  --qs-tone: #8b17ff;
+  --qs-tint: #f1e8ff;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric h2 {
+  font-size: 12px;
+  margin: 1px 0 16px;
+  line-height: 1.4;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric strong {
+  font-size: 26px;
+  line-height: 1;
+  display: block;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric p {
+  font-size: 10px;
+  color: var(--qs-muted);
+  margin: 9px 0 0;
+  line-height: 1.4;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric .qs-badge {
+  position: absolute;
+  top: 13px;
+  right: 10px;
+  font-size: 10px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-bars {
+  position: absolute;
+  right: 10px;
+  bottom: 16px;
+  height: 34px;
+  display: flex;
+  gap: 3px;
+  align-items: end;
+  color: var(--qs-tone);
+  opacity: 0.8;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-bars i {
+  width: 2px;
+  height: 55%;
+  background: currentColor;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-bars i:nth-child(2) {
+  height: 80%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-bars i:nth-child(3) {
+  height: 100%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-bars i:nth-child(4) {
+  height: 65%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-bars i:nth-child(5) {
+  height: 85%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-primary-grid {
+  display: grid;
+  grid-template-columns: 1.08fr 1fr;
+  gap: 10px;
+  align-items: stretch;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-right {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: auto auto;
+  min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-card-head {
+  gap: 10px;
+  margin-bottom: 12px;
+  min-width: 0;
+  align-items: center;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-card-head h2 {
+  font-size: 14px;
+  line-height: 1.35;
+  margin: 0;
+  font-weight: 750;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-card-head p {
+  font-size: 11px;
+  margin: 3px 0 0;
+  color: var(--qs-muted);
+  line-height: 1.4;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-tile {
+  width: 33px;
+  height: 33px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: #eaf3ff;
+  color: var(--qs-primary);
+  display: inline-grid;
+  place-items: center;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-waf,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-results,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-requests {
+  position: relative;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-waf>.qs-card-head {
+  padding-right: 90px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-master {
+  position: absolute;
+  right: 14px;
+  top: 21px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-switch {
+  position: relative;
+  display: inline-flex;
+  width: 38px;
+  height: 21px;
+  flex-shrink: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-switch input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-switch>span {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background: #98aac7;
+  transition: background 0.16s;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-switch>span:after {
+  content: "";
+  display: block;
+  width: 17px;
+  height: 17px;
+  margin: 2px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px #0002;
+  transition: transform 0.16s;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-switch input:checked+span {
+  background: #00c77b;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-switch input:checked+span:after {
+  transform: translateX(17px);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-switch input:focus-visible+span {
+  outline: 2px solid var(--qs-primary);
+  outline-offset: 3px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tabs {
+  display: flex;
+  background: #f6f9ff;
+  overflow-x: auto;
+  gap: 2px;
+  scrollbar-width: thin;
+  margin: 4px 0 10px;
+  max-width: 100%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tabs button {
+  flex: 1 0 auto;
+  border: 0;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  padding: 10px 11px;
+  font-size: 11px;
+  color: var(--qs-muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tabs button[aria-selected="true"] {
+  border-bottom-color: var(--qs-primary);
+  background: #eaf3ff;
+  color: var(--qs-primary);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  border-bottom: 1px solid #eaf0fb;
+  padding: 7px 5px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-rule:hover,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tool:hover {
+  background: #f8fbff;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-rule>span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-rule b,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tool b {
+  font-size: 12px;
+  line-height: 1.35;
+  display: block;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-rule small,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tool small {
+  font-size: 11px;
+  color: var(--qs-muted);
+  line-height: 1.4;
+  display: block;
+  margin-top: 2px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-neutral {
+  background: #edf1f8;
+  color: #64708b;
+  font-size: 10px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-note {
+  font-size: 10px;
+  color: var(--qs-muted);
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-save {
+  width: 100%;
+  justify-content: center;
+  background: linear-gradient(100deg, #041b55, #080b45);
+  color: white;
+  min-height: 36px;
+  margin-top: 10px;
+  border: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup [role="tabpanel"] {
+  min-height: 300px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup [role="tabpanel"]:not(#qs-fw-panel-rules) {
+  padding: 20px 12px;
+  line-height: 1.65;
+  font-size: 13px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup [role="tabpanel"] h3 {
+  font-size: 15px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup [hidden] {
+  display: none !important;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan>.qs-card-head {
+  padding-right: 185px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan-controls {
+  display: flex;
+  gap: 8px;
+  position: absolute;
+  right: 14px;
+  top: 16px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-button {
+  font-size: 11px;
+  min-height: 33px;
+  padding: 7px 12px;
+  gap: 8px;
+  white-space: normal;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-select {
+  font-size: 11px;
+  min-height: 33px;
+  background: white;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan-body {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  align-items: center;
+  gap: 20px;
+  padding: 4px 16px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-ring {
+  width: 166px;
+  height: 166px;
+  border-radius: 50%;
+  background: conic-gradient(#00c888 var(--progress, 0%), #e9f1fc 0);
+  display: grid;
+  place-items: center;
+  margin: auto;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-ring>div {
+  width: 130px;
+  height: 130px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-ring strong {
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-ring p {
+  font-size: 11px;
+  color: var(--qs-muted);
+  line-height: 1.4;
+  margin: 7px 0 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-checklist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-checklist li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+  min-height: 27px;
+  line-height: 1.35;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-checklist .qs-icon {
+  width: 16px;
+  height: 16px;
+  color: #00bb78;
+  background: #e1faee;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-results>.qs-card-head,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-requests>.qs-card-head {
+  padding-right: 115px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-heading-link {
+  position: absolute;
+  top: 17px;
+  right: 15px;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--qs-primary);
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid>div {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 3px 7px;
+  border: 1px solid var(--qs-border);
+  border-radius: 8px;
+  padding: 9px 7px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid .qs-tile {
+  width: 29px;
+  height: 29px;
+  grid-row: span 2;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid strong {
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid small {
+  font-size: 9px;
+  color: var(--qs-muted);
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 11px;
+  background: #f5f8ff;
+  border: 1px solid var(--qs-border);
+  border-radius: 7px;
+  padding: 11px;
+  font-size: 11px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner[data-state="clean"] {
+  background: #ecfbf4;
+  border-color: #c2f3df;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner[data-state="warning"] {
+  background: #fff7e9;
+  border-color: #ffe4b4;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner p {
+  margin: 3px 0 0;
+  color: var(--qs-muted);
+  line-height: 1.5;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-last {
+  margin-left: auto;
+  color: var(--qs-muted);
+  font-size: 9px;
+  max-width: 110px;
+  text-align: right;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 10px;
+  align-items: stretch;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-table-scroll {
+  overflow: auto;
+  width: 100%;
+  scrollbar-width: thin;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-table-scroll table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 600px;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-table-scroll th {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--qs-muted);
+  background: #f5f9ff;
+  padding: 6px 7px;
+  font-weight: 600;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-table-scroll td {
+  border-bottom: 1px solid #edf2fb;
+  padding: 7px;
+  max-width: 145px;
+  overflow-wrap: anywhere;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tool {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  background: transparent;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #eaf0fb;
+  text-align: left;
+  padding: 7px 6px;
+  cursor: pointer;
+  color: var(--qs-navy);
+  min-height: 47px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tool>span:nth-child(2) {
+  flex: 1;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tool>span:last-child {
+  color: var(--qs-primary);
+  font-size: 21px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 11px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-small-button {
+  margin: 0;
+  background: white;
+  color: var(--qs-primary);
+  font-size: 11px;
+  min-height: 30px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-footer {
+  border-top: 1px solid var(--qs-border);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 22px;
+  font-size: 11px;
+  color: var(--qs-muted);
+  background: white;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-footer nav {
+  display: flex;
+  gap: 22px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-footer a {
+  color: var(--qs-muted);
+  text-decoration: none;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup button:focus-visible,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup a:focus-visible,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup select:focus-visible,
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup [tabindex]:focus-visible {
+  outline: 2px solid var(--qs-primary);
+  outline-offset: 3px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+body.gwqsh-admin:has(#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup) #adminmenu .wp-submenu a[aria-current="page"] {
+  background: #0755ff;
+  color: white;
+}
+
+@container qs-firewall (max-width:1250px) {
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-brand {
+    min-width: 195px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-nav a {
+    font-size: 10px;
+    padding: 8px 5px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan>.qs-card-head {
+    padding-right: 0;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan-controls {
+    position: static;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric {
+    gap: 7px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric h2 {
+    font-size: 11px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric .qs-badge {
+    top: 38px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-motto {
+    right: 23%;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan-body {
+    gap: 10px;
+    padding: 4px 0;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid>div {
+    grid-template-columns: 1fr;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid .qs-tile {
+    grid-row: auto;
+    display: none;
+  }
+}
+
+@container qs-firewall (max-width:1000px) {
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-motto {
+    display: none;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-primary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan-body {
+    grid-template-columns: 1fr;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-checklist {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric .qs-badge {
+    top: 13px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-right {
+    align-self: start;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric h2 {
+    font-size: 12px;
+  }
+}
+
+@container qs-firewall (max-width:700px) {
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-primary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric:last-child {
+    grid-column: span 2;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-hero {
+    min-height: 170px;
+    padding: 18px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-hero h1 {
+    font-size: 30px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-lede {
+    font-size: 12px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan-body {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-checklist {
+    display: block;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-footer {
+    flex-direction: column;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid>div {
+    grid-template-columns: 30px 1fr;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid .qs-tile {
+    display: grid;
+    grid-row: span 2;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-motto {
+    display: none;
+  }
+}
+
+@container qs-firewall (max-width:420px) {
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric:last-child {
+    grid-column: auto;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-content {
+    padding: 0 9px 10px;
+    gap: 10px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-card {
+    padding: 12px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric {
+    min-height: 100px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-metric h2 {
+    margin-bottom: 10px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan-body {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-checklist {
+    margin: 0 8px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan-controls {
+    justify-content: stretch;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan-controls>* {
+    flex: 1;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner {
+    flex-wrap: wrap;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-last {
+    max-width: none;
+    text-align: left;
+    margin: 0 0 0 43px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-rule {
+    gap: 9px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-rule small {
+    font-size: 10px;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-neutral {
+    max-width: 62px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-hero h1 {
+    font-size: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-switch>span,
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-switch>span:after {
+    transition: none;
+  }
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-hero::after {
+  content: "Block Threats\a Keep Clean\a Stay Secure";
+  white-space: pre;
+  min-height: 65px;
+  line-height: 1.35;
+  padding: 7px 12px;
+  top: 12px;
+  font-size: 15px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-motto {
+  display: none;
+}
+
+/* Second comparison: keep the scanner compact and mask the asset's original slogan. */
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-hero::after {
+  top: 0;
+  min-height: 83px;
+  padding-top: 10px;
+  left: 62%;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-right {
+  grid-template-rows: auto auto;
+  align-content: start;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-scan {
+  min-height: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-results {
+  min-height: 0;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-result-grid>div {
+  padding: 8px 7px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-ring {
+  width: 160px;
+  height: 160px;
+}
+
+#gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-ring>div {
+  width: 124px;
+  height: 124px;
+}
+
+@container qs-firewall (max-width:1000px) {
+  #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-hero::after {
+    display: none;
+  }
+}

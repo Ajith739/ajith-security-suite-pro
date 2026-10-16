@@ -1,0 +1,332 @@
+/* Shared theme tokens and page surfaces. Light rules stay in the original stylesheets. */
+html[data-theme="dark"] #gracewell-security-suite-pro-app { color-scheme: dark; }
+html[data-theme="light"] #gracewell-security-suite-pro-app { color-scheme: light; }
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard {
+ --qs-primary: var(--blue); --qs-navy: var(--ink); --qs-muted: var(--muted);
+ --qs-border: var(--line); --qs-bg: var(--bg);
+}
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-skip,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-menu,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-card,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-chart-tooltip,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geo-select,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-threat-map-wrap,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-btn,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-load-error button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-card,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-small-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-chips,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-add-ip input,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-table tbody tr:nth-child(even),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-table tbody tr:nth-child(even),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-small-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-protection,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-feedback,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-select,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-ring>div,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-small-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-footer,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-card,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-toggle span,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-tabs button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening :is(select, textarea),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-footer,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-card,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity :is(input, select),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .al-row-menu,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity #activityPager button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-footer { background: var(--surface) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-header,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-crown,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-badge-warning,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-table th,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist li:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-geo-row:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-geo-row.is-hovered,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-geo-progress-track,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-pro-tools .t-amber,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-purple .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-cyan .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-orange .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-rule-list li:nth-child(2) .qs-tile,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-rule-list li:nth-child(5) .qs-tile,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-warning,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-escalation,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-custom-toggle>span:last-child,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-recovery p,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-table th,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-keybox,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-method-row:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-method-row:nth-child(5) .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-policy-row:nth-of-type(4) .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-backup .qs-tile,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-codes li,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-warning,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-tabs button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-empty,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-table th,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-user-role,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-guidance-row:nth-child(3) .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-method-row .qs-badge:not(.qs-good):not(.qs-warning),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tabs,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-rule:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tool:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-neutral,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner[data-state="warning"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-table-scroll th,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-purple,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-button:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-table th,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-tabs button[aria-selected="true"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-code-box,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-danger-panel,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-headers pre,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-metric-value>span[data-direction="down"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-purple,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-orange,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-button:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-table th { background: var(--surface-2) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-header,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-table td,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-checklist li,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-scan-row,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-rule-list li,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-guidance-row,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-method-row,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-policy-row,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-rule,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-table-scroll td,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tool,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-table :is(th, td),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-rec,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-tip,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-table :is(th, td) { border-bottom: 1px solid var(--line) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav a[aria-current],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-nav a:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-icon-button:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-tile,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-blue-badge,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-toggle-status,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-tile-radar,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-blue .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license .qs-tile-blue,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-small-button:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-toggle-track,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-chip,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor #qs-tf-feedback,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-tabs [aria-selected="true"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-user-avatar,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-guidance blockquote,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-tile,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-tabs button[aria-selected="true"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-blue,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-teal,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-progress,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-toggle,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening :is(.hd-info-panel, .hd-danger-panel),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-blue { background: var(--blue-50) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-notification-dot,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-small-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-overview-actions, .qs-pro-dashboard .qs-overview-actions) .qs-select,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-badge-good,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-badge-warning,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-chart-tooltip,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geo-select,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-btn,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-green .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-purple .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-blue .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-cyan .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-orange .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-load-error,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page :is(.qs-small-button, .qs-select, .qs-login-input),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-feedback,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-input,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-warning,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-protection,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening :is(.hd-info-panel, .hd-danger-panel),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity :is(input, select),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-button { border: 1px solid var(--line) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-eyebrow,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-scan-status,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-scan-status,
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-overview-subtitle, .qs-pro-dashboard .qs-overview-subtitle),
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-updated, .qs-pro-dashboard .qs-updated),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-desc,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-sub,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-method-row .qs-badge:not(.qs-good):not(.qs-warning),
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-neutral,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .al-detail dt { color: var(--muted) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-good,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-badge-good,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-green .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-active-pill,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-good,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-custom-toggle input:checked~span:last-child,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-feedback,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-green,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-method-row:nth-child(1) .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-policy-row .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-guidance-row:nth-child(2) .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-checklist .qs-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner[data-state="clean"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-green,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-metric-value>span,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-green { background: var(--green-50) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-good,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-green .qs-stack-circle,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-badge-good,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-gauge b,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-action-green .qs-action-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-active-pill,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-gauge b,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-score,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-score-check,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-good,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-custom-toggle input:checked~span:last-child,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-event-qs-good,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-feedback,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-green,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-method-row:nth-child(1) .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-policy-row .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-enabled,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-guidance-row:nth-child(2) .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-checklist .qs-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-green,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-teal,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-metric-value>span { color: var(--green) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-warning,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-orange { background: var(--amber-50) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-warning,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-pending { color: var(--amber) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-danger,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-load-error,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-rule-list li:nth-child(1) .qs-tile,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-danger,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page :is(.qs-login-locked, .qs-login-events) .qs-tile,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-feedback.is-error,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor #qs-tf-feedback[data-error="true"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-method-row:nth-child(3) .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-guidance-row:nth-child(5) .qs-tf-row-icon,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-remove,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-red,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-red { background: var(--red-50) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-overview-title-group, .qs-pro-dashboard .qs-overview-title-group) h2,
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-overview-actions, .qs-pro-dashboard .qs-overview-actions) .qs-select,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-heading,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-heading strong,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-title,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-geo-select,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-geo-name,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-geo-col-percent,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-btn,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-label,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-title,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-checklist li { color: var(--ink) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-overview-actions, .qs-pro-dashboard .qs-overview-actions) .qs-select,
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-overview-actions, .qs-pro-dashboard .qs-overview-actions) .qs-select:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-select,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-field :is(input, select) { background-color: var(--surface) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-green .qs-stack-circle { background-color: var(--green-50) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-metric-yellow, .qs-metric-amber, .qs-metric-orange) .qs-stack-circle,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-purple .qs-stack-circle { background-color: var(--surface-2) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-red .qs-stack-circle { background-color: var(--red-50) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-blue .qs-stack-circle,
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-metric-cyan, .qs-metric-teal) .qs-stack-circle,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-metric-purple .qs-stack-square { background-color: var(--blue-50) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-overview-divider,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-license-footer,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-table td { border-top: 1px solid var(--line) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-pro-tools .qs-card-head h2,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-chip,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-chip button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-table td,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup .qs-fw-motto { color: var(--blue) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-action-btn:hover,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-custom-toggle input:checked~span:last-child,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-feedback.is-error,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor .qs-tf-remove,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner[data-state="clean"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-result-banner[data-state="warning"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-hardening .hd-danger-panel,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-danger,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-purple-button,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-activity .al-orange-button { border-color: var(--line) !important; }
+
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-dashboard .qs-load-error,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-login-page .qs-login-feedback.is-error,
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-two-factor #qs-tf-feedback[data-error="true"],
+html[data-theme="dark"] #gracewell-security-suite-pro-app .qs-pro-firewall-cleanup #qs-fw-feedback[data-error="true"] { color: var(--red) !important; }
+
+/* Primary button text stays light when page foreground tokens become light. */
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-button, .hd-blue, .al-blue-button, .qs-tf-copy-all) { color: #fff; }
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.hd-dark, .qs-tf-dark-button) { background: var(--navy-900); color: #fff; }
+html[data-theme="dark"] #gracewell-security-suite-pro-app .al-row-menu { background: var(--surface); border-color: var(--line); color: var(--ink); }
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-chart, .qs-login-chart) svg text { fill: var(--muted); }
+html[data-theme="dark"] #gracewell-security-suite-pro-app :is(.qs-chart, .qs-login-chart) svg line { stroke: var(--line); }
+html[data-theme="dark"] #gracewell-security-suite-pro-app .hero-secondary-btn { background: var(--surface) !important; color: var(--ink) !important; border-color: var(--line) !important; }
+/* Use a menu before the seven links outgrow the available admin content. */
+@media (max-width: 1499px) {
+ body.gwqsh-admin #gracewell-security-suite-pro-app .nav {
+  display: none; position: absolute; top: 100%; right: 12px; left: auto;
+  width: min(300px, calc(100% - 24px)); max-height: calc(100dvh - 100px);
+  overflow-y: auto; flex-direction: column; align-items: stretch; gap: 2px;
+  margin: 0; padding: 8px; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--surface); box-shadow: var(--shadow-pop); z-index: 200;
+ }
+ body.gwqsh-admin #gracewell-security-suite-pro-app .nav.open { display: flex; }
+ body.gwqsh-admin #gracewell-security-suite-pro-app .nav-link { padding: 10px 12px; border-radius: 8px; }
+ body.gwqsh-admin #gracewell-security-suite-pro-app .nav-link .i { display: block; }
+ body.gwqsh-admin #gracewell-security-suite-pro-app .burger { display: grid; }
+ body.gwqsh-admin #gracewell-security-suite-pro-app .top-actions { margin-left: auto; }
+}
+#gracewell-security-suite-pro-app .topbar-in { min-width: 0; }
+#gracewell-security-suite-pro-app .st-panels { min-width: 0; }
+#gracewell-security-suite-pro-app .tabs-scroll { max-width: 100%; overflow-x: auto; }
+#gracewell-security-suite-pro-app .modal { max-height: calc(100dvh - 32px); overflow-y: auto; }
+#gracewell-security-suite-pro-app .modal :is(input, select, textarea, pre) { max-width: 100%; min-width: 0; }
+
+/* WordPress's native controls have a white background unless explicitly scoped. */
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app :is(.qs-select, .qs-tf-input, .qs-login-input),
+html[data-theme="dark"] body.gwqsh-admin #gracewell-security-suite-pro-app .qs-pro-dashboard :is(select, textarea, input:not([type="checkbox"]):not([type="radio"])) {
+ background: var(--surface) !important; color: var(--ink) !important; border-color: var(--field-line) !important;
+}
+#gracewell-security-suite-pro-app .qs-metric-title { white-space: normal; overflow-wrap: anywhere; max-width: 100%; }
+#gracewell-security-suite-pro-app .qs-metric-heading { min-width: 0; }
+#gracewell-security-suite-pro-app .qs-metric-desc { white-space: normal; overflow-wrap: anywhere; }
+#gracewell-security-suite-pro-app button.qs-toggle-status { border: 0; padding: 0; }
+
+#gracewell-security-suite-pro-app .gwqsh-config-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* Dialogs are appended beside page roots; native controls need their own scope. */
+html[data-theme="dark"] #gracewell-security-suite-pro-app .modal :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+ background: var(--surface-2) !important; color: var(--ink) !important; border-color: var(--field-line) !important;
+}

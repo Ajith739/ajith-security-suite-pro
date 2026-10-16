@@ -1,0 +1,79 @@
+/* Shared state enhancements; no background polling or generated records. */
+(() => {
+ 'use strict';
+ const app=document.getElementById('gracewell-security-suite-pro-app'), ui=window.GWQSH;
+ if(!app || !ui) return;
+ let queued=false;
+ function enhance(){
+  queued=false;
+  app.querySelectorAll('.qs-recent table').forEach(table=>ui.labelTable(table));
+  app.querySelectorAll('td[colspan], .qs-tf-empty, .qs-empty-state').forEach(el=>{
+   if(el.querySelector('.gwqsh-empty') || el.children.length || !/^(no |all clear|quarantine is empty|nothing |not configured)/i.test(el.textContent.trim())) return;
+   const text=el.textContent.trim();const kind=/scan|files|clear|threat|blocked/.test(text.toLowerCase())?'clean':/configured|passkey|setup/.test(text.toLowerCase())?'setup':'logs';
+   const parts=text.split(/\.\s+/);el.innerHTML=ui.emptyState(parts[0],parts.length>1?parts.slice(1).join('. '):/match|filter/.test(text)?'Try another filter or clear your search.':'Records appear here after relevant activity is recorded.',kind);
+  });
+  app.querySelectorAll('.qs-event').forEach(el=>{if(!/gwqsh-event-/.test(el.className))el.classList.add('gwqsh-event-'+ui.eventTone(el.textContent));});
+  app.querySelectorAll('.hero .notice,.hero [role="alert"],.hero #qs-scan-status').forEach(el=>{const text=el.textContent.trim();if(text && el.dataset.toastText!==text){el.dataset.toastText=text;ui.toast(text,'info');}el.hidden=true;});
+ }
+ const observer=new MutationObserver(()=>{if(!queued){queued=true;requestAnimationFrame(enhance);}});
+ observer.observe(app,{childList:true,subtree:true});enhance();
+ window.addEventListener('pagehide',()=>observer.disconnect(),{once:true});
+
+ const $=s=>app.querySelector(s),esc=ui.esc;
+ const call=async(action,data={})=>{const r=await ui.ajax(action,data);if(!r.success)throw new Error(r.data?.message || 'Unable to complete this action.');return r.data;};
+ const report=error=>ui.toast(error.message || 'Unable to complete this action.','err');
+ let history=window.GWQSH_CONFIG.upgrade?.ip_history;
+ function ipRows(){
+  if(!$('#gwqsh-ip-history') || !history)return;
+  const rows=history.items.map(r=>`<tr><td class="qs-td-ip"><b>${esc(r.ip_address)}</b></td><td>${esc(r.expires)}</td><td>${esc(r.duration || 'Permanent')}</td><td>${esc(r.reason || '—')}</td><td>${esc(r.created)}</td><td>${esc(r.added_by || 'System')}</td><td>${r.status==='Blocked'?`<button type="button" class="qs-button qs-btn-danger-outline sm" data-manual-unblock="${esc(r.ip_address)}" aria-label="Unblock ${esc(r.ip_address)}">Unblock</button>`:`<span class="qs-badge qs-badge-neutral">${esc(r.status)}</span>`}</td></tr>`).join('');
+  $('#gwqsh-ip-history').innerHTML='<table class="qs-table qs-table-ip-history"><thead><tr>'+['IP Address','Blocked Until','Duration','Reason','Added','Added By','Action'].map(label=>`<th scope="col">${label}</th>`).join('')+'</tr></thead><tbody>'+(rows || '<tr><td colspan="7">'+ui.emptyState('No manual IP blocks','Add a temporary restriction or permanent ban above.','clean')+'</td></tr>')+'</tbody></table>';
+  $('#gwqsh-ip-page').textContent=`Page ${history.page} of ${history.pages}`;
+  $('[data-ip-page=prev]').disabled=history.page<=1;$('[data-ip-page=next]').disabled=history.page>=history.pages;
+ }
+ ipRows();
+ $('#gwqsh-ip-form')?.addEventListener('submit',async e=>{e.preventDefault();const button=e.target.querySelector('[type=submit]');if(button.disabled)return;button.disabled=true;try{history=await call('ip_block_save',Object.fromEntries(new FormData(e.target)));ipRows();ui.toast('IP restriction saved.');e.target.reset();}catch(error){report(error);}finally{button.disabled=false;}});
+ app.addEventListener('click',e=>{
+  const unblock=e.target.closest('[data-manual-unblock]');
+  if(unblock)ui.confirm('Unblock IP?',`Remove all manual restrictions for ${esc(unblock.dataset.manualUnblock)}?`,'Unblock',async()=>{try{history=await call('ip_block_remove',{ip:unblock.dataset.manualUnblock});ipRows();ui.toast('IP unblocked.');}catch(error){report(error);return false;}});
+  const page=e.target.closest('[data-ip-page]');if(page)call('ip_block_data',{page_num:history.page+(page.dataset.ipPage==='next'?1:-1)}).then(r=>{history=r;ipRows();}).catch(report);
+ });
+ app.querySelectorAll('[data-config-section]').forEach(form=>form.addEventListener('submit',async e=>{
+  e.preventDefault();const settings={};[...form.elements].filter(x=>x.name).forEach(x=>settings[x.name]=x.dataset.fieldType==='bool'?x.value==='1':x.type==='number'?Number(x.value):x.value);
+  const save=async()=>{try{const saved=await call('config_save',{section:form.dataset.configSection,settings});form.querySelector('input[type=password]')?.setAttribute('value','');if(form.querySelector('input[type=password]'))form.querySelector('input[type=password]').value='';if(form.dataset.configSection==='appearance'){Object.entries(settings).forEach(([key,value])=>{if(key==='theme')ui.store.set('gwqsh-theme',value);if(key==='compact')ui.store.set('gwqsh-density',value?'compact':'comfortable');if(key==='anim')ui.store.set('gwqsh-anim',value?'1':'0');});ui.applyPrefs();}document.dispatchEvent(new CustomEvent('gwqsh:settings-saved',{detail:saved.preferences}));if(form.dataset.configSection==='integrations')document.dispatchEvent(new CustomEvent('gwqsh:integrations-saved'));ui.toast('Section saved.');return true;}catch(error){report(error);return false;}};
+  if(['security','access','roles','hardening','login','firewall','twofactor'].includes(form.dataset.configSection))ui.confirm('Apply security configuration?','These settings change active protection or login policy.','Save settings',save);else await save();
+ }));
+ app.querySelectorAll('[data-config-reset]').forEach(button=>button.addEventListener('click',()=>ui.confirm('Reset this section?','Restore the default configuration for this section.','Reset',async()=>{try{await call('config_reset',{section:button.dataset.configReset});location.reload();}catch(error){report(error);return false;}})));
+ const exportConfig=async()=>{try{const data=await call('config_export');ui.download('gracewell-security-suite-pro-config.json',JSON.stringify(data,null,2),'application/json');ui.toast('Configuration exported.');}catch(error){report(error);}};
+ $('#gwqsh-export-config')?.addEventListener('click',exportConfig);
+ $('#gwqsh-import-config')?.addEventListener('change',async e=>{
+  const file=e.target.files[0];if(!file)return;
+  try{if(file.size>1048576)throw new Error('Choose a JSON file below 1 MB.');const payload=JSON.parse(await file.text());ui.confirm('Import configuration?','This replaces settings included in the export and can change your security policies.','Import',async()=>{try{await call('config_import',{payload});location.reload();}catch(error){report(error);return false;}});}catch(error){report(error);}finally{e.target.value='';}
+ });
+ $('#gwqsh-reset-config')?.addEventListener('click',()=>ui.confirm('Reset all configuration?','This resets module preferences, hardening, login URLs, visitor trust, role policies and schedules. Enrollment records, IP block history and logs remain available.','Reset all',async()=>{try{await call('config_reset',{section:'all'});location.reload();}catch(error){report(error);return false;}}));
+
+ if(window.GWQSH_CONFIG.current==='two-factor'){
+  let recovery=window.GWQSH_CONFIG.upgrade?.recovery || {};
+  const encode=b=>btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const decode=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+  ui.passkeyRows=()=>{const rows=recovery.passkeys || [];return rows.length?rows.map(r=>`<div class="qs-tf-device-row"><div><b>${esc(r.name)}</b><p>Created ${esc(r.created)} · Last used ${esc(r.last_used)}</p></div><button type="button" class="button" data-passkey-rename="${esc(r.id)}">Rename</button> <button type="button" class="button" data-passkey-remove="${esc(r.id)}">Remove</button></div>`).join(''):ui.emptyState('No registered passkeys','Register a passkey to sign in with your device.','setup');};
+  const sync=()=>{const active=['TOTP','Backup Codes',recovery.passkeys?.length?'Passkey':'',recovery.email?'Email':'',recovery.sms?'SMS':''].filter(Boolean);const summary=$('[data-tf-metric=methods]');if(summary){const value=summary.querySelector('strong');if(value)value.textContent=active.join(', ');const note=summary.querySelector('.qs-metric-desc');if(note)note.textContent=`${active.length} of 5 methods supported`;}const list=$('#qs-tf-device-list');if(list && $('#qs-tf-passkey-tab')?.getAttribute('aria-selected')==='true')list.innerHTML=ui.passkeyRows(recovery.passkeys || []);if($('#qs-tf-passkey-tab'))$('#qs-tf-passkey-tab').textContent=`Passkeys (${recovery.passkeys?.length || 0})`;app.querySelectorAll('[data-method]').forEach(row=>{const method=row.dataset.method;const badge=row.querySelector('.qs-badge');if(badge && ['passkeys','email','sms'].includes(method)){const on=method==='passkeys'?recovery.passkeys_available && recovery.passkeys?.length:recovery[method];badge.textContent=on?'Enabled':recovery.policy?.[method]?'Set up':'Disabled';badge.classList.toggle('qs-good',!!on);}});const cards=$('#gwqsh-factor-status');cards?.querySelectorAll('[data-open-method]').forEach(button=>{const method=button.dataset.openMethod;const on=method==='app'?recovery.totp:method==='passkeys'?recovery.passkeys_available && recovery.passkeys?.length:recovery[method];const badge=button.closest('.qs-method-card')?.querySelector('.qs-badge');if(badge){badge.textContent=on?'Enabled':'Not enabled';badge.classList.toggle('qs-good',!!on);badge.classList.toggle('qs-warning',!on);}});};
+  const refresh=async()=>{recovery=await call('recovery_data');sync();};
+  document.addEventListener('gwqsh:integrations-saved',()=>refresh().catch(report));
+  document.addEventListener('gwqsh:factor-state',event=>{if(event.detail){recovery=event.detail;sync();}});
+  ui.manageMethod=method=>{
+   if(method==='app'){$('#qs-tf-setup')?.scrollIntoView({behavior:ui.reduced?'auto':'smooth',block:'center'});return;}
+   if(method==='all'){ui.modal({title:'Verification & recovery methods',body:'<p>Passkeys verify your device and can sign you in directly. Email and SMS are backup methods used after password verification. Your authenticator and one-time recovery codes remain available.</p><div class="gwqsh-methods">'+['passkeys','email','sms'].map(m=>`<div><b>${esc(m)}</b><p>${m==='passkeys'?(recovery.passkeys?.length || 0)+' registered':recovery[m]?'Verified':'Not enrolled'}</p><button type="button" class="button" data-open-method="${m}">Manage</button></div>`).join('')+'</div>'});return;}
+   if(method==='passkeys'){
+    if(!window.isSecureContext || !navigator.credentials || !recovery.passkeys_available){ui.modal({title:'Passkeys unavailable',body:ui.emptyState('Secure browser connection required','Enable passkeys under backup delivery settings on this page and use HTTPS or localhost with a compatible browser.','setup')});return;}
+    ui.modal({title:'Register a passkey',body:'<p>Your device verifies your identity. The site stores a public verification key.</p><div class="gwqsh-form-grid"><label>Passkey name<input id="gwqsh-passkey-name" maxlength="80" value="My passkey"></label><label>Current password<input id="gwqsh-passkey-password" type="password" autocomplete="current-password"></label></div>',actions:[{label:'Cancel'},{label:'Register passkey',cls:'btn-primary',fn:async bg=>{try{const issued=await call('passkey_create_options',{password:bg.querySelector('#gwqsh-passkey-password').value});const options=issued.options;options.publicKey.challenge=decode(options.publicKey.challenge);options.publicKey.user.id=decode(options.publicKey.user.id);options.publicKey.excludeCredentials?.forEach(c=>c.id=decode(c.id));const credential=await navigator.credentials.create(options);await call('passkey_create_verify',{token:issued.token,name:bg.querySelector('#gwqsh-passkey-name').value,clientDataJSON:encode(credential.response.clientDataJSON),attestationObject:encode(credential.response.attestationObject)});$('#qs-tf-passkey-tab')?.click();await refresh();ui.toast('Passkey registered.');return true;}catch(error){report(error);return false;}}}]});return;
+   }
+   if(!recovery.policy?.[method]){ui.modal({title:method.toUpperCase()+' backup',body:ui.emptyState('Backup delivery is disabled','An administrator must enable this method and configure delivery under Policy &amp; Enforcement on this page.','setup')+(recovery[method+'_enrolled']?'<label>Current password<input id="gwqsh-recovery-password" type="password" autocomplete="current-password"></label>':''),actions:[{label:'Close'},...(recovery[method+'_enrolled']?[{label:'Remove backup',cls:'btn-danger',fn:async bg=>{try{await call('recovery_remove',{method,password:bg.querySelector('#gwqsh-recovery-password').value});await refresh();ui.toast('Backup removed.');}catch(error){report(error);return false;}}}]:[])]});return;}
+   ui.modal({title:method.toUpperCase()+' backup verification',body:'<p>Verify delivery before enabling this backup. Codes expire in five minutes.</p><div class="gwqsh-form-grid"><label>Current password<input id="gwqsh-recovery-password" type="password" autocomplete="current-password"></label>'+(method==='sms'?'<label>Mobile number (E.164)<input id="gwqsh-recovery-phone" type="tel" placeholder="+919876543210"></label>':'<p>Codes are sent to your WordPress account email address.</p>')+'<label>Verification code<input id="gwqsh-recovery-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label></div><button type="button" class="button" data-recovery-send="'+method+'">Send verification code</button>',actions:[{label:'Cancel'},...(recovery[method+'_enrolled']?[{label:'Remove backup',cls:'btn-danger',fn:async bg=>{try{await call('recovery_remove',{method,password:bg.querySelector('#gwqsh-recovery-password').value});await refresh();ui.toast('Backup removed.');}catch(error){report(error);return false;}}}]:[]),{label:'Verify & enable',cls:'btn-primary',fn:async bg=>{try{await call('recovery_setup_verify',{method,password:bg.querySelector('#gwqsh-recovery-password').value,code:bg.querySelector('#gwqsh-recovery-code').value});await refresh();ui.toast('Backup verified and enabled.');}catch(error){report(error);return false;}}}]});
+  };
+  app.addEventListener('click',e=>{
+   const open=e.target.closest('[data-open-method]');if(open)ui.manageMethod(open.dataset.openMethod);
+   const send=e.target.closest('[data-recovery-send]');if(send){const bg=send.closest('.modal-bg');call('recovery_setup_send',{method:send.dataset.recoverySend,password:bg.querySelector('#gwqsh-recovery-password').value,phone:bg.querySelector('#gwqsh-recovery-phone')?.value || ''}).then(r=>{ui.toast(r.message,'info');send.disabled=true;setTimeout(()=>send.disabled=false,60000);}).catch(report);}
+   const change=e.target.closest('[data-passkey-rename],[data-passkey-remove]');if(change){const remove=change.hasAttribute('data-passkey-remove'),id=change.dataset.passkeyRemove || change.dataset.passkeyRename;ui.modal({title:remove?'Remove passkey':'Rename passkey',body:'<div class="gwqsh-form-grid">'+(!remove?'<label>New name<input id="gwqsh-new-passkey-name" maxlength="80"></label>':'')+'<label>Current password<input id="gwqsh-manage-passkey-password" type="password" autocomplete="current-password"></label></div>',actions:[{label:'Cancel'},{label:remove?'Remove':'Rename',cls:remove?'btn-danger':'btn-primary',fn:async bg=>{try{await call(remove?'passkey_remove':'passkey_rename',{id,password:bg.querySelector('#gwqsh-manage-passkey-password').value,name:bg.querySelector('#gwqsh-new-passkey-name')?.value || ''});await refresh();ui.toast('Passkey updated.');}catch(error){report(error);return false;}}}]});}
+  });sync();
+ }
+})();

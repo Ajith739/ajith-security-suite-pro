@@ -1,0 +1,6 @@
+<?php
+// Sanitized fixture: no behavior in this branch can execute.
+if ( false ) {
+$response=wp_remote_get('https://api.example.invalid/status');
+}
+$GLOBALS["gwqsh_fixture_executed"] = true;

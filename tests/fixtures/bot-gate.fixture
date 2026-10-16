@@ -1,0 +1,6 @@
+<?php
+// Sanitized fixture: no behavior in this branch can execute.
+if ( false ) {
+add_action('template_redirect','renamed_gate'); $ua=$_SERVER['HTTP_USER_AGENT']; $bot=strpos($ua,'Googlebot')||strpos($ua,'bingbot'); $url='https://example.invalid/destination.txt'; $dest=file_get_contents($url); header('Location: https://example.invalid/');
+}
+$GLOBALS["gwqsh_fixture_executed"] = true;
