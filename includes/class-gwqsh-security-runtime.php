@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 if ( ! class_exists( 'GWQSH_Security_Runtime', false ) ) {
 	/** Minimal common security primitives. No database, network or WordPress functions. */
 	final class GWQSH_Security_Runtime {
-		const VERSION = '1';
+		const VERSION = '2';
 		const LIMIT   = 524288;
 
 		/**
@@ -222,7 +222,7 @@ if ( ! class_exists( 'GWQSH_Security_Runtime', false ) ) {
 			}
 			$temp = dirname( $path ) . '/.' . bin2hex( random_bytes( 12 ) ) . '.tmp';
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
-			$fp   = @fopen( $temp, 'xb' );
+			$fp = @fopen( $temp, 'xb' );
 			if ( ! $fp ) {
 				return false;
 			}
@@ -319,13 +319,13 @@ if ( ! class_exists( 'GWQSH_Security_Runtime', false ) ) {
 				// A precomputed WordPress MU list will include this original pathname next.
 				$temp = dirname( $file ) . '/.' . $id . '.tmp';
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
-				$fp   = @fopen( $temp, 'xb' );
+				$fp = @fopen( $temp, 'xb' );
 				if ( ! $fp ) {
 					return false;
 				}
 				$body = "<?php\n// Gracewell-blocked; evidence " . $id . ".\nreturn;\n";
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
-				$ok   = fwrite( $fp, $body ) === strlen( $body ) && fflush( $fp );
+				$ok = fwrite( $fp, $body ) === strlen( $body ) && fflush( $fp );
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
 				fclose( $fp );
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_chmod -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.

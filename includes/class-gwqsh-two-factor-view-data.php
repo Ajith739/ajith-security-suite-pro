@@ -16,7 +16,7 @@ final class GWQSH_Two_Factor_View_Data {
 	 */
 	public static function get( $filters = array() ) {
 		$me       = wp_get_current_user();
-		$manage   = current_user_can( 'manage_options' );
+		$manage   = current_user_can( GWQSH_Admin::management_capability() );
 		$secret   = GWQSH_Two_Factor::get_provisioning_secret( $me->ID );
 		$settings = GWQSH_Two_Factor::get_settings();
 		$roles    = array_map(
@@ -151,7 +151,7 @@ final class GWQSH_Two_Factor_View_Data {
 		return array(
 			'can_manage'        => $manage,
 			'settings'          => $settings,
-			'recovery' => GWQSH_Recovery::data( $me->ID ),
+			'recovery'          => GWQSH_Recovery::data( $me->ID ),
 			'roles'             => $roles,
 			'counts'            => $counts,
 			'percent'           => $percent,

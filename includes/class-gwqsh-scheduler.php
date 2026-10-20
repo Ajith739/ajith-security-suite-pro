@@ -24,7 +24,7 @@ final class GWQSH_Scheduler {
 	 * @param mixed $schedules schedules value.
 	 */
 	public static function intervals( $schedules ) {
-		$schedules['gwqsh_weekly'] = array(
+		$schedules['gwqsh_weekly']  = array(
 			'interval' => WEEK_IN_SECONDS,
 			'display'  => 'Weekly',
 		);
@@ -32,7 +32,7 @@ final class GWQSH_Scheduler {
 			'interval' => 30 * DAY_IN_SECONDS,
 			'display'  => 'Monthly',
 		);
-		$schedules['gwqsh_custom'] = array(
+		$schedules['gwqsh_custom']  = array(
 			'interval' => (int) self::settings()['custom_minutes'] * MINUTE_IN_SECONDS,
 			'display'  => 'Custom integrity interval',
 		);
@@ -72,7 +72,7 @@ final class GWQSH_Scheduler {
 		if ( isset( $input['time'] ) && ( ! is_string( $input['time'] ) || ! preg_match( '/^([01][0-9]|2[0-3]):[0-5][0-9]$/D', $input['time'] ) ) ) {
 			return new WP_Error( 'invalid_time', 'Choose a valid scan time (HH:MM).' );
 		}
-		$time = isset( $input['time'] ) && preg_match( '/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', trim( $input['time'] ) ) ? trim( $input['time'] ) : '02:00';
+		$time    = isset( $input['time'] ) && preg_match( '/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', trim( $input['time'] ) ) ? trim( $input['time'] ) : '02:00';
 		$minutes = $input['custom_minutes'] ?? 60;
 		if ( ! is_numeric( $minutes ) || floor( (float) $minutes ) !== (float) $minutes || $minutes < 5 || $minutes > 10080 ) {
 			return new WP_Error( 'invalid_interval', 'Choose a custom interval between 5 and 10080 minutes.' ); }
@@ -94,8 +94,8 @@ final class GWQSH_Scheduler {
 		$data = self::validate( $input );
 		if ( is_wp_error( $data ) ) {
 			return $data; }
-		$frequency = $data['frequency'];
-		$old       = self::settings();
+		$frequency      = $data['frequency'];
+		$old            = self::settings();
 		$previous_event = wp_get_scheduled_event( self::HOOK );
 		update_option( 'gwqsh_scan_schedule', $data, false );
 		if ( self::settings() !== $data ) {
@@ -107,10 +107,10 @@ final class GWQSH_Scheduler {
 				return new WP_Error( 'unschedule_failed', 'Unable to replace the existing WordPress cron event.' );
 			}
 			if ( $data['enabled'] ) {
-				$time = $data['time'] ?? '02:00';
+				$time                 = $data['time'] ?? '02:00';
 				list( $hours, $mins ) = explode( ':', $time );
 				try {
-					$now = new DateTimeImmutable( 'now', wp_timezone() );
+					$now         = new DateTimeImmutable( 'now', wp_timezone() );
 					$first_event = $now->setTime( (int) $hours, (int) $mins, 0 );
 					if ( $first_event->getTimestamp() <= time() ) {
 						$first_event = $first_event->modify( '+1 day' );
@@ -133,9 +133,9 @@ final class GWQSH_Scheduler {
 	}
 	/** Return public status fields without exposing credential material. */
 	public static function data() {
-		$next = wp_next_scheduled( self::HOOK );
-		$last = (int) get_option( 'gwqsh_scheduled_scan_last', 0 );
-		$freq_map = array(
+		$next       = wp_next_scheduled( self::HOOK );
+		$last       = (int) get_option( 'gwqsh_scheduled_scan_last', 0 );
+		$freq_map   = array(
 			'hourly'        => 'Hourly',
 			'twicedaily'    => 'Twice daily',
 			'daily'         => 'Daily',
@@ -144,7 +144,7 @@ final class GWQSH_Scheduler {
 			'gwqsh_monthly' => 'Monthly',
 			'monthly'       => 'Monthly',
 		);
-		$settings = self::settings();
+		$settings   = self::settings();
 		$freq_label = 'gwqsh_custom' === $settings['frequency'] ? 'Every ' . $settings['custom_minutes'] . ' minutes' : ( $freq_map[ $settings['frequency'] ] ?? 'Daily' );
 		return array(
 			'settings'        => $settings,

@@ -118,6 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
         keys.forEach(k => { const input = document.createElement('input'); input.type = 'hidden'; input.name = k; input.value = applied[k] || (k === 'days' ? '30' : ''); input.dataset.filter = ''; exportForm.appendChild(input); });
         exportForm.submit();
     }));
+    $$('[data-security-report]').forEach(b => b.addEventListener('click', () => {
+        if (loading) { toast('Wait for the activity query to finish.', 'err'); return; }
+        const reportForm = $('#securityReportExport');
+        reportForm.querySelectorAll('[data-filter]').forEach(el => el.remove());
+        keys.forEach(k => { const input = document.createElement('input'); input.type = 'hidden'; input.name = k; input.value = applied[k] || (k === 'days' ? '30' : ''); input.dataset.filter = ''; reportForm.appendChild(input); });
+        reportForm.submit();
+    }));
     let cleaning = false;
     $('#clearOldLogs').addEventListener('click', async () => {
         if (cleaning) return;

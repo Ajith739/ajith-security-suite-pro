@@ -98,7 +98,7 @@ final class GWQSH_Enterprise_Config {
 				'delivery_retention' => array( 'number', 7, 'Delivery audit retention (days)', array( 1, 30 ) ),
 			),
 			'waf'        => array(
-				'mode'        => array(
+				'mode'          => array(
 					'select',
 					'block',
 					'Firewall operation mode',
@@ -106,20 +106,38 @@ final class GWQSH_Enterprise_Config {
 						'disabled' => 'Disabled',
 						'report'   => 'Detection / report only',
 						'block'    => 'Blocking / enforcement',
+						'recovery' => 'Emergency recovery (WAF paused)',
 					),
 				),
-				'enforce_new' => array( 'bool', false, 'Enforce new rules (otherwise report only)' ),
-				'traversal'   => array( 'bool', true, 'Path traversal detection' ),
-				'inclusion'   => array( 'bool', true, 'File inclusion detection' ),
-				'uploads'     => array( 'bool', true, 'Unauthenticated executable upload attempts' ),
-				'post'        => array( 'bool', false, 'Inspect bounded noncredential POST values' ),
-				'rate'        => array( 'bool', false, 'Enable unauthenticated request rate limit' ),
-				'requests'    => array( 'number', 120, 'Requests per minute per IP', array( 10, 10000 ) ),
-				'exclusions'  => array( 'paths', '', 'Excluded exact paths (one per line)' ),
+				'enforce_new'   => array( 'bool', false, 'Enforce new rules (otherwise report only)' ),
+				'enforce_sql_extended' => array( 'bool', false, 'Enforce extended SQL correlations (validate compatibility in report mode first)' ),
+				'authenticated' => array(
+					'select',
+					'report',
+					'Authenticated request inspection',
+					array(
+						'disabled' => 'Disabled',
+						'report'   => 'Report only (recommended initial mode)',
+						'block'    => 'Block tested matches',
+					),
+				),
+				'traversal'     => array( 'bool', true, 'Path traversal detection' ),
+				'inclusion'     => array( 'bool', true, 'File inclusion detection' ),
+				'uploads'       => array( 'bool', true, 'Unauthenticated executable upload attempts' ),
+				'post'          => array( 'bool', true, 'Inspect bounded noncredential POST values' ),
+				'rest_json'     => array( 'bool', true, 'Inspect bounded REST JSON after authentication (test in report mode first)' ),
+				'rate'          => array( 'bool', false, 'Enable unauthenticated request rate limit' ),
+				'requests'      => array( 'number', 100, 'Requests per minute per IP', array( 10, 10000 ) ),
+				'exclusions'    => array( 'paths', '', 'Excluded exact paths (one per line)' ),
 			),
 			'signatures' => array(
 				'enabled'         => array( 'bool', false, 'Enable configured signed-feed updates' ),
 				'excluded_hashes' => array( 'hashes', '', 'SHA-256 exclusions for signature rules only (one per line; heuristics continue)' ),
+			),
+			'advisories' => array(
+				'enabled'  => array( 'bool', false, 'Enable authorized signed advisory updates' ),
+				'enforce'  => array( 'bool', false, 'Enforce reviewed virtual patches (otherwise detection only)' ),
+				'disabled' => array( 'identifiers', '', 'Emergency disabled advisory or patch IDs (one per line)' ),
 			),
 			'license'    => array( 'key' => array( 'secret', '', 'License token (provider required)' ) ),
 		);
@@ -215,6 +233,18 @@ final class GWQSH_Enterprise_Config {
 								return new WP_Error( 'hashes', 'Use full lowercase SHA-256 hashes.' );
 					}
 				}$value = implode( "\n", $hashes );}
+			if ( 'identifiers' === $type ) {
+				$identifiers = array_values( array_unique( preg_split( '/[\s,]+/', trim( $value ), -1, PREG_SPLIT_NO_EMPTY ) ) );
+				if ( count( $identifiers ) > 100 ) {
+					return new WP_Error( 'identifiers', 'Use at most 100 identifiers.' );
+				}
+				foreach ( $identifiers as $identifier ) {
+					if ( ! preg_match( '/^[A-Za-z0-9_.-]{1,64}$/D', $identifier ) ) {
+						return new WP_Error( 'identifiers', 'Use exact advisory or rule identifiers.' );
+					}
+				}
+				$value = implode( "\n", $identifiers );
+			}
 			if ( 'countries' === $type ) {
 				$codes = array_values( array_unique( preg_split( '/[\s,]+/', strtoupper( trim( $value ) ), -1, PREG_SPLIT_NO_EMPTY ) ) );
 				if ( array_diff( $codes, self::country_codes() ) ) {

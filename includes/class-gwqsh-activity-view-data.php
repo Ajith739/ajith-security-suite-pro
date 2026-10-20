@@ -22,8 +22,10 @@ final class GWQSH_Activity_View_Data {
 	public static function init() {
 		add_action( 'admin_post_gwqsh_activity_export', array( __CLASS__, 'export' ) );
 		add_action( 'gwqsh_activity_search_backfill', array( __CLASS__, 'backfill_search' ) );
-		if ( ! get_option( 'gwqsh_activity_search_ready', false ) ) {
-			self::backfill_search();
+		// Never perform migration writes on ordinary public requests. An admin visit
+		// may enqueue one bounded cron batch; the cron callback performs the work.
+		if ( ! get_option( 'gwqsh_activity_search_ready', false ) && ( is_admin() || wp_doing_cron() ) && ! wp_next_scheduled( 'gwqsh_activity_search_backfill' ) ) {
+			wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'gwqsh_activity_search_backfill' );
 		}
 	}
 	/** Populate only derived searchable text, in bounded migration batches. Original records remain intact. */
@@ -32,7 +34,7 @@ final class GWQSH_Activity_View_Data {
 		$table  = $wpdb->prefix . 'gwqsh_activity_log';
 		$cursor = (int) get_option( 'gwqsh_activity_search_cursor', 0 );
 		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter -- Fixed plugin-owned table and whitelisted SQL clauses; dynamic values are prepared. Live security state must bypass caching.
-		$rows   = $wpdb->get_results( $wpdb->prepare( "SELECT id,details FROM {$table} WHERE id > %d AND safe_details IS NULL ORDER BY id LIMIT 250", $cursor ), ARRAY_A ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB -- Fixed plugin table and prepared cursor; bounded one-time derived-field migration.
+		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT id,details FROM {$table} WHERE id > %d AND safe_details IS NULL ORDER BY id LIMIT 250", $cursor ), ARRAY_A ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB -- Fixed plugin table and prepared cursor; bounded one-time derived-field migration.
 		if ( $wpdb->last_error ) {
 			return; }
 		foreach ( $rows as $row ) {
@@ -162,7 +164,7 @@ final class GWQSH_Activity_View_Data {
 		$table  = $wpdb->prefix . 'gwqsh_activity_log';
 		$counts = array_fill_keys( array_keys( self::GROUPS ), 0 );
 		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Fixed plugin-owned table and whitelisted SQL clauses; dynamic values are prepared. Live security state must bypass caching.
-		$rows   = $wpdb->get_results( $wpdb->prepare( 'SELECT ' . self::category_sql() . " AS category, COUNT(*) AS n FROM {$table} WHERE event_time >= %s AND event_time < %s GROUP BY category", $from, $to ), ARRAY_A ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT ' . self::category_sql() . " AS category, COUNT(*) AS n FROM {$table} WHERE event_time >= %s AND event_time < %s GROUP BY category", $from, $to ), ARRAY_A ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
 		if ( $wpdb->last_error ) {
 			return new WP_Error( 'database', 'Activity statistics could not be loaded.' ); }
 		foreach ( $rows as $row ) {
@@ -175,7 +177,7 @@ final class GWQSH_Activity_View_Data {
 	 * @param array $input Requested filters and report options.
 	 */
 	public static function get( array $input = array() ) {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( GWQSH_Admin::management_capability() ) ) {
 			return new WP_Error( 'permission', 'Permission denied.' );
 		}
 		global $wpdb;
@@ -192,7 +194,7 @@ final class GWQSH_Activity_View_Data {
 		$pages = max( 1, (int) ceil( $total / 10 ) );
 		$page  = min( $pages, max( 1, (int) ( $input['page_num'] ?? 1 ) ) );
 		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Fixed plugin-owned table and whitelisted SQL clauses; dynamic values are prepared. Live security state must bypass caching.
-		$rows  = $wpdb->get_results( 'SELECT *, ' . self::category_sql() . " AS category FROM {$table} WHERE {$where} ORDER BY event_time DESC, id DESC" . $wpdb->prepare( ' LIMIT 10 OFFSET %d', ( $page - 1 ) * 10 ), ARRAY_A ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
+		$rows = $wpdb->get_results( 'SELECT *, ' . self::category_sql() . " AS category FROM {$table} WHERE {$where} ORDER BY event_time DESC, id DESC" . $wpdb->prepare( ' LIMIT 10 OFFSET %d', ( $page - 1 ) * 10 ), ARRAY_A ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
 		if ( $wpdb->last_error ) {
 			return new WP_Error( 'database', 'Activity records could not be loaded.' );
 		}
@@ -269,7 +271,7 @@ final class GWQSH_Activity_View_Data {
 	}
 	/** Secure, capped keyset streaming export of all matching records. */
 	public static function export() {
-		if ( 'POST' !== ( isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '' ) || ! current_user_can( 'manage_options' ) ) {
+		if ( 'POST' !== ( isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '' ) || ! current_user_can( GWQSH_Admin::management_capability() ) ) {
 			wp_die( 'Permission denied.', '', array( 'response' => 403 ) );
 		}
 		check_admin_referer( 'gwqsh_activity_export' );
@@ -278,13 +280,13 @@ final class GWQSH_Activity_View_Data {
 			wp_die( esc_html( $f->get_error_message() ), '', array( 'response' => 400 ) );
 		}
 		global $wpdb;
-		$table  = $wpdb->prefix . 'gwqsh_activity_log';
-		$where  = self::where( $f );
+		$table = $wpdb->prefix . 'gwqsh_activity_log';
+		$where = self::where( $f );
 		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Fixed plugin-owned table and whitelisted SQL clauses; dynamic values are prepared. Live security state must bypass caching.
 		$max    = (int) $wpdb->get_var( "SELECT MAX(id) FROM {$table}" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
 		$where .= $wpdb->prepare( ' AND id <= %d', $max );
 		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Fixed plugin-owned table and whitelisted SQL clauses; dynamic values are prepared. Live security state must bypass caching.
-		$count  = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE {$where}" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
+		$count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE {$where}" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
 		if ( $wpdb->last_error || $count > 50000 ) {
 			wp_die( 'Export unavailable. Narrow your filters to at most 50,000 events.', '', array( 'response' => 400 ) );
 		}
@@ -322,7 +324,7 @@ final class GWQSH_Activity_View_Data {
 	}
 	/** Retention preview with a short-lived, user-bound snapshot. */
 	public static function cleanup_preview() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( GWQSH_Admin::management_capability() ) ) {
 			return new WP_Error( 'permission', 'Permission denied.' );
 		}
 		global $wpdb;
@@ -333,9 +335,9 @@ final class GWQSH_Activity_View_Data {
 		$table  = $wpdb->prefix . 'gwqsh_activity_log';
 		$cutoff = current_datetime()->modify( "-{$days} days" )->format( 'Y-m-d H:i:s' );
 		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Fixed plugin-owned table and whitelisted SQL clauses; dynamic values are prepared. Live security state must bypass caching.
-		$max    = (int) $wpdb->get_var( "SELECT MAX(id) FROM {$table}" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
+		$max = (int) $wpdb->get_var( "SELECT MAX(id) FROM {$table}" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
 		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL,PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Fixed plugin-owned table and whitelisted SQL clauses; dynamic values are prepared. Live security state must bypass caching.
-		$count  = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE event_time < %s AND id <= %d", $cutoff, $max ) ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL,PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
+		$count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE event_time < %s AND id <= %d", $cutoff, $max ) ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL,PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
 		if ( $wpdb->last_error ) {
 			return new WP_Error( 'database', 'Could not preview cleanup.' );
 		}
@@ -364,7 +366,7 @@ final class GWQSH_Activity_View_Data {
 	 * @param string $confirmed Explicit confirmation.
 	 */
 	public static function cleanup( $token, $confirmed ) {
-		if ( ! current_user_can( 'manage_options' ) || '1' !== (string) $confirmed ) {
+		if ( ! current_user_can( GWQSH_Admin::management_capability() ) || '1' !== (string) $confirmed ) {
 			return new WP_Error( 'permission', 'Explicit administrator confirmation is required.' );
 		}
 		$preview = get_transient( 'gwqsh_log_cleanup_' . get_current_user_id() );
@@ -375,8 +377,8 @@ final class GWQSH_Activity_View_Data {
 			return new WP_Error( 'retention', 'The retention cutoff changed. Preview again.' );
 		}
 		global $wpdb;
-		$table   = $wpdb->prefix . 'gwqsh_activity_log';
-		$where   = $wpdb->prepare( 'event_time < %s AND id <= %d', $preview['cutoff'], $preview['max'] );
+		$table = $wpdb->prefix . 'gwqsh_activity_log';
+		$where = $wpdb->prepare( 'event_time < %s AND id <= %d', $preview['cutoff'], $preview['max'] );
 		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Fixed plugin-owned table and whitelisted SQL clauses; dynamic values are prepared. Live security state must bypass caching.
 		$deleted = $wpdb->query( "DELETE FROM {$table} WHERE {$where} ORDER BY event_time, id LIMIT 1000" ); // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL -- Fixed plugin-owned identifiers, whitelisted columns and already-prepared predicates; all external values use placeholders.
 		if ( false === $deleted ) {

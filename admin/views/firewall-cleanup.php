@@ -6,15 +6,15 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-$gwqsh_view_d               = GWQSH_Firewall::data();
-$gwqsh_view_user            = wp_get_current_user();
-$gwqsh_u_name    = ( $gwqsh_view_user && $gwqsh_view_user->exists() ) ? ( $gwqsh_view_user->display_name ? $gwqsh_view_user->display_name : $gwqsh_view_user->user_login ) : 'Admin';
-$gwqsh_u_initial = strtoupper( substr( $gwqsh_u_name, 0, 1 ) );
-$gwqsh_u_role    = ! empty( $gwqsh_view_user->roles[0] ) ? ucfirst( $gwqsh_view_user->roles[0] ) : 'Administrator';
-$gwqsh_view_icon            = static function ( $gwqsh_view_name ) {
+$gwqsh_view_d       = GWQSH_Firewall::data();
+$gwqsh_view_user    = wp_get_current_user();
+$gwqsh_u_name       = ( $gwqsh_view_user && $gwqsh_view_user->exists() ) ? ( $gwqsh_view_user->display_name ? $gwqsh_view_user->display_name : $gwqsh_view_user->user_login ) : 'Admin';
+$gwqsh_u_initial    = strtoupper( substr( $gwqsh_u_name, 0, 1 ) );
+$gwqsh_u_role       = ! empty( $gwqsh_view_user->roles[0] ) ? ucfirst( $gwqsh_view_user->roles[0] ) : 'Administrator';
+$gwqsh_view_icon    = static function ( $gwqsh_view_name ) {
 	return '<svg class="qs-icon" aria-hidden="true"><use href="#i-' . esc_attr( $gwqsh_view_name ) . '"/></svg>';
 };
-$gwqsh_view_url             = static function ( $gwqsh_view_page ) {
+$gwqsh_view_url     = static function ( $gwqsh_view_page ) {
 	$gwqsh_view_suffix = array(
 		'dashboard'        => '',
 		'login'            => '-login',
@@ -28,7 +28,7 @@ $gwqsh_view_url             = static function ( $gwqsh_view_page ) {
 	);
 	return admin_url( 'admin.php?page=gracewell-security-suite-pro' . $gwqsh_view_suffix[ $gwqsh_view_page ] );
 };
-$gwqsh_view_section         = static function ( $gwqsh_view_title, $gwqsh_view_symbol, $gwqsh_view_subtitle = '' ) use ( $gwqsh_view_icon ) {
+$gwqsh_view_section = static function ( $gwqsh_view_title, $gwqsh_view_symbol, $gwqsh_view_subtitle = '' ) use ( $gwqsh_view_icon ) {
 	echo '<div class="qs-card-head"><span class="qs-tile">' . $gwqsh_view_icon( $gwqsh_view_symbol ) . '</span><div><h2>' . esc_html( $gwqsh_view_title ) . '</h2>' . ( $gwqsh_view_subtitle ? '<p>' . esc_html( $gwqsh_view_subtitle ) . '</p>' : '' ) . '</div></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Helper escapes every variable; only trusted SVG markup is emitted.
 };
 require GWQSH_PATH . 'admin/views/dashboard-icons.php';

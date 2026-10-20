@@ -116,7 +116,7 @@ require GWQSH_PATH . 'admin/views/dashboard-icons.php';
 				<div><dt>WordPress Version</dt><dd>v<?php echo esc_html( get_bloginfo( 'version' ) ); ?></dd></div>
 				<div><dt>PHP Version</dt><dd>v<?php echo esc_html( PHP_VERSION ); ?></dd></div>
 				<div><dt>Site Timezone</dt><dd><?php echo esc_html( wp_timezone_string() ); ?></dd></div>
-				<div><dt>Web Server</dt><dd><?php echo esc_html( explode( ' ', sanitize_text_field( $_SERVER['SERVER_SOFTWARE'] ?? 'Apache' ) )[0] ); ?></dd></div>
+				<div><dt>Web Server</dt><dd><?php echo esc_html( explode( ' ', sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ?? 'Apache' ) ) )[0] ); ?></dd></div>
 			</dl>
 		</section>
 
@@ -375,6 +375,7 @@ require GWQSH_PATH . 'admin/views/dashboard-icons.php';
 			</div>
 		
 <?php GWQSH_Enterprise_UI::render( 'signatures' ); ?>
+<?php GWQSH_Enterprise_UI::render( 'advisories' ); ?>
 <?php GWQSH_Enterprise_UI::wizard(); ?>
 </section>
 

@@ -530,7 +530,15 @@ final class GWQSH_Scan_Engine {
 			}
 			$result = self::inspect( $file, $scope, isset( $cache[ $label ] ) ? $cache[ $label ] : array() );
 			if ( isset( $result['error'] ) ) {
-				$state['errors'][ $result['error'] ] = true;
+				$state['errors'][ $result['error'] ]   = true;
+				$state['uninspected']                  = ( $state['uninspected'] ?? 0 ) + 1;
+				$state['uninspected_scopes'][ $scope ] = ( $state['uninspected_scopes'][ $scope ] ?? 0 ) + 1;
+				if ( count( $state['omitted_files'] ?? array() ) < 100 ) {
+					$state['omitted_files'][] = array(
+						'path'   => $label,
+						'reason' => $result['error'],
+					);
+				}
 				continue;
 			}
 			$state['manifest'][ $label ] = array(
@@ -667,6 +675,15 @@ final class GWQSH_Scan_Engine {
 		}
 		update_option( 'gwqsh_last_scan_upload_php_total', $upload_php_total, false );
 		update_option( 'gwqsh_scan_health', array_keys( $state['errors'] ), false );
+		update_option(
+			'gwqsh_last_scan_omissions',
+			array(
+				'count'  => $state['uninspected'] ?? 0,
+				'scopes' => $state['uninspected_scopes'] ?? array(),
+				'files'  => $state['omitted_files'] ?? array(),
+			),
+			false
+		);
 		update_option( 'gwqsh_last_scan_scope_counts', $state['scopes'], false );
 		update_option( 'gwqsh_last_scan_core_total', count( $state['checksums'] ), false );
 		foreach ( array( 'total', 'duration', 'date' ) as $key ) {
@@ -838,15 +855,18 @@ final class GWQSH_Scan_Engine {
 	 */
 	private static function summary( array $state, $pending ) {
 		return array(
-			'total'      => $state['total'],
-			'clean'      => max( 0, $state['total'] - $state['modified'] - $state['missing'] - $state['suspicious'] ),
-			'modified'   => $state['modified'],
-			'missing'    => $state['missing'],
-			'suspicious' => $state['suspicious'],
-			'duration'   => max( 1, time() - $state['started'] ),
-			'date'       => current_time( 'mysql' ),
-			'pending'    => $pending,
-			'coverage'   => array_keys( $state['errors'] ),
+			'total'             => $state['total'],
+			'clean'             => max( 0, $state['total'] - $state['modified'] - $state['missing'] - $state['suspicious'] - ( $state['uninspected'] ?? 0 ) ),
+			'uninspected'       => $state['uninspected'] ?? 0,
+			'omitted_files'     => $state['omitted_files'] ?? array(),
+			'coverage_complete' => ! $pending && ! $state['errors'],
+			'modified'          => $state['modified'],
+			'missing'           => $state['missing'],
+			'suspicious'        => $state['suspicious'],
+			'duration'          => max( 1, time() - $state['started'] ),
+			'date'              => current_time( 'mysql' ),
+			'pending'           => $pending,
+			'coverage'          => array_keys( $state['errors'] ),
 		);
 	}
 

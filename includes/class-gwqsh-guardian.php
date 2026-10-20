@@ -26,6 +26,33 @@ final class GWQSH_Guardian {
 		return rtrim( realpath( get_temp_dir() ) ? realpath( get_temp_dir() ) : get_temp_dir(), '/\\' ) . '/gwqsh-quarantine-' . $hash;
 	}
 
+	/** Ensure private state cannot be placed below a public document root. */
+	public static function state_dir_is_private() {
+		$state = self::state_dir();
+		if ( ! is_string( $state ) || '' === $state || is_link( $state ) ) {
+			return false;
+		}
+		$state_root = realpath( dirname( $state ) );
+		if ( ! $state_root ) {
+			return false;
+		}
+		$state_root = rtrim( str_replace( '\\', '/', $state_root ), '/' );
+		$public_roots = array( ABSPATH, WP_CONTENT_DIR );
+		if ( ! empty( $_SERVER['DOCUMENT_ROOT'] ) && is_string( $_SERVER['DOCUMENT_ROOT'] ) ) {
+			$public_roots[] = wp_unslash( $_SERVER['DOCUMENT_ROOT'] );
+		}
+		foreach ( $public_roots as $root ) {
+			$real = realpath( $root );
+			if ( $real ) {
+				$real = rtrim( str_replace( '\\', '/', $real ), '/' );
+				if ( $state_root === $real || 0 === strpos( $state_root, $real . '/' ) ) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	/**
 	 * Generate standalone PHP from trusted plugin sources only.
 	 *
@@ -48,7 +75,7 @@ final class GWQSH_Guardian {
 	public static function install() {
 		try {
 			$root = self::root();
-			if ( is_link( $root ) || ( ! is_dir( $root ) && ! wp_mkdir_p( $root ) ) || ! GWQSH_Security_Runtime::protect( self::state_dir() ) ) {
+			if ( is_link( $root ) || ( ! is_dir( $root ) && ! wp_mkdir_p( $root ) ) || ! self::state_dir_is_private() || ! GWQSH_Security_Runtime::protect( self::state_dir() ) ) {
 				throw new RuntimeException( 'Guardian directories unavailable' );
 			}
 			$file = $root . '/' . self::NAME;
@@ -168,6 +195,38 @@ final class GWQSH_Guardian {
 		);
 	}
 
+	/** Revalidate a bounded early detection before publishing an actionable finding.
+	 *
+	 * @param string $state Private Guardian storage.
+	 */
+	private static function review_detection( $state ) {
+		$file = GWQSH_Security_Runtime::safe_path( $state . '/guardian-health.json', $state );
+		if ( ! $file || ! is_file( $file ) || filesize( $file ) > 8192 ) {
+			return;
+		}
+		$event = json_decode( (string) file_get_contents( $file ), true );
+		if ( ! is_array( $event ) || 'review_required' !== ( $event['decision'] ?? '' ) || ! is_string( $event['original'] ?? null ) || ! preg_match( '/^[A-Za-z0-9_.-]+\.php$/D', $event['original'] ) || ! is_string( $event['hash'] ?? null ) || ! preg_match( '/^[a-f0-9]{64}$/D', $event['hash'] ) ) {
+			return;
+		}
+		$source = GWQSH_Security_Runtime::safe_path( self::root() . '/' . $event['original'], self::root() );
+		if ( ! $source || ! is_file( $source ) || filesize( $source ) > GWQSH_Security_Runtime::LIMIT ) {
+			return;
+		}
+		$content = file_get_contents( $source, false, null, 0, GWQSH_Security_Runtime::LIMIT + 1 );
+		if ( false === $content || ! hash_equals( $event['hash'], hash( 'sha256', $content ) ) ) {
+			return;
+		}
+		$result = GWQSH_Security_Runtime::analyze( $content );
+		$path   = GWQSH_Scan_Engine::label( $source );
+		if ( ! $path || $result['score'] < 95 || ! $result['auto_block'] ) {
+			return;
+		}
+		GWQSH_Scan_Engine::finding( $path, 'Plugin', 'Suspicious', 'Early Guardian detection; administrator review required.', array( 'hash' => $event['hash'], 'severity' => 'Critical', 'confidence' => 'Very High', 'decision' => 'review_required', 'evidence' => $result['rules'] ) );
+		if ( 1 === GWQSH_Enterprise_Store::hit( 'guardian-review', $event['hash'], DAY_IN_SECONDS ) ) {
+			GWQSH_Activity_Logger::log( 'Suspicious file requires review', 'Early Guardian detected a high-confidence pattern; no source file was modified.', 'Security' );
+		}
+	}
+
 	/** Ingest verified event sidecars once, with only rule IDs and hashes.
 	 *
 	 * @param bool $cleanup Whether explicitly opted-in uninstall should delete owned records.
@@ -191,6 +250,9 @@ final class GWQSH_Guardian {
 		$state = self::state_dir();
 		if ( ! GWQSH_Security_Runtime::safe_path( $state . '/index.php', $state ) ) {
 			return;
+		}
+		if ( ! $cleanup ) {
+			self::review_detection( $state );
 		}
 		$metadata = (array) get_option( 'gwqsh_quarantine_metadata', array() );
 		$count    = 0;

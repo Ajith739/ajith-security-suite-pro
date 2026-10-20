@@ -135,10 +135,12 @@ final class GWQSH_Enterprise_Store {
 		$now   = time();
 		$wpdb->query( $wpdb->prepare( "INSERT INTO {$wpdb->prefix}gwqsh_security_state (state_key,kind,payload,expires_at) VALUES (%s,'lease',%s,%d) ON DUPLICATE KEY UPDATE payload=IF(expires_at<%d,VALUES(payload),payload),expires_at=IF(expires_at<%d,VALUES(expires_at),expires_at)", $key, $token, $now + $ttl, $now, $now ) );
 		$actual = $wpdb->get_var( $wpdb->prepare( "SELECT payload FROM {$wpdb->prefix}gwqsh_security_state WHERE state_key=%s", $key ) );
-		if ( ! is_string( $actual ) || ! hash_equals( $token, $actual ) ) { return false; }
+		if ( ! is_string( $actual ) || ! hash_equals( $token, $actual ) ) {
+			return false; }
 		return $token;
 	}
 	/** Read an active owner lease without an object-cache dependency.
+	 *
 	 * @param string $name Lease identifier.
 	 * @return bool Whether the lease is active.
 	 */

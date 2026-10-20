@@ -11,6 +11,22 @@ defined( 'ABSPATH' ) || exit;
  * GWQSH Ajax implementation.
  */
 final class GWQSH_Ajax {
+	/** Decode bounded structured configuration without lossy text sanitization.
+	 * All callers subsequently validate the decoded fields against their existing schema.
+	 *
+	 * @param array  $request Centrally shape-checked, unslashed request.
+	 * @param string $key Fixed controller field name.
+	 * @param int    $limit Maximum raw JSON bytes.
+	 * @return array|null Parsed structure or invalid input.
+	 */
+	private static function json_input( array $request, $key, $limit = 20000 ) {
+		$raw = isset( $request[ $key ] ) && is_string( $request[ $key ] ) ? $request[ $key ] : '';
+		if ( strlen( $raw ) > $limit ) {
+			return null;
+		}
+		$value = json_decode( $raw, true, 32 );
+		return is_array( $value ) && JSON_ERROR_NONE === json_last_error() ? $value : null;
+	}
 	/**
 	 * Init.
 	 */
@@ -33,6 +49,7 @@ final class GWQSH_Ajax {
 		if ( ! current_user_can( GWQSH_Admin::management_capability() ) && ! ( current_user_can( 'read' ) && in_array( $subaction, GWQSH_Two_Factor::self_service_actions(), true ) ) ) {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'gracewell-security-suite-pro' ) ), 403 );
 		}
+		$request = wp_unslash( $_POST );
 
 		if ( in_array( $subaction, array( 'passkey_list', 'passkey_create_options', 'passkey_create_verify', 'passkey_rename', 'passkey_remove', 'recovery_data', 'recovery_setup_send', 'recovery_setup_verify', 'recovery_remove' ), true ) ) {
 			$result = strpos( $subaction, 'passkey_' ) === 0 ? GWQSH_Passkeys::management( $subaction, wp_unslash( $_POST ) ) : GWQSH_Recovery::management( $subaction, wp_unslash( $_POST ) );
@@ -42,12 +59,12 @@ final class GWQSH_Ajax {
 		}
 		$high_risk = array( 'restore_file', 'restore_trusted', 'restore_quarantine', 'bulk_restore_quarantine', 'delete_quarantine', 'bulk_delete_quarantine', 'clear_all_quarantine', 'accept_current', 'rebuild_baseline', 'config_import' );
 		if ( in_array( $subaction, $high_risk, true ) ) {
-			$verification = GWQSH_Enterprise_UI::consume_proof( wp_unslash( $_POST['operation_token'] ?? '' ) );
+			$verification = GWQSH_Enterprise_UI::consume_proof( sanitize_text_field( wp_unslash( $_POST['operation_token'] ?? '' ) ) );
 			if ( is_wp_error( $verification ) ) {
 				wp_send_json_error( array( 'message' => $verification->get_error_message() ), 403 ); }
 		}
 		if ( 'enterprise_wizard' === $subaction ) {
-			$input  = json_decode( wp_unslash( $_POST['settings'] ?? '' ), true );
+			$input  = self::json_input( $request, 'settings' );
 			$result = is_array( $input ) ? GWQSH_Setup_Wizard::save( $input ) : new WP_Error( 'wizard', 'Invalid setup checkpoint.' );
 			if ( is_wp_error( $result ) ) {
 				wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 ); }
@@ -55,14 +72,14 @@ final class GWQSH_Ajax {
 		}
 		if ( 'enterprise_authorize' === $subaction ) {
 			try {
-				$result = GWQSH_Enterprise_UI::authorize( wp_unslash( $_POST['password'] ?? '' ), wp_unslash( $_POST['code'] ?? '' ) ); } catch ( Throwable $error ) {
+				$result = GWQSH_Enterprise_UI::authorize( $request['password'] ?? '', sanitize_text_field( $request['code'] ?? '' ) ); } catch ( Throwable $error ) {
 				$result = new WP_Error( 'verification', 'Unable to verify this operation.' ); }
 				if ( is_wp_error( $result ) ) {
 					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 ); }
 				wp_send_json_success( array( 'token' => $result ) );
 		}
 		if ( 'enterprise_execute' === $subaction ) {
-			if ( strlen( $_POST['settings'] ?? '' ) > 20000 ) {
+			if ( ! empty( $request['settings'] ) && null === self::json_input( $request, 'settings' ) ) {
 				wp_send_json_error( array( 'message' => 'Configuration payload too large.' ), 400 ); }
 			$result = GWQSH_Enterprise_UI::execute( wp_unslash( $_POST ) );
 			if ( is_wp_error( $result ) ) {
@@ -70,11 +87,69 @@ final class GWQSH_Ajax {
 			wp_send_json_success( $result );
 		}
 		switch ( $subaction ) {
+			case 'security_report':
+				$result = GWQSH_Security_Report::collect( $request );
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'recovery_account_security':
+			case 'recovery_revoke_sessions':
+			case 'recovery_revoke_application_password':
+				$user_id = absint( wp_unslash( $_POST['user_id'] ?? '' ) );
+				$result  = 'recovery_account_security' === $subaction ? GWQSH_Incident_Recovery::account_security( $user_id ) : GWQSH_Incident_Recovery::contain_account(
+					$user_id,
+					'recovery_revoke_sessions' === $subaction ? 'sessions' : 'application_password',
+					sanitize_text_field( wp_unslash( $_POST['uuid'] ?? '' ) ),
+					sanitize_text_field( wp_unslash( $_POST['confirmed'] ?? '' ) ),
+					sanitize_text_field( wp_unslash( $_POST['operation_token'] ?? '' ) )
+				);
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'database_baseline_rollback':
+				$result = GWQSH_Database_Context::rollback( sanitize_text_field( wp_unslash( $_POST['confirmed'] ?? '' ) ), sanitize_text_field( wp_unslash( $_POST['operation_token'] ?? '' ) ) );
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'database_baseline_approve':
+				$result = GWQSH_Database_Context::approve( sanitize_text_field( wp_unslash( $_POST['job_id'] ?? '' ) ), sanitize_text_field( wp_unslash( $_POST['confirmed'] ?? '' ) ), sanitize_text_field( wp_unslash( $_POST['operation_token'] ?? '' ) ) );
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'recovery_center_status':
+				wp_send_json_success( GWQSH_Incident_Recovery::snapshot() );
+				break;
+			case 'database_scan_status':
+			case 'database_scan_start':
+			case 'database_scan_continue':
+			case 'database_scan_cancel':
+				if ( 'database_scan_start' === $subaction ) {
+					$result = GWQSH_Database_Scanner::start();
+				} elseif ( 'database_scan_status' === $subaction ) {
+					$result = GWQSH_Database_Scanner::status();
+				} elseif ( 'database_scan_cancel' === $subaction ) {
+					$result = GWQSH_Database_Scanner::cancel( sanitize_text_field( wp_unslash( $_POST['job_id'] ?? '' ) ) );
+				} else {
+					$result = GWQSH_Database_Scanner::step( sanitize_text_field( wp_unslash( $_POST['job_id'] ?? '' ) ) );
+				}
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
 			case 'config_export':
 				wp_send_json_success( GWQSH_Customization::export() );
 				break;
 			case 'config_save':
-				$input  = json_decode( wp_unslash( $_POST['settings'] ?? '' ), true );
+				$input  = self::json_input( $request, 'settings' );
 				$result = is_array( $input ) ? GWQSH_Customization::save( sanitize_key( $_POST['section'] ?? '' ), $input ) : new WP_Error( 'format', 'Invalid settings.' );
 				if ( is_wp_error( $result ) ) {
 					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 ); }
@@ -113,8 +188,7 @@ final class GWQSH_Ajax {
 				wp_send_json_success( GWQSH_Customization::export() );
 				break;
 			case 'config_import':
-				$raw    = wp_unslash( $_POST['payload'] ?? '' );
-				$input  = strlen( $raw ) <= 1048576 ? json_decode( $raw, true ) : null;
+				$input  = self::json_input( $request, 'payload', 1048576 );
 				$result = is_array( $input ) ? GWQSH_Customization::import( $input ) : new WP_Error( 'format', 'Invalid configuration export.' );
 				if ( is_wp_error( $result ) ) {
 					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 ); }
@@ -124,13 +198,13 @@ final class GWQSH_Ajax {
 				wp_send_json_success( GWQSH_IP_Blocks::history( absint( $_POST['page_num'] ?? 1 ) ) );
 				break;
 			case 'ip_block_save':
-				$result = GWQSH_IP_Blocks::save( wp_unslash( $_POST['ip'] ?? '' ), wp_unslash( $_POST['reason'] ?? '' ), $_POST['minutes'] ?? 0 );
+				$result = GWQSH_IP_Blocks::save( filter_var( wp_unslash( $_POST['ip'] ?? '' ), FILTER_VALIDATE_IP ), sanitize_text_field( wp_unslash( $_POST['reason'] ?? '' ) ), filter_var( wp_unslash( $_POST['minutes'] ?? '0' ), FILTER_VALIDATE_INT ) );
 				if ( is_wp_error( $result ) ) {
 					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 ); }
 				wp_send_json_success( GWQSH_IP_Blocks::history() );
 				break;
 			case 'ip_block_remove':
-				$result = GWQSH_IP_Blocks::remove( wp_unslash( $_POST['ip'] ?? '' ) );
+				$result = GWQSH_IP_Blocks::remove( filter_var( wp_unslash( $_POST['ip'] ?? '' ), FILTER_VALIDATE_IP ) );
 				if ( is_wp_error( $result ) ) {
 					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 ); }
 				wp_send_json_success( GWQSH_IP_Blocks::history() );
@@ -139,7 +213,7 @@ final class GWQSH_Ajax {
 				wp_send_json_success( GWQSH_Scheduler::data() );
 				break;
 			case 'scan_schedule_save':
-				$input  = json_decode( wp_unslash( $_POST['settings'] ?? '' ), true );
+				$input  = self::json_input( $request, 'settings' );
 				$result = is_array( $input ) ? GWQSH_Scheduler::save( $input ) : new WP_Error( 'invalid_input', 'Invalid schedule.' );
 				if ( is_wp_error( $result ) ) {
 					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 ); }
@@ -576,7 +650,7 @@ final class GWQSH_Ajax {
 				wp_send_json_error( array( 'message' => 'Unable to persist proxy detection settings.' ), 500 ); }
 		}
 		if ( isset( $_POST['role_protection'] ) ) {
-			$rules = json_decode( wp_unslash( $_POST['role_protection'] ), true );
+			$rules = self::json_input( wp_unslash( $_POST ), 'role_protection' );
 			if ( ! is_array( $rules ) ) {
 				wp_send_json_error( array( 'message' => 'Invalid role protection rules.' ), 400 ); }
 			foreach ( $rules as $role => $state ) {

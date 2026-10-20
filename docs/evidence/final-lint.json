@@ -1,0 +1,350 @@
+[
+  {
+    "file": "admin/views/activity-log.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/dashboard-icons.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/dashboard.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/file-integrity.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/firewall-cleanup.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/footer.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/hardening.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/login-protection.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/navigation.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/pro.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/settings.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/two-factor.php",
+    "exit": 0
+  },
+  {
+    "file": "admin/views/upgrade-panels.php",
+    "exit": 0
+  },
+  {
+    "file": "gracewell-security-suite-pro.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-activity-logger.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-activity-view-data.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-admin.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-ajax.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-cli.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-country-access.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-crypto.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-customization.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-dashboard-data.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-database-context.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-database-scanner.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-db.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-enterprise-config.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-enterprise-store.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-enterprise-ui.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-events.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-file-integrity.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-firewall.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-guardian.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-hardening-data.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-hardening-rules.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-hardening.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-incident-recovery.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-ip-blocks.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-license.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-login-protection.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-login-view-data.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-malware-analyzer.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-migration.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-network.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-passkeys.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-path-guard.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-privacy.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-pro-compatibility.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-quarantine-manager.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-recovery.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-safe-data.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-scan-engine.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-scheduler.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-secure-http.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-security-report.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-security-runtime.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-settings.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-setup-wizard.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-signatures.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-threat-intelligence.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-time.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-two-factor-view-data.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-two-factor.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-ui.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/class-gwqsh-vulnerabilities.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/guardian-template.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/interface-gwqsh-delivery-provider.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/interface-gwqsh-license-provider.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/interface-gwqsh-reputation-provider.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/AttestationObject.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/AuthenticatorData.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/Format/AndroidKey.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/Format/AndroidSafetyNet.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/Format/Apple.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/Format/FormatBase.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/Format/None.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/Format/Packed.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/Format/Tpm.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Attestation/Format/U2f.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/Binary/ByteBuffer.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/CBOR/CborDecoder.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/WebAuthn.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/vendor/webauthn/src/WebAuthnException.php",
+    "exit": 0
+  },
+  {
+    "file": "includes/waf/rules.php",
+    "exit": 0
+  },
+  {
+    "file": "languages/index.php",
+    "exit": 0
+  },
+  {
+    "file": "tests/integration.php",
+    "exit": 0
+  },
+  {
+    "file": "uninstall.php",
+    "exit": 0
+  }
+]

@@ -1,22 +1,22 @@
 <?php
-
 /**
  * File integrity administration view.
  *
  * @package GracewellSecuritySuitePro
  */
 
-defined('ABSPATH') || exit;
-$gwqsh_data      = GWQSH_Admin::get_page_initial_data('file-integrity');
+defined( 'ABSPATH' ) || exit;
+$gwqsh_data      = GWQSH_Admin::get_page_initial_data( 'file-integrity' );
 $gwqsh_current_u = wp_get_current_user();
-$gwqsh_u_name    = ($gwqsh_current_u && $gwqsh_current_u->exists()) ? ($gwqsh_current_u->display_name ? $gwqsh_current_u->display_name : $gwqsh_current_u->user_login) : 'Admin';
-$gwqsh_u_initial = strtoupper(substr($gwqsh_u_name, 0, 1));
-$gwqsh_u_role    = ! empty($gwqsh_current_u->roles[0]) ? ucfirst($gwqsh_current_u->roles[0]) : 'Administrator';
+$gwqsh_u_name    = ( $gwqsh_current_u && $gwqsh_current_u->exists() ) ? ( $gwqsh_current_u->display_name ? $gwqsh_current_u->display_name : $gwqsh_current_u->user_login ) : 'Admin';
+$gwqsh_u_initial = strtoupper( substr( $gwqsh_u_name, 0, 1 ) );
+$gwqsh_u_role    = ! empty( $gwqsh_current_u->roles[0] ) ? ucfirst( $gwqsh_current_u->roles[0] ) : 'Administrator';
+$gwqsh_icon      = static function ( $gwqsh_view_name ) {
 
-$gwqsh_icon   = static function ($gwqsh_view_name) {
-	return '<svg class="qs-icon" aria-hidden="true"><use href="#i-' . esc_attr($gwqsh_view_name) . '"/></svg>';
+	return '<svg class="qs-icon" aria-hidden="true"><use href="#i-' . esc_attr( $gwqsh_view_name ) . '"/></svg>';
 };
-$gwqsh_url    = static function ($gwqsh_view_page) {
+$gwqsh_url       = static function ( $gwqsh_view_page ) {
+
 	$gwqsh_view_slugs = array(
 		'dashboard'      => '',
 		'login'          => '-login',
@@ -27,9 +27,9 @@ $gwqsh_url    = static function ($gwqsh_view_page) {
 		'pro'            => '-pro',
 		'settings'       => '-settings',
 	);
-	return admin_url('admin.php?page=gracewell-security-suite-pro' . $gwqsh_view_slugs[$gwqsh_view_page]);
+	return admin_url( 'admin.php?page=gracewell-security-suite-pro' . $gwqsh_view_slugs[ $gwqsh_view_page ] );
 };
-$gwqsh_events = GWQSH_Activity_Logger::query_logs(
+$gwqsh_events    = GWQSH_Activity_Logger::query_logs(
 	array(
 		'limit' => 3,
 		'days'  => 1,
@@ -125,8 +125,8 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 
 <header class="topbar">
 	<div class="topbar-in">
-		<a class="brand" href="<?php echo esc_url(admin_url('admin.php?page=gracewell-security-suite-pro')); ?>" aria-label="Security Suite Pro home">
-			<img class="logo-mark" src="<?php echo esc_url(GWQSH_URL . 'assets/img/quietshield.svg'); ?>" alt="" width="40" height="44">
+		<a class="brand" href="<?php echo esc_url( admin_url( 'admin.php?page=gracewell-security-suite-pro' ) ); ?>" aria-label="Security Suite Pro home">
+			<img class="logo-mark" src="<?php echo esc_url( GWQSH_URL . 'assets/img/quietshield.svg' ); ?>" alt="" width="40" height="44">
 			<span class="brand-txt"><b><span>Security Suite Pro</span><svg class="i qs-title-crown" aria-hidden="true">
 						<use href="#i-crown" />
 					</svg></b><small>A Safer WordPress, A Quieter
@@ -144,16 +144,22 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 					aria-label="Notifications">
 					<svg class="i">
 						<use href="#i-bell" />
-					</svg><span class="dot-badge <?php echo empty($gwqsh_events) ? 'off' : ''; ?>" id="notifDot"><?php echo esc_html(count($gwqsh_events)); ?></span>
+					</svg><span class="dot-badge <?php echo empty( $gwqsh_events ) ? 'off' : ''; ?>" id="notifDot"><?php echo esc_html( count( $gwqsh_events ) ); ?></span>
 				</button>
 				<div class="menu menu-notif" id="menu-notif" role="menu">
 					<div class="menu-head"><b>Notifications</b><button class="link-btn" id="markRead" type="button">Mark all as
 							read</button></div>
-					<?php if (empty($gwqsh_events)) : ?>
+					<?php
+					if ( empty( $gwqsh_events ) ) :
+						?>
 						<div class="menu-item">No recent threats detected.</div>
-					<?php else : ?>
-						<?php foreach ($gwqsh_events as $gwqsh_view_event) : ?>
-							<div class="menu-item"><span><b><?php echo esc_html($gwqsh_view_event['event_name']); ?></b><small><?php echo esc_html($gwqsh_view_event['ip_address'] . (! empty($gwqsh_view_event['details']) ? ' · ' . $gwqsh_view_event['details'] : '')); ?></small></span></div>
+						<?php
+					else :
+						?>
+						<?php
+						foreach ( $gwqsh_events as $gwqsh_view_event ) :
+							?>
+							<div class="menu-item"><span><b><?php echo esc_html( $gwqsh_view_event['event_name'] ); ?></b><small><?php echo esc_html( $gwqsh_view_event['ip_address'] . ( ! empty( $gwqsh_view_event['details'] ) ? ' · ' . $gwqsh_view_event['details'] : '' ) ); ?></small></span></div>
 						<?php endforeach; ?>
 					<?php endif; ?>
 				</div>
@@ -180,16 +186,16 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 
 			<div class="menu-wrap">
 				<button class="avatar-btn" data-menu="user" type="button" aria-haspopup="true" aria-expanded="false"
-					aria-label="Account menu"><span class="avatar"><?php echo esc_html($gwqsh_u_initial); ?></span></button>
+					aria-label="Account menu"><span class="avatar"><?php echo esc_html( $gwqsh_u_initial ); ?></span></button>
 				<div class="menu" id="menu-user" role="menu">
-					<div class="menu-head"><b><?php echo esc_html($gwqsh_u_name); ?></b><small><?php echo esc_html($gwqsh_u_role); ?></small></div>
-					<a role="menuitem" class="menu-item" href="<?php echo esc_url(admin_url('admin.php?page=gracewell-security-suite-pro-settings')); ?>"><svg class="i">
+					<div class="menu-head"><b><?php echo esc_html( $gwqsh_u_name ); ?></b><small><?php echo esc_html( $gwqsh_u_role ); ?></small></div>
+					<a role="menuitem" class="menu-item" href="<?php echo esc_url( admin_url( 'admin.php?page=gracewell-security-suite-pro-settings' ) ); ?>"><svg class="i">
 							<use href="#i-gear" />
 						</svg><span>Plugin settings</span></a>
 					<button role="menuitem" class="menu-item" id="themeToggle" type="button"><svg class="i">
 							<use href="#i-moon" />
 						</svg><span id="themeLbl">Dark mode</span></button>
-					<a role="menuitem" class="menu-item" href="<?php echo esc_url(wp_logout_url()); ?>"><svg class="i">
+					<a role="menuitem" class="menu-item" href="<?php echo esc_url( wp_logout_url() ); ?>"><svg class="i">
 							<use href="#i-logout" />
 						</svg><span>Log out</span></a>
 				</div>
@@ -233,20 +239,21 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 					<div class="qs-stack-icon">
 						<span class="qs-stack-square" aria-hidden="true"></span>
 						<span class="qs-stack-circle" aria-hidden="true">
-							<?php echo $gwqsh_icon('file'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+							<?php
+							echo $gwqsh_icon( 'file' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
 						</span>
 					</div>
 					<div class="qs-metric-body">
 						<h4 class="qs-metric-heading">
-							<strong><span class="stat-num" data-count="<?php echo esc_attr((int) get_option('gwqsh_last_scan_core_total', 0)); ?>">0</span></strong>
+							<strong><span class="stat-num" data-count="<?php echo esc_attr( (int) get_option( 'gwqsh_last_scan_core_total', 0 ) ); ?>">0</span></strong>
 							<span class="qs-metric-title">Core Files</span>
 							<span class="qs-badge qs-badge-good">Monitored</span>
 						</h4>
 						<p class="qs-metric-desc">
-							<span class="fi-detail fi-detail-ok">Clean: <b data-k="core-ok"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['core-ok'] ?? 0)); ?></b></span>
-							<span class="fi-detail fi-detail-mod">Mod: <b data-k="core-mod"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['core-mod'] ?? 0)); ?></b></span>
-							<span class="fi-detail fi-detail-miss">Miss: <b data-k="core-miss"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['core-miss'] ?? 0)); ?></b></span>
+							<span class="fi-detail fi-detail-ok">Clean: <b data-k="core-ok"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['core-ok'] ?? 0 ) ); ?></b></span>
+							<span class="fi-detail fi-detail-mod">Mod: <b data-k="core-mod"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['core-mod'] ?? 0 ) ); ?></b></span>
+							<span class="fi-detail fi-detail-miss">Miss: <b data-k="core-miss"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['core-miss'] ?? 0 ) ); ?></b></span>
 						</p>
 					</div>
 				</div>
@@ -256,7 +263,8 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 					<div class="qs-stack-icon">
 						<span class="qs-stack-square" aria-hidden="true"></span>
 						<span class="qs-stack-circle" aria-hidden="true">
-							<?php echo $gwqsh_icon('gear'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+							<?php
+							echo $gwqsh_icon( 'gear' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
 						</span>
 					</div>
@@ -267,9 +275,9 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 							<span class="qs-badge qs-badge-good">Active</span>
 						</h4>
 						<p class="qs-metric-desc">
-							<span class="fi-detail fi-detail-ok">Clean: <b data-k="pl-ok"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['pl-ok'] ?? 0)); ?></b></span>
-							<span class="fi-detail fi-detail-mod">Mod: <b data-k="pl-mod"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['pl-mod'] ?? 0)); ?></b></span>
-							<span class="fi-detail fi-detail-sus">Sus: <b data-k="pl-sus"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['pl-sus'] ?? 0)); ?></b></span>
+							<span class="fi-detail fi-detail-ok">Clean: <b data-k="pl-ok"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['pl-ok'] ?? 0 ) ); ?></b></span>
+							<span class="fi-detail fi-detail-mod">Mod: <b data-k="pl-mod"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['pl-mod'] ?? 0 ) ); ?></b></span>
+							<span class="fi-detail fi-detail-sus">Sus: <b data-k="pl-sus"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['pl-sus'] ?? 0 ) ); ?></b></span>
 						</p>
 					</div>
 				</div>
@@ -279,7 +287,8 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 					<div class="qs-stack-icon">
 						<span class="qs-stack-square" aria-hidden="true"></span>
 						<span class="qs-stack-circle" aria-hidden="true">
-							<?php echo $gwqsh_icon('grid'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+							<?php
+							echo $gwqsh_icon( 'grid' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
 						</span>
 					</div>
@@ -290,9 +299,9 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 							<span class="qs-badge qs-badge-good">Active</span>
 						</h4>
 						<p class="qs-metric-desc">
-							<span class="fi-detail fi-detail-ok">Clean: <b data-k="th-ok"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['th-ok'] ?? 0)); ?></b></span>
-							<span class="fi-detail fi-detail-mod">Mod: <b data-k="th-mod"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['th-mod'] ?? 0)); ?></b></span>
-							<span class="fi-detail fi-detail-sus">Sus: <b data-k="th-sus"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['th-sus'] ?? 0)); ?></b></span>
+							<span class="fi-detail fi-detail-ok">Clean: <b data-k="th-ok"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['th-ok'] ?? 0 ) ); ?></b></span>
+							<span class="fi-detail fi-detail-mod">Mod: <b data-k="th-mod"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['th-mod'] ?? 0 ) ); ?></b></span>
+							<span class="fi-detail fi-detail-sus">Sus: <b data-k="th-sus"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['th-sus'] ?? 0 ) ); ?></b></span>
 						</p>
 					</div>
 				</div>
@@ -302,7 +311,8 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 					<div class="qs-stack-icon">
 						<span class="qs-stack-square" aria-hidden="true"></span>
 						<span class="qs-stack-circle" aria-hidden="true">
-							<?php echo $gwqsh_icon('shield-check'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+							<?php
+							echo $gwqsh_icon( 'shield-check' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
 						</span>
 					</div>
@@ -310,12 +320,12 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 						<h4 class="qs-metric-heading">
 							<strong><span class="stat-num" data-count="0">0</span></strong>
 							<span class="qs-metric-title">Uploads Scan</span>
-							<span class="qs-badge qs-badge-warning"><?php echo esc_html('Alerts (' . $gwqsh_data['summary']['breakdown']['up-php'] . ')'); ?></span>
+							<span class="qs-badge qs-badge-warning"><?php echo esc_html( 'Alerts (' . $gwqsh_data['summary']['breakdown']['up-php'] . ')' ); ?></span>
 						</h4>
 						<p class="qs-metric-desc">
-							<span class="fi-detail fi-detail-ok">Clean: <b data-k="up-ok"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['up-ok'] ?? 0)); ?></b></span>
-							<span class="fi-detail fi-detail-php">PHP: <b data-k="up-php"><?php echo esc_html($gwqsh_data['summary']['breakdown']['up-php'] ?? '—'); ?></b></span>
-							<span class="fi-detail fi-detail-sus">Sus: <b data-k="up-sus"><?php echo esc_html(number_format_i18n($gwqsh_data['summary']['breakdown']['up-sus'] ?? 0)); ?></b></span>
+							<span class="fi-detail fi-detail-ok">Clean: <b data-k="up-ok"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['up-ok'] ?? 0 ) ); ?></b></span>
+							<span class="fi-detail fi-detail-php">PHP: <b data-k="up-php"><?php echo esc_html( $gwqsh_data['summary']['breakdown']['up-php'] ?? '—' ); ?></b></span>
+							<span class="fi-detail fi-detail-sus">Sus: <b data-k="up-sus"><?php echo esc_html( number_format_i18n( $gwqsh_data['summary']['breakdown']['up-sus'] ?? 0 ) ); ?></b></span>
 						</p>
 					</div>
 				</div>
@@ -325,13 +335,14 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 					<div class="qs-stack-icon">
 						<span class="qs-stack-square" aria-hidden="true"></span>
 						<span class="qs-stack-circle" aria-hidden="true">
-							<?php echo $gwqsh_icon('activity'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+							<?php
+							echo $gwqsh_icon( 'activity' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
 						</span>
 					</div>
 					<div class="qs-metric-body">
 						<h4 class="qs-metric-heading">
-							<strong>v<?php echo esc_html(GWQSH_Malware_Analyzer::VERSION); ?></strong>
+							<strong>v<?php echo esc_html( GWQSH_Malware_Analyzer::VERSION ); ?></strong>
 							<span class="qs-metric-title">Detection Engine</span>
 							<span class="qs-badge qs-badge-good">Ready</span>
 						</h4>
@@ -370,7 +381,7 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 									<circle cx="12" cy="12" r="10" fill="currentColor" />
 									<path d="m9 12 2 2 4-4" stroke="#fff" />
 								</svg><b
-									id="nClean"><?php echo esc_html($gwqsh_data['summary']['clean']); ?></b><span>Clean
+									id="nClean"><?php echo esc_html( $gwqsh_data['summary']['clean'] ); ?></b><span>Clean
 									files</span></li>
 							<li><svg class="i c-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor"
 									stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -378,7 +389,7 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 									<line x1="12" x2="12" y1="8" y2="12" stroke="#fff" />
 									<line x1="12" x2="12.01" y1="16" y2="16" stroke="#fff" />
 								</svg><b
-									id="nMod"><?php echo esc_html($gwqsh_data['summary']['modified']); ?></b><span>Modified
+									id="nMod"><?php echo esc_html( $gwqsh_data['summary']['modified'] ); ?></b><span>Modified
 									files</span></li>
 							<li><svg class="i c-red" viewBox="0 0 24 24" fill="none" stroke="currentColor"
 									stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -386,7 +397,7 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 									<path d="m15 9-6 6" stroke="#fff" />
 									<path d="m9 9 6 6" stroke="#fff" />
 								</svg><b
-									id="nMiss"><?php echo esc_html($gwqsh_data['summary']['missing']); ?></b><span>Missing
+									id="nMiss"><?php echo esc_html( $gwqsh_data['summary']['missing'] ); ?></b><span>Missing
 									files</span></li>
 							<li><svg class="i c-red" viewBox="0 0 24 24" fill="none" stroke="currentColor"
 									stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -394,7 +405,7 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 									<line x1="12" x2="12" y1="8" y2="12" stroke="#fff" />
 									<line x1="12" x2="12.01" y1="16" y2="16" stroke="#fff" />
 								</svg><b
-									id="nSus"><?php echo esc_html($gwqsh_data['summary']['suspicious']); ?></b><span>Suspicious
+									id="nSus"><?php echo esc_html( $gwqsh_data['summary']['suspicious'] ); ?></b><span>Suspicious
 									files</span></li>
 						</ul>
 					</div>
@@ -444,19 +455,19 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 					<div class="ttl">
 						<h2 id="h-last">Last Scan</h2>
 						<p id="lastDate">
-							<?php echo esc_html($gwqsh_data['summary']['last_date'] ? $gwqsh_data['summary']['last_date'] : 'Never Run'); ?>
+							<?php echo esc_html( $gwqsh_data['summary']['last_date'] ? $gwqsh_data['summary']['last_date'] : 'Never Run' ); ?>
 						</p>
 					</div>
-					<span class="pill p-gray" id="scanPill"><?php echo ! empty($gwqsh_data['summary']['scan_running']) ? 'Running' : ($gwqsh_data['summary']['last_date'] ? 'Completed' : 'Never Run'); ?></span>
+					<span class="pill p-gray" id="scanPill"><?php echo ! empty( $gwqsh_data['summary']['scan_running'] ) ? 'Running' : ( $gwqsh_data['summary']['last_date'] ? 'Completed' : 'Never Run' ); ?></span>
 				</div>
 				<dl class="kv divide">
 					<div>
 						<dt>Duration</dt>
-						<dd id="kvDur"><?php echo esc_html($gwqsh_data['summary']['duration']); ?> seconds</dd>
+						<dd id="kvDur"><?php echo esc_html( $gwqsh_data['summary']['duration'] ); ?> seconds</dd>
 					</div>
 					<div>
 						<dt>Files checked</dt>
-						<dd id="kvFiles"><?php echo esc_html($gwqsh_data['summary']['total']); ?></dd>
+						<dd id="kvFiles"><?php echo esc_html( $gwqsh_data['summary']['total'] ); ?></dd>
 					</div>
 					<div>
 						<dt>Scan mode</dt>
@@ -464,7 +475,7 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 					</div>
 					<div>
 						<dt>Next scheduled scan</dt>
-						<dd id="qs-next-scan-display"><?php echo esc_html($gwqsh_data['schedule']['next'] ?? 'Not scheduled'); ?></dd>
+						<dd id="qs-next-scan-display"><?php echo esc_html( $gwqsh_data['schedule']['next'] ?? 'Not scheduled' ); ?></dd>
 					</div>
 				</dl>
 				<div class="scan-prog hide" id="scanProg" aria-live="polite">
@@ -708,7 +719,7 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 								<path d="m9 18 6-6-6-6" />
 							</svg></button>
 						<a class="lrow"
-							href="<?php echo esc_url(admin_url('admin.php?page=gracewell-security-suite-pro-activity-log&type=system')); ?>"><span
+							href="<?php echo esc_url( admin_url( 'admin.php?page=gracewell-security-suite-pro-activity-log&type=system' ) ); ?>"><span
 								class="tile sm t-blue"><svg class="i" viewBox="0 0 24 24" fill="none"
 									stroke="currentColor" stroke-width="2" stroke-linecap="round"
 									stroke-linejoin="round" aria-hidden="true">
@@ -724,6 +735,7 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 								<path d="m9 18 6-6-6-6" />
 							</svg></a>
 						<button class="lrow" id="toolSignatures" type="button"><span class="tile sm t-purple"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span class="txt"><b>Signed Malware Signature Updates</b><small>Manage automated signatures and verify manifest integrity.</small></span><svg class="i chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+						<button class="lrow" id="toolRecoveryCenter" type="button"><span class="tile sm t-blue"><?php echo $gwqsh_icon( 'shield-check' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fixed escaped SVG helper. ?></span><span class="txt"><b>Security Recovery Center</b><small>Inspect database evidence and follow the incident recovery workflow.</small></span></button>
 					</div>
 				</section>
 				<section class="card tips-card" aria-labelledby="h-tips">
@@ -819,7 +831,7 @@ $gwqsh_events = GWQSH_Activity_Logger::query_logs(
 
 <template id="tpl-signatures">
 	<div class="qs-modal-enterprise-content">
-		<?php GWQSH_Enterprise_UI::render('signatures', 'integrity'); ?>
+		<?php GWQSH_Enterprise_UI::render( 'signatures', 'integrity' ); ?>
 	</div>
 </template>
 

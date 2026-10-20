@@ -23,8 +23,9 @@ WordPress roots, dedicated MU coverage, SHA-256 change evidence and bounded resu
 scans. Version 1.1.0 of the database schema adds nullable evidence without deleting
 existing data. Core checksum unavailability does not disable local inspection.
 
-A standalone early MU Guardian preserves originals and replaces only explicit
-high-confidence malicious shapes with harmless stubs. Alphabetical loading cannot
+The standalone early MU Guardian reports explicit high-confidence patterns for
+administrator review. Automatic source replacement is deprecated in 1.2.0-rc.1;
+confirmed quarantine preserves originals before isolation. Alphabetical loading cannot
 guarantee precedence over filesystem attackers. Guardian installation, failure,
 removal, quarantine retention, bounded coverage and false-positive policy are
 specified in [the engine security documentation](docs/MALWARE-ENGINE.md).
@@ -56,3 +57,7 @@ Fresh lockout, replay, factor-consumption and activity queries are deliberately 
 The canonical directory, bootstrap and text domain are `gracewell-security-suite-pro`. Pro replaces the released Free edition; the active editions cannot run simultaneously. Stored gwqsh_ keys and security payloads are retained. Free site-salt and prior Pro auth-salt ciphertext remain readable. New recovery-code hashes use the site-salt scheme; both earlier verifier formats remain valid until consumed. Keep data removal disabled before deleting the inactive Free plugin. Public declarations, AJAX/nonces, database tables, options, transients, user metadata and cron hooks use `GWQSH_`/`gwqsh_`. A one-time migration renames legacy tables and stored keys without decrypting or modifying payloads; existing current keys take precedence. Conflicting populated tables stop the upgrade rather than overwrite data. Security state is migrated before authentication hooks initialize. Legacy encrypted `gqs1` payloads, trusted-device cookies, recovery bookmarks and in-flight factor input names remain verifiable. Old AJAX actions are not exposed. Legacy `GQS_DISABLE_LOGIN_URL` and `GQS_TRUSTED_PROXIES` constants remain supported; prefer the new `GWQSH_` names. Previously quarantined files remain in their original private storage and are included in intentional uninstall cleanup.
 
 Custom login routes follow WordPress permalink configuration: `/slug/` with pretty permalinks, `/index.php/slug/` with index permalinks, or `/?gwqsh_login=slug` with plain permalinks. The displayed/copied URL and native form action use the same route. No server rewrite configuration is changed by the plugin.
+
+## 1.2.0 release candidate
+
+See [release readiness](docs/RELEASE-READINESS.md), [security audit](docs/SECURITY-AUDIT.md), and [recovery policy](docs/RECOVERY-VALIDATION.md) for actual tests, remaining blockers and the Guardian containment deprecation. This candidate does not claim competitive detection parity or certification.

@@ -226,7 +226,10 @@ final class GWQSH_Customization {
 		$sections['scan_schedule'] = GWQSH_Scheduler::settings();
 		foreach ( GWQSH_Enterprise_Config::schema() as $section => $fields ) {
 			$values = GWQSH_Enterprise_Config::get( $section );
-			foreach ( $fields as $key => $field ) { if ( 'secret' === $field[0] ) { unset( $values[ $key ] ); } }
+			foreach ( $fields as $key => $field ) {
+				if ( 'secret' === $field[0] ) {
+					unset( $values[ $key ] ); }
+			}
 			$sections[ 'enterprise__' . $section ] = $values;
 		}
 		return array(
@@ -427,9 +430,13 @@ final class GWQSH_Customization {
 				return new WP_Error( 'format', 'Invalid section data.' ); }
 			if ( 0 === strpos( $key, 'enterprise__' ) ) {
 				$section = substr( $key, 12 );
-				foreach ( $values as $field => $value ) { if ( '_clear' === $field || 'secret' === ( GWQSH_Enterprise_Config::schema()[ $section ][ $field ][0] ?? '' ) ) { return new WP_Error( 'credentials', 'Enterprise credentials cannot be imported.' ); } }
+				foreach ( $values as $field => $value ) {
+					if ( '_clear' === $field || 'secret' === ( GWQSH_Enterprise_Config::schema()[ $section ][ $field ][0] ?? '' ) ) {
+						return new WP_Error( 'credentials', 'Enterprise credentials cannot be imported.' ); }
+				}
 				$result = GWQSH_Enterprise_Config::validate( $section, $values, $payload['sections']['security']['geo_enabled'] ?? GWQSH_Settings::get( 'geo_enabled', false ) );
-				if ( is_wp_error( $result ) ) { return $result; }
+				if ( is_wp_error( $result ) ) {
+					return $result; }
 				continue;
 			}
 			if ( 'scan_schedule' === $key ) {

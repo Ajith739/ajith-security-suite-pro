@@ -38,6 +38,9 @@ final class GWQSH_Secure_HTTP {
 		if ( 'signatures' === $service ) {
 			return defined( 'GWQSH_SIGNATURE_FEED_URL' ) && hash_equals( GWQSH_SIGNATURE_FEED_URL, $url ) && ! filter_var( $host, FILTER_VALIDATE_IP ) && false !== strpos( $host, '.' );
 		}
+		if ( 'advisories' === $service ) {
+			return defined( 'GWQSH_ADVISORY_FEED_URL' ) && hash_equals( GWQSH_ADVISORY_FEED_URL, $url ) && ! filter_var( $host, FILTER_VALIDATE_IP ) && false !== strpos( $host, '.' ) && ! isset( $u['query'] );
+		}
 		return false;
 	}
 	/**
@@ -63,7 +66,7 @@ final class GWQSH_Secure_HTTP {
 		$args['redirection']         = 0;
 		$args['sslverify']           = true;
 		$args['reject_unsafe_urls']  = true;
-		$args['limit_response_size'] = 'signatures' === $service ? 1048576 : 32768;
+		$args['limit_response_size'] = in_array( $service, array( 'signatures', 'advisories' ), true ) ? 1048576 : 32768;
 		return wp_safe_remote_request( $url, $args );
 	}
 }

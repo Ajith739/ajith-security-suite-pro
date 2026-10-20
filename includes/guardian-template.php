@@ -59,20 +59,20 @@ defined( 'ABSPATH' ) || exit;
 					GWQSH_Security_Runtime::atomic_write( $state . '/guardian-health.json', '{"decision":"token_budget_limit"}' );
 				}
 				if ( $result['auto_block'] && $result['score'] >= 95 ) {
-					$record = GWQSH_Security_Runtime::preserve( $file, $root, $state, $result['rules'], true, hash( 'sha256', $content ) );
-					if ( ! $record ) {
-						GWQSH_Security_Runtime::atomic_write(
-							$state . '/guardian-health.json',
-							json_encode(
-								array(
-									'decision' => 'block_failed',
-									'hash'     => hash( 'sha256', $content ),
-									'rules'    => $result['rules'],
-									'time'     => time(),
-								)
+					// Detection is independent of cleanup authorization. Early boot has no
+					// authenticated administrator to confirm a file replacement.
+					GWQSH_Security_Runtime::atomic_write(
+						$state . '/guardian-health.json',
+						json_encode(
+							array(
+								'decision' => 'review_required',
+								'original' => $item->getFilename(),
+								'hash'     => hash( 'sha256', $content ),
+								'rules'    => $result['rules'],
+								'time'     => time(),
 							)
-						);
-					}
+						)
+					);
 				}
 			}
 		} finally {

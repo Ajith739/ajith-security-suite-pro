@@ -11,12 +11,19 @@ defined( 'ABSPATH' ) || exit;
  * GWQSH Login Protection implementation.
  */
 final class GWQSH_Login_Protection {
-	/** Unknown accounts remain protected; exemptions require explicit role configuration. */
+	/** Unknown accounts remain protected; exemptions require explicit role configuration.
+	 *
+	 * @param string $username Login identifier.
+	 */
 	public static function protects_account( $username ) {
 		$user = is_email( $username ) ? get_user_by( 'email', $username ) : get_user_by( 'login', $username );
-		if ( ! $user || ! $user->roles ) { return true; }
+		if ( ! $user || ! $user->roles ) {
+			return true; }
 		$rules = self::get_settings()['role_protection'];
-		foreach ( $user->roles as $role ) { if ( ! array_key_exists( $role, $rules ) || $rules[$role] ) { return true; } }
+		foreach ( $user->roles as $role ) {
+			if ( ! array_key_exists( $role, $rules ) || $rules[ $role ] ) {
+				return true; }
+		}
 		return false;
 	}
 
@@ -67,9 +74,13 @@ final class GWQSH_Login_Protection {
 		foreach ( $defaults as $k => $def ) {
 			if ( isset( $new_settings[ $k ] ) ) {
 				if ( 'role_protection' === $k ) {
-					if ( ! is_array( $new_settings[$k] ) ) { continue; }
-					$current[$k] = array();
-					foreach ( $new_settings[$k] as $role => $state ) { if ( isset( wp_roles()->roles[$role] ) && is_bool( $state ) ) { $current[$k][$role] = $state; } }
+					if ( ! is_array( $new_settings[ $k ] ) ) {
+						continue; }
+					$current[ $k ] = array();
+					foreach ( $new_settings[ $k ] as $role => $state ) {
+						if ( isset( wp_roles()->roles[ $role ] ) && is_bool( $state ) ) {
+							$current[ $k ][ $role ] = $state; }
+					}
 				} elseif ( is_bool( $def ) ) {
 					$current[ $k ] = filter_var( $new_settings[ $k ], FILTER_VALIDATE_BOOLEAN );
 				} elseif ( is_numeric( $def ) ) {
@@ -237,7 +248,8 @@ final class GWQSH_Login_Protection {
 	 * @param mixed $password Password.
 	 */
 	public static function check_lockout_before_auth( $user, $username, $password ) {
-		if ( ! self::protects_account( $username ) ) { return $user; }
+		if ( ! self::protects_account( $username ) ) {
+			return $user; }
 		if ( empty( $username ) && empty( $password ) ) {
 			return $user;
 		}
@@ -278,7 +290,8 @@ final class GWQSH_Login_Protection {
 	 * @param mixed $error Error.
 	 */
 	public static function record_failed_attempt( $username, $error = null ) {
-		if ( ! self::protects_account( $username ) ) { return; }
+		if ( ! self::protects_account( $username ) ) {
+			return; }
 		// A successful password check followed by a second-factor challenge is not a failure.
 		if ( ( is_wp_error( $error ) && in_array( 'gwqsh_2fa_required', $error->get_error_codes(), true ) ) ||
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only authentication/routing hook; WordPress authenticates credentials, and no setting is changed by this input.
@@ -350,7 +363,8 @@ final class GWQSH_Login_Protection {
 	 * @param mixed $user User.
 	 */
 	public static function on_successful_login( $user_login, $user ) {
-		if ( ! self::protects_account( $user_login ) ) { return; }
+		if ( ! self::protects_account( $user_login ) ) {
+			return; }
 		$ip = GWQSH_Settings::get_client_ip();
 		global $wpdb;
 		$table = esc_sql( $wpdb->prefix . 'gwqsh_lockouts' );

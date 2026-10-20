@@ -354,13 +354,22 @@ final class GWQSH_File_Integrity {
 			}
 		}
 
+		$omissions = (array) get_option( 'gwqsh_last_scan_omissions', array() );
+		foreach ( array(
+			'Core'    => 'core-ok',
+			'Plugin'  => 'pl-ok',
+			'Theme'   => 'th-ok',
+			'Uploads' => 'up-ok',
+		) as $scope => $key ) {
+			$breakdown[ $key ] = max( 0, $breakdown[ $key ] - (int) ( $omissions['scopes'][ $scope ] ?? 0 ) );
+		}
 		$breakdown['up-sus'] = $breakdown['up-php'];
 		$upload_php_total    = get_option( 'gwqsh_last_scan_upload_php_total', null );
 		$breakdown['up-php'] = null === $upload_php_total ? null : (int) $upload_php_total;
 
 		$total_files  = (int) get_option( 'gwqsh_last_scan_total', 0 );
 		$issues_count = $counts['Modified'] + $counts['Missing'] + $counts['Suspicious'];
-		$clean_files  = max( 0, $total_files - $issues_count );
+		$clean_files  = max( 0, $total_files - $issues_count - (int) ( $omissions['count'] ?? 0 ) );
 
 		$last_date = get_option( 'gwqsh_last_scan_time', '' );
 		$last_dur  = get_option( 'gwqsh_last_scan_duration', 0 );
@@ -377,6 +386,8 @@ final class GWQSH_File_Integrity {
 			),
 			'total'              => $total_files,
 			'clean'              => $clean_files,
+			'uninspected'        => (int) ( $omissions['count'] ?? 0 ),
+			'omitted_files'      => $omissions['files'] ?? array(),
 			'clean_percent'      => $total_files ? round( $clean_files / $total_files * 100, 1 ) : 0,
 			'scan_running'       => (bool) get_option( 'gwqsh_scan_progress', false ),
 			'protection'         => ! GWQSH_Settings::get( 'status', true ) ? 'Disabled' : ( $issues_count || $coverage ? 'Attention Required' : 'Monitoring' ),

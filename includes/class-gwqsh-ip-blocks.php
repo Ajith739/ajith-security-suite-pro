@@ -113,12 +113,12 @@ final class GWQSH_IP_Blocks {
 		// phpcs:ignore WordPress.DB -- Fixed WordPress-owned identifiers and prepared values; live enforcement and atomic mutations must bypass stale caches.
 		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} ORDER BY id DESC LIMIT 20 OFFSET %d", ( $page - 1 ) * 20 ), ARRAY_A );
 		foreach ( $rows as &$row ) {
-			$row['status']  = $row['revoked_at'] ? 'Unblocked' : ( $row['expires_at'] && $row['expires_at'] <= time() ? 'Expired' : 'Blocked' );
-			$row['created'] = GWQSH_Time::format( (int) $row['created_at'] );
-			$row['expires'] = $row['expires_at'] ? GWQSH_Time::format( (int) $row['expires_at'] ) : 'Permanent';
-			$dur_mins       = $row['expires_at'] ? max( 1, (int) round( ( $row['expires_at'] - $row['created_at'] ) / 60 ) ) : 0;
+			$row['status']   = $row['revoked_at'] ? 'Unblocked' : ( $row['expires_at'] && $row['expires_at'] <= time() ? 'Expired' : 'Blocked' );
+			$row['created']  = GWQSH_Time::format( (int) $row['created_at'] );
+			$row['expires']  = $row['expires_at'] ? GWQSH_Time::format( (int) $row['expires_at'] ) : 'Permanent';
+			$dur_mins        = $row['expires_at'] ? max( 1, (int) round( ( $row['expires_at'] - $row['created_at'] ) / 60 ) ) : 0;
 			$row['duration'] = $dur_mins ? $dur_mins . ' minutes' : 'Permanent';
-			$user_obj       = ! empty( $row['created_by'] ) ? get_userdata( $row['created_by'] ) : null;
+			$user_obj        = ! empty( $row['created_by'] ) ? get_userdata( $row['created_by'] ) : null;
 			$row['added_by'] = $user_obj ? $user_obj->user_login : ( ! empty( $row['created_by'] ) ? 'user' : 'system' );
 		} unset( $row );
 		return array(
@@ -153,7 +153,7 @@ final class GWQSH_IP_Blocks {
 	}
 	/** Enforce administrator restrictions on public requests. */
 	public static function enforce() {
-		if ( wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) || ( is_admin() && current_user_can( 'manage_options' ) ) ) {
+		if ( wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) || ( is_admin() && current_user_can( GWQSH_Admin::management_capability() ) ) ) {
 			return; }
 		$ip = GWQSH_Settings::get_client_ip();
 		if ( self::blocked( $ip ) ) {

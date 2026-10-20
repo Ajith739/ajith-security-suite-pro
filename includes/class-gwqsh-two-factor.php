@@ -43,7 +43,13 @@ final class GWQSH_Two_Factor {
 		add_action( 'wp_authenticate_application_password_errors', array( __CLASS__, 'application_password_policy' ), 10, 4 );
 		add_filter( 'rest_pre_dispatch', array( __CLASS__, 'restrict_rest' ), 10, 3 );
 	}
-	/** Noninteractive credentials cannot silently bypass a required or enrolled factor. */
+	/** Noninteractive credentials cannot silently bypass a required or enrolled factor.
+	 *
+	 * @param WP_Error $error Accumulated authentication errors.
+	 * @param WP_User  $user Candidate account.
+	 * @param array    $item Application credential metadata.
+	 * @param string   $password Supplied application password, never logged.
+	 */
 	public static function application_password_policy( $error, $user, $item, $password ) {
 		if ( $user instanceof WP_User && ( self::required( $user->ID ) || self::effective_enabled( $user->ID ) ) ) {
 			$error->add( 'gwqsh_app_password_restricted', 'Application passwords are restricted for accounts protected by two-factor authentication.' );
@@ -576,7 +582,7 @@ final class GWQSH_Two_Factor {
 	 * Get all users 2fa list.
 	 */
 	public static function get_all_users_2fa_list() {
-		$users      = current_user_can( 'manage_options' ) ? get_users() : array( wp_get_current_user() );
+		$users      = current_user_can( GWQSH_Admin::management_capability() ) ? get_users() : array( wp_get_current_user() );
 		$out        = array();
 		$current_id = get_current_user_id();
 

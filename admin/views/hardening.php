@@ -1,22 +1,21 @@
 <?php
-
 /** Hardening Pro administration screen.
  *
  * @package GracewellSecuritySuitePro
  */
 
-defined('ABSPATH') || exit;
-if (! current_user_can('manage_options')) {
+defined( 'ABSPATH' ) || exit;
+if ( ! current_user_can( 'manage_options' ) ) {
 	return;
 }
-$gwqsh_data      = GWQSH_Admin::get_page_initial_data('hardening');
+$gwqsh_data      = GWQSH_Admin::get_page_initial_data( 'hardening' );
 $gwqsh_current_u = wp_get_current_user();
 $gwqsh_u_name    = $gwqsh_current_u->display_name ? $gwqsh_current_u->display_name : $gwqsh_current_u->user_login;
-$gwqsh_u_initial = strtoupper(substr($gwqsh_u_name, 0, 1));
-$gwqsh_u_role    = ! empty($gwqsh_current_u->roles[0]) ? ucfirst($gwqsh_current_u->roles[0]) : 'Administrator';
+$gwqsh_u_initial = strtoupper( substr( $gwqsh_u_name, 0, 1 ) );
+$gwqsh_u_role    = ! empty( $gwqsh_current_u->roles[0] ) ? ucfirst( $gwqsh_current_u->roles[0] ) : 'Administrator';
+$gwqsh_icon      = static function ( $gwqsh_view_name ) {
 
-$gwqsh_icon = static function ($gwqsh_view_name) {
-	return '<svg class="qs-icon" aria-hidden="true"><use href="#i-' . esc_attr($gwqsh_view_name) . '"/></svg>';
+	return '<svg class="qs-icon" aria-hidden="true"><use href="#i-' . esc_attr( $gwqsh_view_name ) . '"/></svg>';
 };
 ?>
 
@@ -24,8 +23,8 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 <a class="skip" href="#main">Skip to content</a>
 <header class="topbar">
 	<div class="topbar-in">
-		<a class="brand" href="<?php echo esc_url(admin_url('admin.php?page=gracewell-security-suite-pro')); ?>" aria-label="Security Suite Pro home">
-			<img class="logo-mark" src="<?php echo esc_url(GWQSH_URL . 'assets/img/quietshield.svg'); ?>" alt="" width="40" height="44">
+		<a class="brand" href="<?php echo esc_url( admin_url( 'admin.php?page=gracewell-security-suite-pro' ) ); ?>" aria-label="Security Suite Pro home">
+			<img class="logo-mark" src="<?php echo esc_url( GWQSH_URL . 'assets/img/quietshield.svg' ); ?>" alt="" width="40" height="44">
 			<span class="brand-txt"><b><span>Security Suite Pro</span><svg class="i qs-title-crown" aria-hidden="true"><use href="#i-crown" /></svg></b><small>A Safer WordPress, A Quieter
 					Tomorrow</small></span>
 		</a>
@@ -73,16 +72,16 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 
 			<div class="menu-wrap">
 				<button class="avatar-btn" data-menu="user" type="button" aria-haspopup="true" aria-expanded="false"
-					aria-label="Account menu"><span class="avatar"><?php echo esc_html($gwqsh_u_initial); ?></span></button>
+					aria-label="Account menu"><span class="avatar"><?php echo esc_html( $gwqsh_u_initial ); ?></span></button>
 				<div class="menu" id="menu-user" role="menu">
-					<div class="menu-head"><b><?php echo esc_html($gwqsh_u_name); ?></b><small><?php echo esc_html($gwqsh_u_role); ?></small></div>
-					<a role="menuitem" class="menu-item" href="<?php echo esc_url(admin_url('admin.php?page=gracewell-security-suite-pro-settings')); ?>"><svg class="i">
+					<div class="menu-head"><b><?php echo esc_html( $gwqsh_u_name ); ?></b><small><?php echo esc_html( $gwqsh_u_role ); ?></small></div>
+					<a role="menuitem" class="menu-item" href="<?php echo esc_url( admin_url( 'admin.php?page=gracewell-security-suite-pro-settings' ) ); ?>"><svg class="i">
 							<use href="#i-gear" />
 						</svg><span>Plugin settings</span></a>
 					<button role="menuitem" class="menu-item" id="themeToggle" type="button"><svg class="i">
 							<use href="#i-moon" />
 						</svg><span id="themeLbl">Dark mode</span></button>
-					<a role="menuitem" class="menu-item" href="<?php echo esc_url(wp_logout_url()); ?>"><svg class="i">
+					<a role="menuitem" class="menu-item" href="<?php echo esc_url( wp_logout_url() ); ?>"><svg class="i">
 							<use href="#i-logout" />
 						</svg><span>Log out</span></a>
 				</div>
@@ -116,17 +115,18 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 						<div class="qs-stack-icon">
 							<span class="qs-stack-square" aria-hidden="true"></span>
 							<span class="qs-stack-circle" aria-hidden="true">
-								<?php echo $gwqsh_icon('shield-check'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+								<?php
+								echo $gwqsh_icon( 'shield-check' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								?>
 							</span>
 						</div>
 						<div class="qs-metric-body">
 							<h4 class="qs-metric-heading">
-								<strong><span id="scoreN"><?php echo esc_html($gwqsh_data['score']); ?></span> / 100</strong>
+								<strong><span id="scoreN"><?php echo esc_html( $gwqsh_data['score'] ); ?></span> / 100</strong>
 								<span class="qs-metric-title">Hardening Score</span>
 							</h4>
 							<p class="qs-metric-desc" id="scoreMsg">Assessment of these six hardening controls.</p>
-							<div class="hd-progress" role="progressbar" aria-label="Hardening score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr($gwqsh_data['score']); ?>" style="display:none;"><span id="scoreBar"></span></div>
+							<div class="hd-progress" role="progressbar" aria-label="Hardening score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( $gwqsh_data['score'] ); ?>" style="display:none;"><span id="scoreBar"></span></div>
 						</div>
 					</div>
 
@@ -135,15 +135,16 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 						<div class="qs-stack-icon">
 							<span class="qs-stack-square" aria-hidden="true"></span>
 							<span class="qs-stack-circle" aria-hidden="true">
-								<?php echo $gwqsh_icon('gear'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+								<?php
+								echo $gwqsh_icon( 'gear' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								?>
 							</span>
 						</div>
 						<div class="qs-metric-body">
 							<h4 class="qs-metric-heading">
-								<strong><span id="enabledN"><?php echo esc_html($gwqsh_data['passed']); ?></span> / 6</strong>
+								<strong><span id="enabledN"><?php echo esc_html( $gwqsh_data['passed'] ); ?></span> / 6</strong>
 								<span class="qs-metric-title">Enabled Settings</span>
-								<span class="qs-badge qs-badge-good hd-pill hd-green" id="enabledBadge"><?php echo esc_html($gwqsh_data['passed'] . ' / 6'); ?></span>
+								<span class="qs-badge qs-badge-good hd-pill hd-green" id="enabledBadge"><?php echo esc_html( $gwqsh_data['passed'] . ' / 6' ); ?></span>
 							</h4>
 							<p class="qs-metric-desc" id="enabledMsg">Controls with current application evidence.</p>
 						</div>
@@ -154,15 +155,16 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 						<div class="qs-stack-icon">
 							<span class="qs-stack-square" aria-hidden="true"></span>
 							<span class="qs-stack-circle" aria-hidden="true">
-								<?php echo $gwqsh_icon('bell'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+								<?php
+								echo $gwqsh_icon( 'bell' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								?>
 							</span>
 						</div>
 						<div class="qs-metric-body">
 							<h4 class="qs-metric-heading">
-								<strong><span id="pendingN"><?php echo esc_html($gwqsh_data['pending']); ?></span></strong>
+								<strong><span id="pendingN"><?php echo esc_html( $gwqsh_data['pending'] ); ?></span></strong>
 								<span class="qs-metric-title">Pending Actions</span>
-								<span class="qs-badge qs-badge-warning hd-pill hd-orange" id="pendingBadge"><?php echo esc_html($gwqsh_data['pending'] . ' pending'); ?></span>
+								<span class="qs-badge qs-badge-warning hd-pill hd-orange" id="pendingBadge"><?php echo esc_html( $gwqsh_data['pending'] . ' pending' ); ?></span>
 							</h4>
 							<p class="qs-metric-desc" id="pendingMsg">Disabled or unverified controls need review.</p>
 						</div>
@@ -173,15 +175,16 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 						<div class="qs-stack-icon">
 							<span class="qs-stack-square" aria-hidden="true"></span>
 							<span class="qs-stack-circle" aria-hidden="true">
-								<?php echo $gwqsh_icon('lock'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+								<?php
+								echo $gwqsh_icon( 'lock' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								?>
 							</span>
 						</div>
 						<div class="qs-metric-body">
 							<h4 class="qs-metric-heading">
-								<strong><span id="riskN"><?php echo esc_html($gwqsh_data['level']); ?></span></strong>
+								<strong><span id="riskN"><?php echo esc_html( $gwqsh_data['level'] ); ?></span></strong>
 								<span class="qs-metric-title">Risk Level</span>
-								<span class="qs-badge hd-pill <?php echo 'Low' === $gwqsh_data['level'] ? 'qs-badge-good hd-green' : 'qs-badge-warning hd-orange'; ?>" id="riskBadge"><?php echo esc_html($gwqsh_data['level']); ?></span>
+								<span class="qs-badge hd-pill <?php echo 'Low' === $gwqsh_data['level'] ? 'qs-badge-good hd-green' : 'qs-badge-warning hd-orange'; ?>" id="riskBadge"><?php echo esc_html( $gwqsh_data['level'] ); ?></span>
 							</h4>
 							<p class="qs-metric-desc">Weighted hardening assessment</p>
 						</div>
@@ -193,8 +196,11 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 			<div class="hd-grid">
 				<div class="hd-left">
 					<section class="hd-card hd-checklist" id="hardeningChecklist">
-						<div class="hd-head"><span class="hd-icon hd-purple"><?php echo $gwqsh_icon('gear'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																				?></span>
+						<div class="hd-head"><span class="hd-icon hd-purple">
+						<?php
+						echo $gwqsh_icon( 'gear' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						?>
+						</span>
 							<div>
 								<h2>Hardening Checklist</h2>
 								<p>Enable security features to protect your site. Review compatibility before changing an option.</p>
@@ -214,24 +220,27 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 								<tbody id="checkBody">
 									<?php
 									$gwqsh_descriptions = array(
-										'xmlrpc'  => array('orange', 'shield-check', 'Restricts XML-RPC authentication and requests.'),
-										'editor'  => array('red', 'file', 'Blocks theme and plugin file editing from admin.'),
-										'version' => array('purple', 'globe', 'Removes generator output and exact core version query values.'),
-										'enum'    => array('blue', 'users', 'Restricts anonymous numeric author and users REST probes.'),
-										'headers' => array('orange', 'shield-check', 'Adds nosniff, SAMEORIGIN and Referrer-Policy when absent.'),
-										'uploads' => array('red', 'file', 'Uses owned server rules; execution blocking requires verification.'),
+										'xmlrpc'  => array( 'orange', 'shield-check', 'Restricts XML-RPC authentication and requests.' ),
+										'editor'  => array( 'red', 'file', 'Blocks theme and plugin file editing from admin.' ),
+										'version' => array( 'purple', 'globe', 'Removes generator output and exact core version query values.' ),
+										'enum'    => array( 'blue', 'users', 'Restricts anonymous numeric author and users REST probes.' ),
+										'headers' => array( 'orange', 'shield-check', 'Adds nosniff, SAMEORIGIN and Referrer-Policy when absent.' ),
+										'uploads' => array( 'red', 'file', 'Uses owned server rules; execution blocking requires verification.' ),
 									);
-									foreach ($gwqsh_data['rows'] as $gwqsh_view_key => $gwqsh_view_row) :
-										$gwqsh_view_d = $gwqsh_descriptions[$gwqsh_view_key];
-									?>
-										<tr data-key="<?php echo esc_attr($gwqsh_view_key); ?>">
-											<td><span class="hd-icon hd-<?php echo esc_attr($gwqsh_view_d[0]); ?>"><?php echo $gwqsh_icon($gwqsh_view_d[1]); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																														?></span><b><?php echo esc_html($gwqsh_view_row['name']); ?></b></td>
-											<td><?php echo esc_html($gwqsh_view_d[2]); ?></td>
-											<td><span class="hd-pill" data-control-status="<?php echo esc_attr($gwqsh_view_key); ?>"><?php echo esc_html($gwqsh_view_row['status']); ?></span><button class="hd-info" type="button" data-info="<?php echo esc_attr($gwqsh_view_key); ?>" aria-label="Details for <?php echo esc_attr($gwqsh_view_row['name']); ?>">ⓘ</button></td>
-											<td><button class="hd-toggle" type="button" role="switch" aria-label="<?php echo esc_attr($gwqsh_view_row['name']); ?>" aria-checked="<?php echo $gwqsh_view_row['configured'] ? 'true' : 'false'; ?>" data-toggle="<?php echo esc_attr($gwqsh_view_key); ?>"><span></span></button></td>
+									foreach ( $gwqsh_data['rows'] as $gwqsh_view_key => $gwqsh_view_row ) :
+										$gwqsh_view_d = $gwqsh_descriptions[ $gwqsh_view_key ];
+										?>
+										<tr data-key="<?php echo esc_attr( $gwqsh_view_key ); ?>">
+											<td><span class="hd-icon hd-<?php echo esc_attr( $gwqsh_view_d[0] ); ?>">
+											<?php
+											echo $gwqsh_icon( $gwqsh_view_d[1] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+											?>
+																														</span><b><?php echo esc_html( $gwqsh_view_row['name'] ); ?></b></td>
+											<td><?php echo esc_html( $gwqsh_view_d[2] ); ?></td>
+											<td><span class="hd-pill" data-control-status="<?php echo esc_attr( $gwqsh_view_key ); ?>"><?php echo esc_html( $gwqsh_view_row['status'] ); ?></span><button class="hd-info" type="button" data-info="<?php echo esc_attr( $gwqsh_view_key ); ?>" aria-label="Details for <?php echo esc_attr( $gwqsh_view_row['name'] ); ?>">ⓘ</button></td>
+											<td><button class="hd-toggle" type="button" role="switch" aria-label="<?php echo esc_attr( $gwqsh_view_row['name'] ); ?>" aria-checked="<?php echo $gwqsh_view_row['configured'] ? 'true' : 'false'; ?>" data-toggle="<?php echo esc_attr( $gwqsh_view_key ); ?>"><span></span></button></td>
 										</tr>
-									<?php endforeach; ?>
+										<?php endforeach; ?>
 								</tbody>
 							</table>
 						</div>
@@ -239,8 +248,11 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 					</section>
 					<div class="hd-lower">
 						<section class="hd-card hd-server">
-							<div class="hd-head"><span class="hd-icon hd-purple"><?php echo $gwqsh_icon('grid'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																					?></span>
+							<div class="hd-head"><span class="hd-icon hd-purple">
+							<?php
+																														echo $gwqsh_icon( 'grid' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							?>
+							</span>
 								<div>
 									<h2>Server Configuration &amp; Advanced Hardening</h2>
 									<p>Review server guidance before deployment.</p>
@@ -285,8 +297,11 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 							</div>
 						</section>
 						<section class="hd-card hd-undo">
-							<div class="hd-head"><span class="hd-icon hd-blue"><?php echo $gwqsh_icon('refresh'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																				?></span>
+							<div class="hd-head"><span class="hd-icon hd-blue">
+							<?php
+							echo $gwqsh_icon( 'refresh' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							?>
+							</span>
 								<div>
 									<h2>Undo Changes</h2>
 									<p>Revert changes owned by Security Suite Pro.</p>
@@ -304,8 +319,11 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 				</div>
 				<aside class="hd-right">
 					<section class="hd-card hd-components">
-						<div class="hd-head"><span class="hd-icon hd-blue"><?php echo $gwqsh_icon('activity'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																			?></span>
+						<div class="hd-head"><span class="hd-icon hd-blue">
+						<?php
+						echo $gwqsh_icon( 'activity' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						?>
+						</span>
 							<h2>Security Components</h2>
 						</div>
 						<div class="hd-component-body">
@@ -320,8 +338,11 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 						<p class="hd-note">Circle: Hardening only. Component values use shared module providers.</p>
 					</section>
 					<section class="hd-card hd-recommendations" id="recommendations">
-						<div class="hd-head"><span class="hd-icon hd-orange"><?php echo $gwqsh_icon('help'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																				?></span>
+						<div class="hd-head"><span class="hd-icon hd-orange">
+						<?php
+						echo $gwqsh_icon( 'help' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						?>
+						</span>
 							<div>
 								<h2>Recommended Actions</h2>
 								<p>Review disabled or unverified controls.</p>
@@ -330,8 +351,11 @@ $gwqsh_icon = static function ($gwqsh_view_name) {
 						<div id="recommendationList"></div><button type="button" class="hd-link hd-all" id="recAll">View All Recommendations →</button>
 					</section>
 					<section class="hd-card hd-headers">
-						<div class="hd-head"><span class="hd-icon hd-green"><?php echo $gwqsh_icon('shield-check'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																			?></span>
+						<div class="hd-head"><span class="hd-icon hd-green">
+						<?php
+						echo $gwqsh_icon( 'shield-check' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						?>
+						</span>
 							<div>
 								<h2>Security Headers Preview</h2>
 								<p>Configured values and the last public response.</p>

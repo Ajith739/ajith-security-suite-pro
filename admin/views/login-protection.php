@@ -6,15 +6,15 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-$gwqsh_view_d               = GWQSH_Admin::get_page_initial_data( 'login-protection' );
-$gwqsh_view_user            = wp_get_current_user();
-$gwqsh_u_name    = ( $gwqsh_view_user && $gwqsh_view_user->exists() ) ? ( $gwqsh_view_user->display_name ? $gwqsh_view_user->display_name : $gwqsh_view_user->user_login ) : 'Admin';
-$gwqsh_u_initial = strtoupper( substr( $gwqsh_u_name, 0, 1 ) );
-$gwqsh_u_role    = ! empty( $gwqsh_view_user->roles[0] ) ? ucfirst( $gwqsh_view_user->roles[0] ) : 'Administrator';
-$gwqsh_view_icon            = static function ( $gwqsh_view_name ) {
+$gwqsh_view_d        = GWQSH_Admin::get_page_initial_data( 'login-protection' );
+$gwqsh_view_user     = wp_get_current_user();
+$gwqsh_u_name        = ( $gwqsh_view_user && $gwqsh_view_user->exists() ) ? ( $gwqsh_view_user->display_name ? $gwqsh_view_user->display_name : $gwqsh_view_user->user_login ) : 'Admin';
+$gwqsh_u_initial     = strtoupper( substr( $gwqsh_u_name, 0, 1 ) );
+$gwqsh_u_role        = ! empty( $gwqsh_view_user->roles[0] ) ? ucfirst( $gwqsh_view_user->roles[0] ) : 'Administrator';
+$gwqsh_view_icon     = static function ( $gwqsh_view_name ) {
 	return '<svg class="qs-icon" aria-hidden="true"><use href="#i-' . esc_attr( $gwqsh_view_name ) . '"/></svg>';
 };
-$gwqsh_view_url             = static function ( $gwqsh_view_page ) {
+$gwqsh_view_url      = static function ( $gwqsh_view_page ) {
 	$gwqsh_view_slugs = array(
 		'dashboard'      => '',
 		'login'          => '-login',
@@ -27,13 +27,13 @@ $gwqsh_view_url             = static function ( $gwqsh_view_page ) {
 	);
 	return admin_url( 'admin.php?page=gracewell-security-suite-pro' . $gwqsh_view_slugs[ $gwqsh_view_page ] );
 };
-$gwqsh_view_head            = static function ( $gwqsh_view_title, $gwqsh_view_symbol, $gwqsh_view_page = '', $gwqsh_view_action = 'View All', $gwqsh_view_extra = '' ) use ( $gwqsh_view_icon, $gwqsh_view_url ) {
+$gwqsh_view_head     = static function ( $gwqsh_view_title, $gwqsh_view_symbol, $gwqsh_view_page = '', $gwqsh_view_action = 'View All', $gwqsh_view_extra = '' ) use ( $gwqsh_view_icon, $gwqsh_view_url ) {
 	echo '<div class="qs-card-head"><span class="qs-tile">' . $gwqsh_view_icon( $gwqsh_view_symbol ) . '</span><h2>' . esc_html( $gwqsh_view_title ) . '</h2>' . $gwqsh_view_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Icon helper escapes symbol; extra is trusted markup generated below.
 	if ( $gwqsh_view_page ) {
 		echo '<a class="qs-small-button" href="' . esc_url( $gwqsh_view_url( $gwqsh_view_page ) ) . '">' . esc_html( $gwqsh_view_action ) . $gwqsh_view_icon( 'arrow' ) . '</a>'; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped icon helper.
 	echo '</div>';
 };
-$gwqsh_view_settings        = $gwqsh_view_d['settings'];
+$gwqsh_view_settings = $gwqsh_view_d['settings'];
 require GWQSH_PATH . 'admin/views/dashboard-icons.php';
 ?>
 <a class="skip" href="#main">Skip to content</a>
@@ -247,10 +247,10 @@ if ( ! $gwqsh_view_d['data_error'] ) {
 	<label class="qs-login-field" for="qs-proxy-mode"><b>Proxy IP detection</b><select class="qs-select" id="qs-proxy-mode" form="qs-login-access-form" name="proxy_mode">
 	<?php
 	foreach ( array(
-		'remote' => 'Direct visitor IP',
-		'xff'    => 'X-Forwarded-For',
-		'cf'     => 'Cloudflare',
-		'xreal'  => 'X-Real-IP',
+		'remote'     => 'Direct visitor IP',
+		'xff'        => 'X-Forwarded-For',
+		'cf'         => 'Cloudflare',
+		'xreal'      => 'X-Real-IP',
 		'trueclient' => 'True-Client-IP',
 	) as $gwqsh_view_key => $gwqsh_view_name ) :
 		?>
@@ -260,7 +260,7 @@ if ( ! $gwqsh_view_d['data_error'] ) {
 	<?php
 	foreach ( $gwqsh_view_d['roles'] as $gwqsh_view_login_role ) :
 		?>
-		<span><b><?php echo esc_html( $gwqsh_view_login_role['name'] ); ?></b><input type="checkbox" class="gwqsh-role-toggle" data-role-protection="<?php echo esc_attr( $gwqsh_view_login_role['key'] ); ?>" aria-label="<?php echo esc_attr( $gwqsh_view_login_role['name'] . ' login protection' ); ?>" <?php checked( $gwqsh_view_settings['role_protection'][$gwqsh_view_login_role['key']] ?? true ); ?>></span><?php endforeach; ?></div><small>Enable login rate limiting by role. Unknown accounts are always protected. Save Access to apply changes.</small></div>
+		<span><b><?php echo esc_html( $gwqsh_view_login_role['name'] ); ?></b><input type="checkbox" class="gwqsh-role-toggle" data-role-protection="<?php echo esc_attr( $gwqsh_view_login_role['key'] ); ?>" aria-label="<?php echo esc_attr( $gwqsh_view_login_role['name'] . ' login protection' ); ?>" <?php checked( $gwqsh_view_settings['role_protection'][ $gwqsh_view_login_role['key'] ] ?? true ); ?>></span><?php endforeach; ?></div><small>Enable login rate limiting by role. Unknown accounts are always protected. Save Access to apply changes.</small></div>
 	</div></div>
 </section>
 </div>

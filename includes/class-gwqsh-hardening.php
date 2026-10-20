@@ -170,7 +170,11 @@ final class GWQSH_Hardening {
 	 * Init.
 	 */
 	public static function init() {
-
+		// WordPress checks this constant when deciding whether to expose editor screens.
+		// It is request-local; turning this setting off takes effect on the next request.
+		if ( self::active( 'editor' ) && ! defined( 'DISALLOW_FILE_EDIT' ) ) {
+			define( 'DISALLOW_FILE_EDIT', true );
+		}
 		add_filter( 'xmlrpc_enabled', array( __CLASS__, 'xmlrpc_enabled' ) );
 		add_filter( 'the_generator', array( __CLASS__, 'generator' ) );
 		add_filter( 'wp_headers', array( __CLASS__, 'remove_pingback_header' ) );

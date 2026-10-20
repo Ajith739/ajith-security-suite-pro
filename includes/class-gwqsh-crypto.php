@@ -11,6 +11,25 @@ defined( 'ABSPATH' ) || exit;
  * GWQSH Crypto implementation.
  */
 final class GWQSH_Crypto {
+	/** Fail closed for malformed Ed25519 inputs across native Sodium and WP's polyfill.
+	 * Some valid-length but noncanonical signatures throw instead of returning false.
+	 *
+	 * @param mixed $signature Raw detached signature bytes.
+	 * @param mixed $message Exact signed message bytes.
+	 * @param mixed $public_key Raw public key bytes.
+	 * @return bool Whether the signature verified.
+	 */
+	public static function verify_ed25519( $signature, $message, $public_key ) {
+		if ( ! function_exists( 'sodium_crypto_sign_verify_detached' ) || ! is_string( $signature ) || 64 !== strlen( $signature ) || ! is_string( $public_key ) || 32 !== strlen( $public_key ) || ! is_string( $message ) || strlen( $message ) > 1048576 ) {
+			return false;
+		}
+		try {
+			return true === sodium_crypto_sign_verify_detached( $signature, $message, $public_key );
+		} catch ( Throwable $error ) {
+			return false;
+		}
+	}
+
 	/**
 	 * Record the old Pro key scheme before upgrading its database version.
 	 * Free 1.0.x already uses a site salt; never replace its missing encryption key.

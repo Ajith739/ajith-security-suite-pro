@@ -105,7 +105,8 @@
         const results = {'Login successful':['Success','qs-good'],'Login attempt blocked':['Failed','qs-danger'],'IP locked out':['Locked','qs-danger'],'IP unlocked':['Unlocked','qs-good'],'Login blocked by lockout':['Blocked','qs-danger'],'XML-RPC access blocked':['Blocked','qs-danger'],'XML-RPC login blocked':['Blocked','qs-danger'],'IP allowlisted':['Allowlisted','qs-good'],'IP allowlist updated':['Updated','qs-blue-badge']};
         $('#qs-login-event-body').innerHTML = data.events.length ? data.events.map(e => {const [label,tone]=results[e.event_name] || ['Recorded','qs-blue-badge'];return `<tr><td>${esc(date(e.event_time))}</td><td title="${esc(e.details)}" class="qs-event-${tone}">${esc(e.event_name)}</td><td title="${esc(e.ip_address)}">${esc(e.ip_address)}</td><td>${esc(e.user_login || '—')}</td><td><span class="qs-badge ${tone}">${label}</span></td></tr>`;}).join('') : empty(5,'No login events recorded in the last 30 days');
         $$('[data-allowlist]').forEach(el => { el.innerHTML = data.allow_ips.length ? data.allow_ips.map(ip=>`<span class="qs-login-chip"><span>${esc(ip)}</span><button type="button" data-remove-ip="${esc(ip)}" aria-label="Remove trusted IP ${esc(ip)}">×</button></span>`).join('') : '<span class="qs-login-chart-note">No trusted IP addresses configured.</span>'; });
-        $('#qs-configured-url').textContent = data.login_url;
+        const configuredUrl = $('#qs-configured-url');
+        if (configuredUrl) configuredUrl.textContent = data.login_url;
         const notification=$('#menu-notif');
         if (notification) {
             notification.querySelectorAll('.menu-item').forEach(e=>e.remove());

@@ -139,7 +139,7 @@ require GWQSH_PATH . 'admin/views/dashboard-icons.php';
 			if ( ! empty( $gwqsh_view_d['recovery']['sms'] ) || ! empty( $gwqsh_view_settings['enable_sms'] ) ) {
 				$gwqsh_active_methods[] = 'SMS';
 			}
-			$gwqsh_view_metrics   = array(
+			$gwqsh_view_metrics = array(
 				array( 'users', '2FA Coverage', $gwqsh_view_d['counts']['enabled'] . ' / ' . $gwqsh_view_d['counts']['total'] . ' users', $gwqsh_view_d['percent'] . '%', 'Users with 2FA enabled', 'coverage', 'blue' ),
 				array( 'gear', 'Active Methods', implode( ', ', $gwqsh_active_methods ), '', count( $gwqsh_active_methods ) . ' of 5 methods supported', 'methods', 'purple' ),
 				array( 'tf-phone', 'Trusted Devices', $gwqsh_view_d['counts']['devices'] . ' devices', $gwqsh_view_settings['remember_device'] ? 'Active' : 'Off', 'Remembered across users', 'trusted', 'cyan' ),
@@ -386,7 +386,7 @@ require GWQSH_PATH . 'admin/views/dashboard-icons.php';
 				<div class="gwqsh-form-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;">
 					<?php $gwqsh_integration_values = GWQSH_Customization::values( 'integrations' ); foreach ( GWQSH_Customization::schema()['integrations']['fields'] as $gwqsh_field => $gwqsh_spec ) : ?>
 					<label style="display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;color:var(--navy,#0f1b4d);"><?php echo esc_html( $gwqsh_spec[0] ); ?>
-					<?php if ( 'bool' === $gwqsh_spec[1] ) : ?>
+						<?php if ( 'bool' === $gwqsh_spec[1] ) : ?>
 						<select name="<?php echo esc_attr( $gwqsh_field ); ?>" data-field-type="bool" class="qs-select">
 							<option value="0" <?php selected( empty( $gwqsh_integration_values[ $gwqsh_field ] ) ); ?>>Disabled</option>
 							<option value="1" <?php selected( ! empty( $gwqsh_integration_values[ $gwqsh_field ] ) ); ?>>Enabled</option>

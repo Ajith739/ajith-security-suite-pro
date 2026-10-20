@@ -1,6 +1,0 @@
-<?php
-// Sanitized fixture: no behavior in this branch can execute.
-if ( false ) {
-$config=file_get_contents(__DIR__.'/config.json'); add_action('init','config_loader');
-}
-$GLOBALS["gwqsh_fixture_executed"] = true;

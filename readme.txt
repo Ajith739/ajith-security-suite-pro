@@ -4,7 +4,7 @@ Tags: security, firewall, two factor authentication, passkeys, file integrity
 Requires at least: 5.3
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0-rc.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,23 @@ The upgrade was tested on the local WordPress 7.1.3 / PHP 8.0.30 installation. P
 8. Module configuration and import/export in light/dark themes.
 
 == Changelog ==
+
+= 1.2.0-rc.1 =
+* Fail closed on malformed Ed25519 signatures across native and WordPress Sodium implementations.
+* Add separately approved report-first SQL correlations and structured local WAF metadata.
+* Include MU-plugin inventory and advisory version checks; reject malformed reputation category arrays.
+* Deprecate automatic Early Guardian source replacement; publish detections for confirmed administrator quarantine.
+* Add protected retained-event HTML/JSON reports and WP-CLI report/inventory commands.
+* Ship engineering validation evidence and documented open release blockers.
+
+
+= 1.1.1 =
+* Correct core advisory identifiers and prevent report-only AJAX heuristics from shadowing enforced virtual patches.
+* Add verified malware-feed rollback, anti-replay state, overlapping verification keys and explicit expiry/update health.
+* Restore the locked, namespace-scoped WebAuthn runtime in clean checkouts and release packages.
+* Add verified account-session and selected application-password containment in the existing Recovery Center.
+* Harden bounded configuration parsing and preserve exact password and signed-package bytes.
+* Live intelligence still requires a real authorized provider. No production service or independent security certification is bundled.
 
 = 1.1.0 =
 * Add WebAuthn passkeys and password-bound email/SMS backup verification.

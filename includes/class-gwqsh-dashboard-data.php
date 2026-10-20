@@ -89,9 +89,10 @@ final class GWQSH_Dashboard_Data {
 	}
 
 	/**
-	 * Regional threat sources projection for dashboard threat map.
+	 * Resolve an existing local country flag illustration.
 	 *
-	 * @param int $days Overview period.
+	 * @param string $code Country code.
+	 * @param string $country_name Optional country name.
 	 * @return array
 	 */
 	public static function flag_url( $code, $country_name = '' ) {
@@ -132,6 +133,11 @@ final class GWQSH_Dashboard_Data {
 		return GWQSH_URL . 'assets/img/country/others.svg';
 	}
 
+	/** Regional threat sources from actual recorded events and cached geolocation.
+	 *
+	 * @param int $days Overview period.
+	 * @return array Aggregated source countries and coverage.
+	 */
 	public static function geography( $days = 30 ) {
 		global $wpdb;
 		$rows   = $wpdb->get_results( $wpdb->prepare( "SELECT ip_address, COUNT(*) AS attacks FROM {$wpdb->prefix}gwqsh_activity_log WHERE event_time >= %s AND event_name IN ('Firewall request blocked','Login blocked by lockout','Manual IP request blocked','XML-RPC login blocked') GROUP BY ip_address ORDER BY attacks DESC LIMIT 100", self::cutoff( $days ) ), ARRAY_A );

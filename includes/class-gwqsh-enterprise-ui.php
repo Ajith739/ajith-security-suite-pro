@@ -22,7 +22,11 @@ final class GWQSH_Enterprise_UI {
 	public static function assets() {
 		if ( ! GWQSH_Admin::current_page() ) {
 			return;
-		}wp_enqueue_script( 'gwqsh-enterprise', GWQSH_URL . 'assets/js/enterprise.js', array( 'gwqsh-core' ), (string) filemtime( GWQSH_PATH . 'assets/js/enterprise.js' ), true );}
+		}wp_enqueue_script( 'gwqsh-enterprise', GWQSH_URL . 'assets/js/enterprise.js', array( 'gwqsh-core' ), (string) filemtime( GWQSH_PATH . 'assets/js/enterprise.js' ), true );
+		if ( 'file-integrity' === GWQSH_Admin::current_page() ) {
+			wp_enqueue_script( 'gwqsh-recovery-center', GWQSH_URL . 'assets/js/recovery-center.js', array( 'gwqsh-core' ), (string) filemtime( GWQSH_PATH . 'assets/js/recovery-center.js' ), true );
+		}
+	}
 	/**
 	 * Title.
 	 *
@@ -38,6 +42,7 @@ final class GWQSH_Enterprise_UI {
 			'privacy'    => 'Privacy & data minimization',
 			'waf'        => 'Firewall mode & additional rules',
 			'signatures' => 'Signed malware signature updates',
+			'advisories' => 'Vulnerability intelligence & virtual patches',
 			'license'    => 'License connection',
 		)[ $section ] ?? $section;}
 	/**
@@ -71,10 +76,19 @@ final class GWQSH_Enterprise_UI {
 			echo '<p>WordPress-level inspection only. Existing reviewed rules retain their behavior. Additional rules default to report-only until explicitly enforced. The existing firewall master switch must also be enabled.</p>';
 		}
 		if ( 'signatures' === $section ) {
-			$db = GWQSH_Signatures::database();
-			echo '<p>' . esc_html( GWQSH_Signatures::available() ? 'Trusted feed configured.' : 'Inactive: configure an official HTTPS feed and trusted Ed25519 publisher key in wp-config.php. No live publisher is bundled.' ) . '</p><p>Verified database version: ' . esc_html( (string) ( $db['version'] ?? 0 ) ) . ' &middot; ' . esc_html( empty( $db['verified_at'] ) ? 'Never updated' : GWQSH_Time::format( $db['verified_at'] ) ) . '</p>';}
+			$db     = GWQSH_Signatures::database();
+			$health = GWQSH_Signatures::health();
+			echo '<p>' . esc_html( $health['configured'] ? 'Trusted feed configured; successful updates must be verified below.' : 'Inactive: configure an authorized HTTPS feed and trusted Ed25519 publisher key in wp-config.php.' ) . '</p><p>Verified database version: ' . esc_html( (string) $health['version'] ) . ' &middot; ' . esc_html( empty( $health['verified_at'] ) ? 'Never updated' : GWQSH_Time::format( $health['verified_at'] ) ) . '</p><p>' . esc_html( $health['coverage'] ) . ' &middot; Expires: ' . esc_html( $health['expires_at'] ? GWQSH_Time::format( $health['expires_at'] ) : 'Unavailable' ) . ' &middot; Last update: ' . esc_html( $health['last_attempt']['status'] ?? 'Never attempted' ) . '</p>';}
 		if ( 'license' === $section ) {
 			echo '<p>Status: ' . esc_html( GWQSH_License::status()['state'] ) . '. An official provider adapter is required. Expiry and outages never disable existing security protection.</p>';
+		}
+		if ( 'advisories' === $section ) {
+			$report = GWQSH_Vulnerabilities::report();
+			echo '<p>Last verified activation: ' . esc_html( $report['verified_at'] ? GWQSH_Time::format( $report['verified_at'] ) : 'Never' ) . ' &middot; Expires: ' . esc_html( $report['expires_at'] ? GWQSH_Time::format( $report['expires_at'] ) : 'Unavailable' ) . ' &middot; Last update: ' . esc_html( $report['health']['status'] ?? 'Never attempted' ) . '</p>';
+			echo '<p>Authorized publisher infrastructure and public keys must be configured separately. No production advisory service or CVE patches are bundled. Virtual patches require reviewed exploit conditions and do not replace software updates. Update checks send no installed-component inventory.</p><p>' . esc_html( $report['status'] . ' · Version: ' . $report['version'] . ' · Review findings: ' . count( $report['findings'] ) ) . '</p>';
+			foreach ( $report['findings'] as $finding ) {
+				echo '<p>' . esc_html( $finding['advisory']['id'] . ' · ' . $finding['advisory']['component'] . ' · ' . $finding['installed']['version'] . ' · ' . $finding['status'] ) . ' <a href="' . esc_url( $finding['advisory']['url'] ) . '" target="_blank" rel="noopener noreferrer">Advisory and remediation</a></p>';
+			}
 		}
 		if ( 'shipping' === $section ) {
 			echo '<p>Production collector: Datadog Logs (US/EU). Only minimized structured events are sent. No raw request body, secrets or session material is shipped.</p>';
@@ -100,7 +114,7 @@ final class GWQSH_Enterprise_UI {
 				foreach ( $options as $v => $label ) {
 							echo '<option value="' . esc_attr( (string) $v ) . '" ' . selected( (string) $settings[ $key ], (string) $v, false ) . '>' . esc_html( $label ) . '</option>';
 				}echo '</select>';} elseif ( 'secret' === $f[0] ) {
-				echo '<input id="' . esc_attr( $id ) . '" name="' . esc_attr( $key ) . '" type="password" autocomplete="new-password" value="" data-type="secret"><small>' . esc_html( GWQSH_Enterprise_Config::has_secret( $section, $key ) ? 'Stored securely. Leave blank to keep; use Revoke to remove.' : 'Not configured.' ) . '</small><span><input type="checkbox" data-clear-secret="' . esc_attr( $key ) . '" aria-label="' . esc_attr( 'Revoke ' . $f[2] ) . '"> Revoke credential</span>';} elseif ( in_array( $f[0], array( 'countries', 'events', 'paths', 'hashes' ), true ) ) {
+				echo '<input id="' . esc_attr( $id ) . '" name="' . esc_attr( $key ) . '" type="password" autocomplete="new-password" value="" data-type="secret"><small>' . esc_html( GWQSH_Enterprise_Config::has_secret( $section, $key ) ? 'Stored securely. Leave blank to keep; use Revoke to remove.' : 'Not configured.' ) . '</small><span><input type="checkbox" data-clear-secret="' . esc_attr( $key ) . '" aria-label="' . esc_attr( 'Revoke ' . $f[2] ) . '"> Revoke credential</span>';} elseif ( in_array( $f[0], array( 'countries', 'events', 'paths', 'hashes', 'identifiers' ), true ) ) {
 						echo '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $key ) . '" rows="2">' . esc_textarea( $settings[ $key ] ) . '</textarea>';
 				} else {
 					echo '<input id="' . esc_attr( $id ) . '" name="' . esc_attr( $key ) . '" type="' . esc_attr( $f[0] ) . '" value="' . esc_attr( (string) $settings[ $key ] ) . '" data-type="' . esc_attr( $f[0] ) . '"' . ( 'number' === $f[0] ? ' min="' . esc_attr( (string) $f[3][0] ) . '" max="' . esc_attr( (string) $f[3][1] ) . '"' : '' ) . '>';
@@ -114,7 +128,14 @@ final class GWQSH_Enterprise_UI {
 				'test_slack' => 'Test Slack',
 			),
 			'shipping'   => array( 'test_collector' => 'Test collector' ),
-			'signatures' => array( 'signature_update' => 'Update verified signatures' ),
+			'signatures' => array(
+				'signature_update'   => 'Update verified signatures',
+				'signature_rollback' => 'Rollback verified signatures',
+			),
+			'advisories' => array(
+				'advisory_update'   => 'Update verified advisories',
+				'advisory_rollback' => 'Roll back previous verified package',
+			),
 			'geo'        => array( 'refresh_cloudflare' => 'Refresh Cloudflare ranges' ),
 			'license'    => array(
 				'license_activate'   => 'Activate',
@@ -123,7 +144,7 @@ final class GWQSH_Enterprise_UI {
 			),
 		);
 		foreach ( $actions[ $section ] ?? array() as $action => $label ) {
-			echo '<button type="button" class="btn btn-outline btn-sm" data-enterprise-action="' . esc_attr( $action ) . '">' . esc_html( $label ) . '</button>';
+			echo '<button type="button" class="btn btn-outline btn-sm" data-enterprise-action="' . esc_attr( $action ) . '" data-version="' . esc_attr( (string) ( 'advisories' === $section ? $report['version'] : ( 'signatures' === $section ? $health['version'] : 0 ) ) ) . '">' . esc_html( $label ) . '</button>';
 		}
 		echo '</div><p data-enterprise-status role="status"></p></form></details>';
 	}
@@ -201,12 +222,20 @@ final class GWQSH_Enterprise_UI {
 						return new WP_Error( 'schedule', 'Settings saved, but signature scheduling failed. Retry or check WP-Cron.' ); }
 				}
 			}
+			if ( ! is_wp_error( $result ) && 'advisories' === ( $input['section'] ?? '' ) ) {
+				wp_clear_scheduled_hook( GWQSH_Vulnerabilities::HOOK );
+				if ( ! empty( $data['enabled'] ) && true !== wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', GWQSH_Vulnerabilities::HOOK, array(), true ) ) {
+					return new WP_Error( 'schedule', 'Configuration saved; advisory scheduling failed. Check WP-Cron.' );
+				}
+			}
 			return $result;}
 		if ( 'wizard' === $action ) {
 			$data = json_decode( $input['settings'] ?? '', true );
 			return is_array( $data ) ? GWQSH_Setup_Wizard::save( $data ) : new WP_Error( 'wizard', 'Invalid checkpoint.' );}
-		if ( 'signature_update' === $action ) {
-			return GWQSH_Signatures::update();
+		if ( in_array( $action, array( 'signature_update', 'signature_rollback', 'advisory_update', 'advisory_rollback' ), true ) ) {
+			$service = str_starts_with( $action, 'signature_' ) ? 'GWQSH_Signatures' : 'GWQSH_Vulnerabilities';
+			$result  = str_ends_with( $action, '_rollback' ) ? $service::rollback( (int) ( $input['expected_version'] ?? 0 ) ) : $service::update();
+			return is_wp_error( $result ) ? $result : array( 'version' => 'GWQSH_Signatures' === $service ? GWQSH_Signatures::version() : ( GWQSH_Vulnerabilities::database()['version'] ?? 0 ) );
 		}
 		if ( 'refresh_cloudflare' === $action ) {
 			return GWQSH_Country_Access::refresh_cloudflare();

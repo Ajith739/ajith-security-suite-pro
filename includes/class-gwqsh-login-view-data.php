@@ -52,11 +52,11 @@ final class GWQSH_Login_View_Data {
 		$forwarded_ip    = '';
 		if ( $proxy_effective ) {
 			if ( 'cf' === $detected_proxy && GWQSH_Country_Access::cloudflare_peer( $remote ) && ! empty( $_SERVER['HTTP_CF_CONNECTING_IP'] ) && is_string( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) {
-				$forwarded_ip = trim( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) );
+				$forwarded_ip = sanitize_text_field( filter_var( trim( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ), FILTER_VALIDATE_IP ) );
 			} elseif ( 'xreal' === $detected_proxy && ! empty( $_SERVER['HTTP_X_REAL_IP'] ) && is_string( $_SERVER['HTTP_X_REAL_IP'] ) ) {
-				$forwarded_ip = trim( wp_unslash( $_SERVER['HTTP_X_REAL_IP'] ) );
+				$forwarded_ip = sanitize_text_field( filter_var( trim( wp_unslash( $_SERVER['HTTP_X_REAL_IP'] ) ), FILTER_VALIDATE_IP ) );
 			} elseif ( 'trueclient' === $detected_proxy && ! empty( $_SERVER['HTTP_TRUE_CLIENT_IP'] ) && is_string( $_SERVER['HTTP_TRUE_CLIENT_IP'] ) ) {
-				$forwarded_ip = trim( wp_unslash( $_SERVER['HTTP_TRUE_CLIENT_IP'] ) );
+				$forwarded_ip = sanitize_text_field( filter_var( trim( wp_unslash( $_SERVER['HTTP_TRUE_CLIENT_IP'] ) ), FILTER_VALIDATE_IP ) );
 			} elseif ( 'xff' === $detected_proxy && ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) && is_string( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 				$forwarded_ip   = GWQSH_Settings::forwarded_ip( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ), $trusted ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- forwarded_ip bounds and validates every IP before use.
 				$detected_proxy = 'xff';

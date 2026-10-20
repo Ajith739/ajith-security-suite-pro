@@ -12,7 +12,7 @@ final class GWQSH_Firewall {
 		return wp_parse_args(
 			(array) get_option( 'gwqsh_firewall', array() ),
 			array(
-				'enabled' => false,
+				'enabled' => true,
 				'sql'     => true,
 				'xss'     => true,
 				'bots'    => true,
@@ -21,7 +21,166 @@ final class GWQSH_Firewall {
 	}
 	/** Register one public request hook; no duplicate authentication hooks. */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'inspect' ), 2 ); }
+		add_action( 'init', array( __CLASS__, 'inspect' ), 2 );
+		add_filter( 'rest_pre_dispatch', array( __CLASS__, 'inspect_rest' ), 10, 3 );
+	}
+	/** Preserve explicitly authorized authored fields while inspecting other inputs.
+	 *
+	 * @param array  $body Parsed body fields.
+	 * @param string $route REST route, or empty for a native editor request.
+	 * @return array Non-authored evidence.
+	 */
+	public static function editing_evidence( array $body, $route = '' ) {
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			return $body;
+		}
+		$editing = false;
+		if ( $route && preg_match( '~^/wp/v2/(posts|pages|blocks)(?:/([0-9]+))?/?$~D', $route, $matches ) ) {
+			$type       = array(
+				'posts'  => 'post',
+				'pages'  => 'page',
+				'blocks' => 'wp_block',
+			)[ $matches[1] ];
+			$definition = get_post_type_object( $type );
+			$editing    = ! empty( $matches[2] ) ? current_user_can( 'edit_post', (int) $matches[2] ) : ( $definition && current_user_can( $definition->cap->create_posts ) );
+		} elseif ( ! $route && is_admin() && in_array( $GLOBALS['pagenow'] ?? '', array( 'post.php', 'post-new.php' ), true ) && in_array( $body['action'] ?? '', array( 'editpost', 'post' ), true ) ) {
+			$editing = ! empty( $body['post_ID'] ) ? current_user_can( 'edit_post', absint( $body['post_ID'] ) ) : current_user_can( 'edit_posts' );
+		}
+		if ( $editing ) {
+			foreach ( array( 'content', 'title', 'excerpt', 'post_content', 'post_title', 'post_excerpt' ) as $key ) {
+				unset( $body[ $key ] );
+			}
+		}
+		return $body;
+	}
+
+	/** Inspect opt-in bounded REST JSON after WordPress authentication.
+	 * Authentication/controller authorization remains owned by WordPress.
+	 *
+	 * @param mixed           $result Prior short-circuit result.
+	 * @param WP_REST_Server  $server REST server.
+	 * @param WP_REST_Request $request Authenticated REST request.
+	 * @return mixed Prior result, or a structured denial.
+	 */
+	public static function inspect_rest( $result, $server, $request ) {
+		$legacy   = self::settings();
+		$settings = GWQSH_Enterprise_Config::get( 'waf' );
+		if ( null !== $result || ! $legacy['enabled'] || ! GWQSH_Settings::is_active() || empty( $settings['rest_json'] ) || in_array( $settings['mode'], array( 'disabled', 'recovery' ), true ) || GWQSH_Country_Access::emergency() || ! $request->is_json_content_type() ) {
+			return $result;
+		}
+		$mode = self::rollout( is_user_logged_in(), $settings );
+		$ip   = GWQSH_Settings::get_client_ip();
+		$path = '/wp-json' . $request->get_route();
+		if ( 'disabled' === $mode || GWQSH_Login_Protection::is_ip_allowlisted( $ip ) || in_array( $path, explode( "\n", $settings['exclusions'] ), true ) ) {
+			return $result;
+		}
+		$body   = $request->get_body();
+		$reason = '';
+		if ( strlen( $body ) > 16384 ) {
+			$reason = 'rest_body_size';
+		} elseif ( $request->get_header( 'content-encoding' ) && 'identity' !== strtolower( $request->get_header( 'content-encoding' ) ) ) {
+			$reason = 'rest_body_encoding';
+		} else {
+			$parsed = json_decode( $body, true, 10 );
+			if ( JSON_ERROR_NONE !== json_last_error() || ! is_array( $parsed ) ) {
+				$reason = 'rest_body_format';
+			}
+		}
+		if ( $reason ) {
+			if ( 1 === GWQSH_Enterprise_Store::hit( 'waf-coverage', $ip . $reason, 60 ) ) {
+				GWQSH_Activity_Logger::log( 'Firewall inspection incomplete', wp_json_encode( array( 'coverage' => $reason ) ), 'Security' );
+			}
+			if ( 'block' === $mode ) {
+				return new WP_Error( 'gwqsh_firewall_incomplete', 'This request could not be inspected within the configured security limits.', array( 'status' => 413 ) );
+			}
+			return $result;
+		}
+		$evidence = self::editing_evidence( $parsed, $request->get_route() );
+		if ( self::evidence( $evidence )['limits'] && 1 === GWQSH_Enterprise_Store::hit( 'waf-coverage', $ip . 'rest_value_bounds', 60 ) ) {
+			GWQSH_Activity_Logger::log( 'Firewall inspection incomplete', wp_json_encode( array( 'coverage' => 'rest_value_bounds' ) ), 'Security' );
+		}
+		$rule = self::advanced( $evidence, array(), array(), $path, $settings );
+		if ( ( ! $rule || 'GWQSH-1006' === $rule ) && self::match( $evidence, '', '', $legacy ) ) {
+			$rule = 'GWQSH-1004';
+		}
+		if ( ! $rule ) {
+			return $result;
+		}
+		$report = self::decision( '', $rule, '', $settings, $mode, false )['report'];
+		if ( 1 === GWQSH_Enterprise_Store::hit( 'waf-rest-audit', $ip . $rule, 60 ) ) {
+			GWQSH_Activity_Logger::log(
+				$report ? 'Firewall request detected' : 'Firewall request blocked',
+				wp_json_encode(
+					array(
+						'rule'          => $rule,
+						'transport'     => 'rest_json',
+						'authenticated' => is_user_logged_in(),
+						'version'       => 1,
+					)
+				),
+				'Security'
+			);
+		}
+		return $report ? $result : new WP_Error( 'gwqsh_firewall', 'This request matched a security rule.', array( 'status' => 403 ) );
+	}
+	/**
+	 * Collect request evidence with shared byte, node and nesting limits.
+	 * Credential subtrees are excluded before traversal, including nested values.
+	 *
+	 * @param array $input Untrusted parsed request values.
+	 * @return array Values and explicit coverage limitations; never persisted as content.
+	 */
+	public static function evidence( array $input ) {
+		$result = array(
+			'values' => array(),
+			'limits' => array(),
+		);
+		$nodes  = 128;
+		$bytes  = 16384;
+		$until  = microtime( true ) + 0.01;
+		self::collect( $input, 0, $nodes, $bytes, $until, $result );
+		$result['limits'] = array_values( array_unique( $result['limits'] ) );
+		return $result;
+	}
+
+	/** Bounded tree walk: count containers too, so empty arrays cannot evade budgets.
+	 *
+	 * @param array $input Parsed values.
+	 * @param int   $depth Current depth.
+	 * @param int   $nodes Remaining nodes.
+	 * @param int   $bytes Remaining bytes.
+	 * @param float $until Deadline.
+	 * @param array $result Collected evidence.
+	 */
+	private static function collect( array $input, $depth, &$nodes, &$bytes, $until, &$result ) {
+		foreach ( $input as $key => $value ) {
+			if ( --$nodes < 0 || $bytes <= 0 || microtime( true ) > $until ) {
+				$result['limits'][] = 'request_budget';
+				return;
+			}
+			// Match credential components, not substrings such as postcode, passage or shortcode.
+			if ( is_string( $key ) && preg_match( '/(?:^|[_-])(?:pass|password|passwd|pwd|token|nonce|wpnonce|secret|code|assert|assertion|cookie|session|credit|card|payment|authorization|log|user_login|user_email)(?:$|[_-])/i', substr( $key, 0, 256 ) ) ) {
+				continue;
+			}
+			if ( is_array( $value ) ) {
+				if ( $depth >= 8 ) {
+					$result['limits'][] = 'request_depth';
+					continue;
+				}
+				self::collect( $value, $depth + 1, $nodes, $bytes, $until, $result );
+			} elseif ( is_scalar( $value ) ) {
+				$value = (string) $value;
+				$size  = min( 2048, $bytes );
+				if ( strlen( $value ) > $size ) {
+					$result['limits'][] = 'value_size';
+				}
+				$value              = substr( $value, 0, $size );
+				$bytes             -= strlen( $value );
+				$result['values'][] = rawurldecode( $value );
+			}
+		}
+	}
+
 	/**
 	 * Match bounded query evidence without executing it.
 	 *
@@ -32,18 +191,7 @@ final class GWQSH_Firewall {
 	 * @return string Matched rule, or an empty string.
 	 */
 	public static function match( array $values, $agent, $path, array $settings ) {
-		$budget   = 16384;
-		$visited  = 0;
-		$iterator = new RecursiveIteratorIterator( new RecursiveArrayIterator( $values ) );
-		foreach ( $iterator as $value ) {
-			if ( ++$visited > 64 || $budget <= 0 ) {
-				break; }
-			if ( ! is_scalar( $value ) ) {
-				continue; }
-			$value   = substr( (string) $value, 0, min( 2048, $budget ) );
-			$budget -= strlen( $value );
-			// One extra decoding pass covers encoded probes without exponential normalization.
-			$value = rawurldecode( $value );
+		foreach ( self::evidence( $values )['values'] as $value ) {
 			if ( $settings['sql'] && ( preg_match( '/\bunion\s+(?:all\s+)?select\s+(?:null|[0-9]+)\s*,/i', $value ) || preg_match( '/[\'"]\s*(?:or|and)\s+[0-9]{1,8}\s*=\s*[0-9]{1,8}\s*(?:--|#|\/\*)/i', $value ) ) ) {
 				return 'SQL Injection'; }
 			if ( $settings['xss'] && preg_match( '/<\s*(?:script\b[^>]{0,256}>|(?:img|svg)\b[^>]{0,256}\bon(?:error|load)\s*=)/i', $value ) ) {
@@ -57,53 +205,39 @@ final class GWQSH_Firewall {
 
 	/** Rule metadata is fixed source data, never executable downloaded patterns. */
 	public static function rules() {
-		return array(
-			'GWQSH-1001' => array(
-				'category'   => 'traversal',
-				'severity'   => 'High',
-				'confidence' => 'High',
-				'version'    => 1,
-			),
-			'GWQSH-1002' => array(
-				'category'   => 'inclusion',
-				'severity'   => 'High',
-				'confidence' => 'High',
-				'version'    => 1,
-			),
-			'GWQSH-1003' => array(
-				'category'   => 'uploads',
-				'severity'   => 'High',
-				'confidence' => 'Review',
-				'version'    => 1,
-			),
-			'GWQSH-1004' => array(
-				'category'   => 'post',
-				'severity'   => 'High',
-				'confidence' => 'Review',
-				'version'    => 1,
-			),
-			'GWQSH-1005' => array(
-				'category'   => 'rate',
-				'severity'   => 'Medium',
-				'confidence' => 'Measured',
-				'version'    => 1,
-			),
-		);
+		return require __DIR__ . '/waf/rules.php';
 	}
+
+	/** Additional SQL correlations remain report-only until enforce_new is approved.
+	 * This is a lexical detector, not a SQL parser or proof of exploitation.
+	 *
+	 * @param string $value Already bounded request evidence.
+	 * @return bool Whether a correlation matched.
+	 */
+	public static function extended_sql( $value ) {
+		$value = substr( (string) $value, 0, 2048 );
+		return (bool) preg_match( '~(*LIMIT_MATCH=10000)(*LIMIT_DEPTH=100)(?:;\s*(?:drop\s+table|truncate\s+table|delete\s+from)\s+[a-z_][a-z0-9_]{0,63}|\bunion\s+(?:all\s+)?select\s+[^;\r\n]{1,100}\s+from\s+[a-z_]|\b(?:and|or)\s+(?:sleep\s*\(\s*[0-9]{1,3}\s*\)|benchmark\s*\(\s*[0-9]{1,8}\s*,))~i', $value );
+	}
+
+	/** Match additional report-first request rules.
+	 *
+	 * @param array  $query Query parameters.
+	 * @param array  $post Parsed form fields.
+	 * @param array  $files Uploaded file metadata.
+	 * @param string $path Request path.
+	 * @param array  $settings Validated additional rule settings.
+	 */
 	public static function advanced( array $query, array $post, array $files, $path, array $settings ) {
-		$values  = array( $path );
-		$budget  = 16384;
-		$visited = 0;
-		$iter    = new RecursiveIteratorIterator( new RecursiveArrayIterator( $query ) );
-		foreach ( $iter as $value ) {
-			if ( ++$visited > 64 || $budget <= 0 ) {
-				break;
-			}if ( ! is_scalar( $value ) ) {
-				continue;
-			}$v       = substr( (string) $value, 0, min( 2048, $budget ) );
-			$budget  -= strlen( $v );
-			$values[] = rawurldecode( $v );}
+		$sql_enabled = self::settings()['sql'];
+		$sql_match   = false;
+		$values = array_merge( array( rawurldecode( substr( $path, 0, 2048 ) ) ), self::evidence( $query )['values'] );
+		if ( $settings['post'] ) {
+			$values = array_merge( $values, self::evidence( $post )['values'] );
+		}
 		foreach ( $values as $value ) {
+			if ( $sql_enabled && self::extended_sql( $value ) ) {
+				$sql_match = true;
+			}
 			if ( $settings['traversal'] && preg_match( '~(?:\.\.[/\\\\]){2}|(?:%2e){2}(?:%2f|%5c)~i', $value ) ) {
 				return 'GWQSH-1001';
 			}
@@ -113,22 +247,21 @@ final class GWQSH_Firewall {
 		}
 		if ( $settings['uploads'] ) {
 			foreach ( array_slice( $files, 0, 10 ) as $file ) {
-				$name = $file['name'] ?? '';
-				if ( is_string( $name ) && preg_match( '/\.(?:php[0-9]?|phtml|phar)(?:\.|$)/i', substr( $name, 0, 256 ) ) ) {
-					return 'GWQSH-1003';
+				if ( ! is_array( $file ) ) {
+					continue;
+				}
+				$names = self::evidence( array( $file['name'] ?? '' ) );
+				foreach ( $names['values'] as $name ) {
+					if ( preg_match( '/\.(?:php[0-9]?|phtml|phar)(?:\.|$)/i', substr( $name, 0, 256 ) ) ) {
+						return 'GWQSH-1003';
+					}
 				}
 			}
 		}
 		if ( $settings['post'] ) {
 			// Never inspect password, authentication, checkout or session material as raw request bodies.
-			$safe = array();
-			foreach ( array_slice( $post, 0, 32, true ) as $key => $value ) {
-				if ( ! preg_match( '/pass|token|nonce|secret|code|assert|cookie|session|credit|card|payment/i', (string) $key ) && is_string( $value ) ) {
-					$safe[ $key ] = substr( $value, 0, 1024 );
-				}
-			}
 			if ( self::match(
-				$safe,
+				$post,
 				'',
 				'',
 				array(
@@ -140,38 +273,69 @@ final class GWQSH_Firewall {
 				return 'GWQSH-1004';
 			}
 		}
-		return '';
+		return $sql_match ? 'GWQSH-1006' : '';
 	}
-	/** Inspect unauthenticated public query requests only. */
+	/** Decide rollout policy without exempting all authenticated users.
+	 *
+	 * @param bool  $authenticated Whether this request has an authenticated user.
+	 * @param array $advanced Validated rollout settings.
+	 */
+	public static function rollout( $authenticated, array $advanced ) {
+		return $authenticated ? ( $advanced['authenticated'] ?? 'report' ) : $advanced['mode'];
+	}
+
+	/** Inspect permitted requests; authenticated inspection starts report-only. */
 	public static function inspect() {
 		$settings = self::settings();
-		if ( ! $settings['enabled'] || ! GWQSH_Settings::is_active() || is_user_logged_in() || ( is_admin() && ! wp_doing_ajax() ) || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+		if ( ! $settings['enabled'] || ! GWQSH_Settings::is_active() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 			return; }
 		if ( GWQSH_Country_Access::emergency() ) {
 			return; }
 		$advanced = GWQSH_Enterprise_Config::get( 'waf' );
-		if ( 'disabled' === $advanced['mode'] ) {
+		if ( in_array( $advanced['mode'], array( 'disabled', 'recovery' ), true ) ) {
 			return; }
+		$authenticated = is_user_logged_in();
+		$mode          = self::rollout( $authenticated, $advanced );
+		if ( 'disabled' === $mode ) {
+			return;
+		}
 		$ip = GWQSH_Settings::get_client_ip();
 		if ( GWQSH_Login_Protection::is_ip_allowlisted( $ip ) ) {
 			return; }
 		$path = substr( (string) wp_parse_url( isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/', PHP_URL_PATH ), 0, 200 );
 		if ( in_array( $path, explode( "\n", $advanced['exclusions'] ), true ) ) {
 			return; }
-		// Query inputs only: editor/form HTML, REST bodies and password fields are untouched.
+		$query_evidence = self::evidence( wp_unslash( $_GET ) );
+		$post_evidence  = self::evidence( self::editing_evidence( wp_unslash( $_POST ) ) );
+		$coverage_gap   = array_values( array_unique( array_merge( $query_evidence['limits'], $post_evidence['limits'] ) ) );
+		if ( $coverage_gap && 'block' === $mode ) {
+			$coverage_key = $ip . implode( ',', $coverage_gap );
+			if ( 1 === GWQSH_Enterprise_Store::hit( 'waf-coverage-block', $coverage_key, 60 ) ) {
+				GWQSH_Activity_Logger::log( 'Firewall inspection incomplete', wp_json_encode( array( 'coverage' => $coverage_gap ) ), 'Security', '—', $ip );
+			}
+			status_header( 413 );
+			nocache_headers();
+			GWQSH_UI::error( 413, 'Request not inspected', 'This request exceeded the configured security inspection limits.' );
+		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Request evidence is inspected for denial, never accepted as a settings mutation.
-		$rule     = self::match( wp_unslash( $_GET ), isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '', $path, $settings );
-		$new_rule = self::advanced( wp_unslash( $_GET ), wp_unslash( $_POST ), $_FILES, $path, $advanced );
-		if ( ! $new_rule && $advanced['rate'] ) {
+		$rule = self::match( wp_unslash( $_GET ), isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '', $path, $settings );
+		// phpcs:ignore WordPress.Security.NonceVerification -- Inspect untrusted evidence for denial only; this hook never accepts a state mutation.
+		$new_rule = self::advanced( wp_unslash( $_GET ), self::editing_evidence( wp_unslash( $_POST ) ), $_FILES, $path, $advanced );
+		$patch    = '';
+		if ( wp_parse_url( admin_url( 'admin-ajax.php' ), PHP_URL_PATH ) === $path ) {
+			// phpcs:ignore WordPress.Security.NonceVerification -- Data-only rejection predicates; no authorization or settings mutation.
+			$patch = GWQSH_Vulnerabilities::match( '/wp-admin/admin-ajax.php', isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : 'GET', array_merge( wp_unslash( $_GET ), wp_unslash( $_POST ) ) );
+		}
+		if ( ( ! $new_rule || 'GWQSH-1006' === $new_rule ) && ! $authenticated && $advanced['rate'] ) {
 			$count = GWQSH_Enterprise_Store::hit( 'waf-rate', $ip, 60 );
 			if ( null !== $count && $count > $advanced['requests'] ) {
 				$new_rule = 'GWQSH-1005'; }
 		}
-		if ( ! $rule && ! $new_rule ) {
+		if ( ! $rule && ! $new_rule && ! $patch ) {
 			return; }
-		$detected = 'report' === $advanced['mode'] || ( ! $rule && ! $advanced['enforce_new'] );
-		if ( ! $rule ) {
-			$rule = $new_rule; }
+		$decision = self::decision( $rule, $new_rule, $patch, $advanced, $mode, GWQSH_Enterprise_Config::get( 'advisories' )['enforce'] );
+		$detected = $decision['report'];
+		$rule     = $decision['rule'];
 
 		// Best-effort per-visitor/rule minute deduplication; existing log retention applies.
 		$dedup = GWQSH_Enterprise_Store::hit( 'waf-audit', $ip . $rule, 60 );
@@ -181,8 +345,9 @@ final class GWQSH_Firewall {
 				wp_json_encode(
 					array(
 						'rule'          => $rule,
+						'authenticated' => $authenticated,
 						'path'          => $path,
-						'rule_metadata' => self::rules()[ $new_rule ] ?? array(
+						'rule_metadata' => self::rules()[ $rule ] ?? array(
 							'version'    => 1,
 							'confidence' => 'High',
 						),
@@ -198,6 +363,31 @@ final class GWQSH_Firewall {
 		status_header( 'GWQSH-1005' === $rule ? 429 : 403 );
 		nocache_headers();
 		GWQSH_UI::error( 'GWQSH-1005' === $rule ? 429 : 403, 'Request blocked', 'This request matched a security rule. Contact the site administrator if you believe this is an error.' );
+	}
+
+	/** Resolve independent protections without allowing a report-only rule to shadow a block.
+	 *
+	 * @param string $legacy Reviewed baseline match.
+	 * @param string $generic Additional heuristic match.
+	 * @param string $patch Advisory-specific match.
+	 * @param array  $policy WAF rollout policy.
+	 * @param string $mode Effective authenticated/guest mode.
+	 * @param bool   $enforce_patch Operator-approved patch enforcement.
+	 * @return array Selected rule and report-only decision.
+	 */
+	public static function decision( $legacy, $generic, $patch, array $policy, $mode, $enforce_patch ) {
+		$block = '';
+		if ( $legacy ) {
+			$block = $legacy;
+		} elseif ( $patch && $enforce_patch ) {
+			$block = $patch;
+		} elseif ( $generic && $policy['enforce_new'] && ( 'GWQSH-1006' !== $generic || ! empty( $policy['enforce_sql_extended'] ) ) ) {
+			$block = $generic;
+		}
+		return array(
+			'rule'   => $block ? $block : ( $generic ? $generic : $patch ),
+			'report' => 'report' === $policy['mode'] || 'report' === $mode || ! $block,
+		);
 	}
 	/**
 	 * Save after the existing controller verifies nonce and manage_options.

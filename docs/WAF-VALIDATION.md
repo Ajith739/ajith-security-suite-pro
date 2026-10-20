@@ -1,0 +1,9 @@
+# WAF validation
+
+The shipped JSON corpus has 120 attack-shaped inputs (SQL tautologies, UNION, stacked DROP, script tags, traversal and inclusion) and 120 benign searches, prose, URLs and markup. Each is passed through actual bounded evidence collection and both existing and additional matchers. The observed matrix and timings are in evidence/integration.json. These samples are synthetic variations, not 120 independent exploits. No OWASP ZAP/WPScan run or production false-positive estimate is claimed.
+
+Rules have stable legacy keys plus UUIDs, numeric severity/confidence and default action in includes/waf/rules.php. Scores are engineering labels, not calibrated probabilities. Existing labels remain for UI compatibility. The new SQL matcher bounds input to 2048 bytes and PCRE match/depth to 10000/100. Request evidence retains existing 128-node/16KiB/8-level limits and credential-subtree exclusions. Exhaustion reports incomplete coverage. A 50MB whole-WordPress process cap is not enforced.
+
+GWQSH-1006 defaults to detection even if the operator previously enabled enforce_new. Blocking requires enforce_new AND enforce_sql_extended, plus an effective blocking mode. Existing reviewed protections retain their prior rollout. Authenticated inspection defaults report-only. The opt-in visitor rate limiter defaults 100/minute for unsaved settings; existing saved limits are preserved. It rate-limits traffic rather than deliberately skipping security inspection after 100 requests.
+
+Compatibility and higher-coverage work: test real checkout, editor and custom REST/AJAX traffic; review request-depth/large-body omissions; run an independently selected exploit corpus; measure end-to-end request latency and concurrent counter admission. Do not enable the new rule merely because synthetic tests pass.

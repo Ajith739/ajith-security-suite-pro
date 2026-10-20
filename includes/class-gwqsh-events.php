@@ -38,14 +38,14 @@ final class GWQSH_Events {
 			'critical'      => array( '/protection failed|critical|guardian.*fail/i', 'Critical' ),
 			'admin'         => array( '/new administrator/i', 'Critical' ),
 			'role'          => array( '/role changed|role escalation/i', 'High' ),
-			'scan_failure'  => array( '/scan failed|scan skipped/i', 'High' ),
+			'scan_failure'  => array( '/scan failed|scan skipped|intelligence update failed/i', 'High' ),
 			'scan_findings' => array( '/scheduled scan.*findings/i', 'High' ),
 			'malware'       => array( '/malware signature|malware detected/i', 'Critical' ),
 			'file'          => array( '/file finding|suspicious file|quarantin/i', 'High' ),
 			'lockout'       => array( '/locked out|lockout|login country changed|country request blocked|reputation request blocked/i', 'High' ),
 			'login'         => array( '/login attempt blocked|2FA verification failed/i', 'Medium' ),
-			'firewall'      => array( '/firewall request (blocked|detected)|request rate limit/i', 'Medium' ),
-			'configuration' => array( '/settings changed|configuration changed|schedule changed|hardening/i', 'High' ),
+			'firewall'      => array( '/firewall request (blocked|detected)|request rate limit|virtual patch/i', 'Medium' ),
+			'configuration' => array( '/settings changed|configuration changed|schedule changed|hardening|incident account containment/i', 'High' ),
 		);
 		foreach ( $rules as $category => $rule ) {
 			if ( preg_match( $rule[0], $name ) ) {

@@ -50,7 +50,7 @@ final class GWQSH_Threat_Intelligence {
 	 * @return mixed Operation result.
 	 */
 	public static function validate( $data ) {
-		if ( ! is_array( $data ) || ! isset( $data['score'] ) || ! is_int( $data['score'] ) || $data['score'] < 0 || $data['score'] > 100 || ! isset( $data['categories'] ) || ! is_array( $data['categories'] ) || array_diff( $data['categories'], array( 'brute_force', 'spam', 'scanner', 'hostile' ) ) ) {
+		if ( ! is_array( $data ) || ! isset( $data['score'] ) || ! is_int( $data['score'] ) || $data['score'] < 0 || $data['score'] > 100 || ! isset( $data['categories'] ) || ! is_array( $data['categories'] ) || count( $data['categories'] ) > 4 || count( array_filter( $data['categories'], 'is_string' ) ) !== count( $data['categories'] ) || array_diff( $data['categories'], array( 'brute_force', 'spam', 'scanner', 'hostile' ) ) ) {
 			return new WP_Error( 'response', 'Invalid reputation data.' );
 		}
 		return array(

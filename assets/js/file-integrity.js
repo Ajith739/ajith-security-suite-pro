@@ -100,7 +100,13 @@ document.addEventListener('DOMContentLoaded', function () {
             : 'We scanned ' + fmt(TOTAL) + ' files and found nothing that needs attention.';
         $('#sumHead').textContent = !TOTAL ? 'Run your first file scan' : issues ? 'Your site needs a look' : 'Your site looks good!';
 
-        if (D.summary?.coverage?.length) { $('#sumP').textContent += ' Coverage limited: ' + D.summary.coverage.map(v => v.replaceAll('_', ' ')).join(', ') + '.'; }
+        if (D.summary?.coverage?.length) {
+            $('#sumHead').textContent = 'Verification incomplete';
+            $('#sumP').textContent += ' Coverage limited: ' + D.summary.coverage.map(v => v.replaceAll('_', ' ')).join(', ') + '.';
+            const omitted = Number(D.summary?.uninspected || 0);
+            if (omitted) $('#sumP').textContent += ' ' + fmt(omitted) + ' files were not inspected and are excluded from the clean count.';
+            if (D.summary?.omitted_files?.length) $('#sumP').textContent += ' Omitted files (up to 100): ' + D.summary.omitted_files.map(v => v.path + ' (' + v.reason.replaceAll('_', ' ') + ')').join('; ') + '.';
+        }
         if (D.summary?.quarantine_damaged) {
             $('#sumHead').textContent = 'Quarantine evidence needs review';
             $('#sumP').textContent = D.summary.quarantine_damaged + ' quarantine records have damaged or missing evidence. Review Quarantine management.';

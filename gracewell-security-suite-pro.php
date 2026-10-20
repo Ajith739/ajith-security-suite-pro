@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/joshua-sundar/gracewell-security-suite-pro
  * Update URI: https://github.com/joshua-sundar/gracewell-security-suite-pro
  * Description: WordPress firewall, passkeys and two-factor recovery, login protection, scheduled file integrity scans, IP restrictions and security audit logs.
- * Version: 1.1.0
+ * Version: 1.2.0-rc.2
  * Author: gracewell89
  * Author URI: https://gracewell.in/
  * Contributors: gracewell89
@@ -30,7 +30,7 @@ if ( GWQSH_Pro_Compatibility::conflicts( __FILE__ ) || defined( 'GWQSH_PLUGIN_FI
 
 define( 'GWQSH_PATH', plugin_dir_path( __FILE__ ) );
 define( 'GWQSH_URL', plugin_dir_url( __FILE__ ) );
-define( 'GWQSH_VERSION', '1.1.0' );
+define( 'GWQSH_VERSION', '1.2.0-rc.2' );
 define( 'GWQSH_DB_VERSION', '1.6.0' );
 define( 'GWQSH_PLUGIN_FILE', __FILE__ );
 define( 'GWQSH_PLUGIN_DIR', GWQSH_PATH );
@@ -57,6 +57,7 @@ require_once GWQSH_PATH . 'includes/class-gwqsh-privacy.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-events.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-threat-intelligence.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-signatures.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-vulnerabilities.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-license.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-enterprise-ui.php';
 
@@ -74,6 +75,8 @@ require_once GWQSH_PATH . 'includes/class-gwqsh-crypto.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-settings.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-activity-logger.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-activity-view-data.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-security-report.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-cli.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-login-protection.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-two-factor.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-two-factor-view-data.php';
@@ -86,6 +89,10 @@ require_once GWQSH_PATH . 'includes/class-gwqsh-guardian.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-malware-analyzer.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-scan-engine.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-file-integrity.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-database-scanner.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-safe-data.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-database-context.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-incident-recovery.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-quarantine-manager.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-ajax.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-admin.php';
@@ -111,6 +118,8 @@ function gwqsh_pro_activate_plugin() {
  * Gwqsh deactivate plugin.
  */
 function gwqsh_pro_deactivate_plugin() {
+	GWQSH_Database_Scanner::deactivate();
+	wp_clear_scheduled_hook( GWQSH_Vulnerabilities::HOOK );
 	foreach ( array( 'gwqsh_deliver_events', 'gwqsh_reputation_lookup', 'gwqsh_update_signatures', 'gwqsh_refresh_cloudflare_ranges' ) as $hook ) {
 		wp_clear_scheduled_hook( $hook ); }
 	GWQSH_Guardian::remove();
@@ -140,11 +149,14 @@ function gwqsh_pro_bootstrap() {
 	GWQSH_Threat_Intelligence::init();
 	GWQSH_Country_Access::init();
 	GWQSH_Signatures::init();
+	GWQSH_Vulnerabilities::init();
 	GWQSH_Enterprise_UI::init();
 	GWQSH_Network::init();
 	GWQSH_IP_Blocks::init();
 	GWQSH_Activity_Logger::init();
 	GWQSH_Activity_View_Data::init();
+	GWQSH_Security_Report::init();
+	GWQSH_CLI::init();
 	GWQSH_Login_Protection::init();
 	GWQSH_Two_Factor::init();
 	GWQSH_Passkeys::init();
@@ -152,6 +164,7 @@ function gwqsh_pro_bootstrap() {
 	GWQSH_Customization::init();
 	GWQSH_Hardening::init();
 	GWQSH_File_Integrity::init();
+	GWQSH_Database_Scanner::init();
 	GWQSH_Scheduler::init();
 	GWQSH_Guardian::init();
 	GWQSH_Firewall::init();

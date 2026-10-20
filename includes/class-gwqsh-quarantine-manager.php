@@ -395,7 +395,10 @@ final class GWQSH_Quarantine_Manager {
 		return $result;
 	}
 
-	/** Reinspect restored bytes without automatic deletion or changes to provenance. */
+	/** Reinspect restored bytes without automatic deletion or changes to provenance.
+	 *
+	 * @param string $path Restored location.
+	 */
 	public static function recheck_restored( $path ) {
 		$validated = GWQSH_Path_Guard::validate( $path, true );
 		if ( ! $validated ) {
@@ -1359,7 +1362,7 @@ final class GWQSH_Quarantine_Manager {
 	 */
 	public static function ensure_quarantine_dir() {
 		$dir = self::quarantine_dir();
-		if ( ! $dir ) {
+		if ( ! $dir || ! GWQSH_Guardian::state_dir_is_private() ) {
 			return new WP_Error( self::ERR_QUARANTINE_WRITABLE, self::error_message( self::ERR_QUARANTINE_WRITABLE ) );
 		}
 		if ( ! GWQSH_Security_Runtime::protect( $dir ) ) {

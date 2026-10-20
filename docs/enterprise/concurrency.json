@@ -1,9 +1,0 @@
-{
-  "workers": 5,
-  "increments": 100,
-  "unique": 100,
-  "nulls": 0,
-  "minimum": 2,
-  "maximum": 101,
-  "final_counter": 101
-}

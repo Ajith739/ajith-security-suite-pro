@@ -20,7 +20,7 @@ wp_clear_scheduled_hook( 'gwqsh_continue_integrity_scan' );
 
 // Always stop plugin maintenance, even when preserving settings for reinstall.
 foreach ( array( 'gwqsh_', 'gqs_' ) as $gwqsh_prefix ) {
-	foreach ( array( 'deliver_events', 'reputation_lookup', 'update_signatures', 'refresh_cloudflare_ranges', 'daily_maintenance', 'scheduled_integrity_scan', 'daily_log_cleanup', 'cleanup_lockouts', 'activity_search_backfill', 'geo_lookup', 'run_integrity_now', 'auth_cleanup' ) as $gwqsh_suffix ) {
+	foreach ( array( 'deliver_events', 'reputation_lookup', 'update_signatures', 'update_advisories', 'refresh_cloudflare_ranges', 'daily_maintenance', 'scheduled_integrity_scan', 'daily_log_cleanup', 'cleanup_lockouts', 'activity_search_backfill', 'geo_lookup', 'run_integrity_now', 'auth_cleanup' ) as $gwqsh_suffix ) {
 		wp_clear_scheduled_hook( $gwqsh_prefix . $gwqsh_suffix );
 	}
 }

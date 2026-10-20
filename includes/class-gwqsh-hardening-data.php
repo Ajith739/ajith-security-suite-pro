@@ -114,7 +114,7 @@ final class GWQSH_Hardening_Data {
 		); }
 	/** One page snapshot; permission checked by admin/controller. */
 	public static function get() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( GWQSH_Admin::management_capability() ) ) {
 			return new WP_Error( 'permission', 'Permission denied.' ); }
 		$a          = self::assessment();
 		$components = GWQSH_Admin::get_score_components();
@@ -171,7 +171,7 @@ final class GWQSH_Hardening_Data {
 	 * @return true|WP_Error Validation/persistence result.
 	 */
 	public static function save_csp( $mode, $policy, $confirmed ) {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( GWQSH_Admin::management_capability() ) ) {
 			return new WP_Error( 'permission', 'Permission denied.' ); }
 		if ( ! is_string( $policy ) || strlen( $policy ) > 2048 || preg_match( '/[\x00-\x1f\x7f]/', $policy ) || ! in_array( $mode, array( 'off', 'report', 'enforce' ), true ) ) {
 			return new WP_Error( 'policy', 'Use a single-line policy of at most 2,048 bytes.' ); }
@@ -223,12 +223,35 @@ final class GWQSH_Hardening_Data {
 				header( $name . ': ' . $csp['policy'] ); }
 		}
 	}
+	/** Write a same-site probe without following a pre-created symlink. */
+	private static function write_probe( $path, $body ) {
+		if ( ! is_string( $path ) || is_link( $path ) || file_exists( $path ) ) {
+			return false;
+		}
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Exclusive local probe creation prevents symlink-following races.
+		$handle = @fopen( $path, 'xb' );
+		if ( ! $handle ) {
+			return false;
+		}
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Bounded inert local verification probe.
+		$ok = fwrite( $handle, $body ) === strlen( $body ) && fflush( $handle );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Closes the exclusive local probe handle.
+		fclose( $handle );
+		if ( ! $ok || is_link( $path ) ) {
+			if ( is_file( $path ) && ! is_link( $path ) ) {
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_unlink -- Removes only the just-created inert probe.
+				@unlink( $path );
+			}
+			return false;
+		}
+		return true;
+	}
 	/** Explicit verification only; fixed own-site target, no arbitrary URL or redirects.
 	 *
 	 * @return array|WP_Error Evidence/result.
 	 */
 	public static function verify() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( GWQSH_Admin::management_capability() ) ) {
 			return new WP_Error( 'permission', 'Permission denied.' ); }
 		$cooldown = 'gwqsh_hardening_probe_' . get_current_user_id();
 		if ( get_transient( $cooldown ) ) {
@@ -271,19 +294,19 @@ final class GWQSH_Hardening_Data {
 			$php     = trailingslashit( $dir ) . $name . '.php';
 			$control = trailingslashit( $dir ) . $name . '.txt';
 			try {
-				if ( false !== file_put_contents( $php, 'Security Suite Pro inert access probe', LOCK_EX ) && false !== file_put_contents( $control, 'Security Suite Pro inert access probe', LOCK_EX ) ) {
+				if ( self::write_probe( $php, 'Security Suite Pro inert access probe' ) && self::write_probe( $control, 'Security Suite Pro inert access probe' ) ) {
 					$ok                = wp_remote_get( trailingslashit( $uploads['baseurl'] ) . $name . '.txt', $args );
 					$denied            = wp_remote_get( trailingslashit( $uploads['baseurl'] ) . $name . '.php', $args );
 					$e['uploads_pass'] = ! is_wp_error( $ok ) && ! is_wp_error( $denied ) && 200 === wp_remote_retrieve_response_code( $ok ) && 'Security Suite Pro inert access probe' === wp_remote_retrieve_body( $ok ) && 403 === wp_remote_retrieve_response_code( $denied );
 					$e['upload_note']  = $e['uploads_pass'] ? 'HTTP sample: ordinary text delivered; .php access denied with 403. This verifies one path, not every handler or extension.' : 'Expected media HTTP 200 and PHP HTTP 403 were not observed. Review server rules/AllowOverride; no execution-blocking assurance is awarded.';
 				}
 			} finally {
-				if ( file_exists( $php ) ) {
+				if ( file_exists( $php ) && ! is_link( $php ) ) {
 					// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
 					if ( ! unlink( $php ) ) {
 						$e['uploads_pass'] = false;
 						$e['upload_note']  = 'Probe cleanup failed; review the uploads directory before retrying.'; }
-				} if ( file_exists( $control ) ) {
+				} if ( file_exists( $control ) && ! is_link( $control ) ) {
 					// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
 					if ( ! unlink( $control ) ) {
 						$e['uploads_pass'] = false;
