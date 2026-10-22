@@ -45,11 +45,20 @@
    benchmark matrix, test evidence, remaining work, feature matrix, engine
    integration audit, WAF validation, release readiness, performance.
 
+10. **Malware analyzer evidence** — wrote a synthetic corpus
+    (`tests/cases/110-malware-analyzer.php`) against the real analyzer. Four
+    samples scored 0: remote `include("http://…")`, obfuscated callable
+    assembly, `preg_replace /e` and `create_function`. The first two are real
+    current dropper patterns and were fixed with token-level rules
+    (`remote_include`, `obfuscated_callable`); the latter two cannot execute on
+    PHP 8+ and are recorded as documented non-detections. Analyzer `VERSION`
+    bumped to force re-analysis of cached scan results.
+
 ### Measured outcome
 
 ```
-Linted 102 PHP files, 0 failures
-PHP 8.4.1 | 122 passed, 0 failed, 2 skipped, 124 total
+Linted 103 PHP files, 0 failures
+PHP 8.4.1 | 128 passed, 0 failed, 2 skipped, 130 total
 ```
 
 Timing (WASM runtime, not production):

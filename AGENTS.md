@@ -63,7 +63,7 @@ edit distribution metadata that belongs to it.
 | Command | Purpose |
 | --- | --- |
 | `php tests/lint.php .` | Token-parser syntax lint of every PHP file |
-| `php tests/run-tests.php --verbose` | 122 isolated assertions against real plugin source |
+| `php tests/run-tests.php --verbose` | 130 isolated assertions against real plugin source |
 | `node tests/tools/php-wasm-runner.mjs` | Same, inside a WASM PHP runtime when no PHP binary exists |
 
 Skipped checks must stay recorded as skipped. Anything requiring a real
@@ -90,7 +90,7 @@ legitimate score component, and 10/10 is an aspiration, not a claim.
 | --- | --- | --- |
 | WAF request inspection (local) | 7.5/10 | Bounded parsers for GET/POST/JSON/multipart/XML/REST; 40-sample attack corpus detected, 19-sample benign corpus allowed; no independent exploit corpus or production traffic measurement |
 | Bot / abusive-request defence | 6.0/10 | Sensitive-file probes, holds, rate limiting and CIDR/trusted-proxy tests pass; no edge/DDoS protection, no live IP reputation |
-| Malware detection | 5.0/10 | Engine exists and is scheduled, but no corpus benchmark ran in this session and the namespaced scanner is unwired |
+| Malware detection | 5.5/10 | Synthetic corpus: 8/8 malicious PHP flagged, 10/10 benign clean, uploads/oversize states verified; representative corpus and production false-positive rate still unknown |
 | Vulnerability intelligence / virtual patching | 4.0/10 | Signed-advisory client and scoped patch evaluation exist; no operator trust anchor, no vendor feed, no verified exploit corpus |
 | Authentication | 6.5/10 | TOTP replay guards and WebAuthn ceremony validation are tested in isolation; bundled WebAuthn runtime is missing from this checkout, so passkeys are unavailable here |
 | File integrity / cleanup | 5.0/10 | Scheduled scans, quarantine and baseline tooling exist; not exercised against live WordPress in this session |

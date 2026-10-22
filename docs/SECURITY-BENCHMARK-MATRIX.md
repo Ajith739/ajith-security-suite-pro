@@ -9,7 +9,7 @@ result.
 | --- | --- | --- | --- |
 | WAF and exploit protection | **7.5** | 40 attack samples detected across SQLi/XSS/traversal/LFI/RCE/SSRF/object-injection; 33 benign samples allowed; policy gates verified (24 assertions) | lexical detectors only; no pre-WordPress layer; no independent exploit corpus; unknown production FP rate |
 | Bot and IP defences | **6.0** | 16 sensitive-file probes detected / 20 ordinary paths allowed; hold logic; CIDR + IPv6 + forwarded-chain spoof tests (23 assertions) | no edge/DDoS protection, no live IP reputation, no country-blocking validation |
-| Malware detection | **5.0** | engine reachable and scheduled; analyzer present | no corpus benchmark, no FP measurement, duplicate scanner unwired |
+| Malware detection | **5.5** | synthetic corpus: 8/8 malicious PHP flagged, 10/10 benign PHP clean, uploads/oversize handling verified; two new token-level rules | corpus is hand-written, not representative; production false-positive rate and scan cost unmeasured |
 | Vulnerability intelligence | **4.0** | signed-advisory client + scoped patch evaluation code path | no trust anchor, no feed, no CVE ingestion |
 | Virtual patching | **4.0** | `match()`/`evaluate()` wired into firewall with approval gate | production patch list empty; no verified exploit-condition testing |
 | Threat intelligence | **3.0** | client-side verification design documented | no publisher, no keys, no rotation/replay test in this session |
@@ -26,7 +26,7 @@ Weighted overall (equal weights across 14 dimensions): **5.2 / 10**.
 
 ## Evidence index
 
-* `docs/evidence/phpunit-results.json` — 124 assertions, 122 passed, 0 failed, 2 skipped
+* `docs/evidence/phpunit-results.json` — 130 assertions, 128 passed, 0 failed, 2 skipped
 * `docs/evidence/lint.json` — 102 files, 0 syntax failures
 * `docs/WAF-VALIDATION.md`, `docs/TEST-EVIDENCE.md`, `docs/ENGINE-INTEGRATION-AUDIT.md`
 

@@ -1,5 +1,5 @@
 {
-    "generated_at": "2026-10-22T08:20:19+00:00",
+    "generated_at": "2026-10-22T08:21:48+00:00",
     "php_version": "8.4.1",
     "extensions": {
         "sodium": false,
@@ -9,10 +9,10 @@
         "pdo": true
     },
     "summary": {
-        "passed": 122,
+        "passed": 128,
         "failed": 0,
         "skipped": 2,
-        "total": 124
+        "total": 130
     },
     "results": [
         {
@@ -669,25 +669,25 @@
             "group": "performance",
             "test": "Typical request evaluation stays bounded",
             "passed": true,
-            "detail": "370.0 \u00b5s/request (WASM)"
+            "detail": "436.7 \u00b5s/request (WASM)"
         },
         {
             "group": "performance",
             "test": "Worst-case budgeted body stays bounded",
             "passed": true,
-            "detail": "1350.0 \u00b5s/request for ~30KB values (WASM)"
+            "detail": "1950.0 \u00b5s/request for ~30KB values (WASM)"
         },
         {
             "group": "performance",
             "test": "Nested cart-like payloads stay bounded",
             "passed": true,
-            "detail": "1060.0 \u00b5s/request for 120 nested values (WASM)"
+            "detail": "980.0 \u00b5s/request for 120 nested values (WASM)"
         },
         {
             "group": "performance",
             "test": "WAF timing summary",
             "passed": true,
-            "detail": "typical=370.0\u00b5s, heavy=1350.0\u00b5s, nested=1060.0\u00b5s (PHP 8.4.1, WASM runtime)"
+            "detail": "typical=436.7\u00b5s, heavy=1950.0\u00b5s, nested=980.0\u00b5s (PHP 8.4.1, WASM runtime)"
         },
         {
             "group": "false-positives",
@@ -760,6 +760,42 @@
             "test": "Manifest coverage",
             "passed": true,
             "detail": "1 wired, 8 unwired"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "Synthetic malicious PHP flagged at >=40",
+            "passed": true,
+            "detail": "8/8 flagged"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "Benign PHP stays below the flag threshold",
+            "passed": true,
+            "detail": "10 benign samples clean"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "PHP-8-removed constructs are documented as not detected",
+            "passed": true,
+            "detail": "no score, accepted (cannot execute on PHP 8+)"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "PHP inside uploads is treated as executable content",
+            "passed": true,
+            "detail": "score=65 evidence=upload_executable"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "Oversized input reports partial analysis instead of a silent pass",
+            "passed": true,
+            "detail": "partial=true confidence=Unknown"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "Analysis returns an explainable shape",
+            "passed": true,
+            "detail": "keys=score,severity,confidence,evidence,signature_ids,auto_block,analysis_partial,version"
         }
     ]
 }

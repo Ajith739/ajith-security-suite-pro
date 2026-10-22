@@ -39,12 +39,12 @@ Generated evidence:
 ## 3. Results (verbatim from the runner)
 
 ```
-Linted 102 PHP files, 0 failures
+Linted 103 PHP files, 0 failures
 
 SKIP  [inspector-parsers] XML parser tests — DOM extension is unavailable in this PHP runtime
 SKIP  [ssrf] Public hostname acceptance — DNS resolution unavailable in this runtime
 
-PHP 8.4.1 | 122 passed, 0 failed, 2 skipped, 124 total
+PHP 8.4.1 | 128 passed, 0 failed, 2 skipped, 130 total
 ```
 
 Group breakdown:
@@ -63,6 +63,7 @@ Group breakdown:
 | ssrf | 8 | 1 | webhook scheme/host/IP-class rejection |
 | performance | 4 | 0 | bounded evaluation cost (relative regression watch) |
 | false-positives | 2 | 0 | 14 legitimate payloads allowed; 5 known-aggressive shapes recorded |
+| malware-analyzer | 6 | 0 | 8/8 synthetic malicious flagged, 10/10 benign clean, uploads/oversize states |
 | integration-manifest | 10 | 0 | wired/unwired engine claims match the code |
 
 ## 4. Defects found and fixed by this suite
@@ -76,6 +77,7 @@ Group breakdown:
 | 5 | Serialized object nested in an array (`a:1:{i:0;O:7:"WP_User":…}`) was missed; only objects starting the value matched. | `serialized_object()` matches the object shape anywhere in a value. |
 | 6 | Executable PHP in request data (`<?php system($_GET[c]); ?>`) had no rule at all. | New **report-first** rule `GWQSH-1017` (needs `enforce_new` to block). |
 | 7 | `advanced()` walked the evidence tree twice per call (once for values, once for SQL), on every request. | Single bounded walk per collection. |
+| 8 | Malware analyzer scored 0 for remote `include("http://…")` and for obfuscated callable assembly (`$f = "sys"."tem"; $f($_POST)`), both live dropper patterns. | Token-level `remote_include` and `obfuscated_callable` rules; analyzer `VERSION` 6 → 7 to invalidate cached scan verdicts. |
 
 ## 5. Deliberately aggressive detections (documented, not hidden)
 

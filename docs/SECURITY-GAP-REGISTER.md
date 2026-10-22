@@ -19,7 +19,9 @@ limits), **Open** (not addressed), **External** (needs a third party),
 | AUTH-1 | **P1** | `includes/vendor/webauthn/` is gitignored and absent from this checkout, so passkeys are unavailable in a clean clone (feature gate degrades safely). | **Open (packaging)** | `GWQSH_Passkeys::available()` returns false; `docs/RELEASE-READINESS.md` blocker |
 | AUTH-2 | **P2** | Passkey/TOTP browser flows not executed in this session. | **Open (test coverage)** | `docs/AUTHENTICATION-VALIDATION.md` |
 | UI-1 | **P3** | `assets/vendor/three/three.module.js` is gitignored; hero bird animation degrades. | **Open (packaging)** | `assets/js/hero-birds.js` dynamic import is guarded |
-| SCAN-1 | **P2** | Malware engine not benchmarked against a representative corpus; false-positive rate unknown. | **Open** | `tests/` covers only logic-level assertions |
+| SCAN-1 | **P2** | Malware engine not benchmarked against a **representative** corpus; production false-positive rate and scan cost unknown. | **Partial** | `tests/cases/110-malware-analyzer.php`: 8/8 hand-written malicious flagged, 10/10 benign clean (synthetic only) |
+| SCAN-3 | **P2** | Remote PHP include (`include("http://…")`) scored 0 despite being a dropper pattern. | **Fixed** | `remote_include` token-level rule; corpus case `remote include` |
+| SCAN-4 | **P2** | Obfuscated callable assembly (`$f = "sys"."tem"; $f($_POST)`) scored 0. | **Fixed** | `obfuscated_callable` rule limited to dangerous resolved names |
 | SCAN-2 | **P2** | Namespaced `Gracewell_Malware_Scanner` duplicate unused. | **Open** | See INT-1 |
 | VULN-1 | **P2** | No operator trust anchor / signed advisory feed; virtual patches are data-only and unused in production until configured. | **External** | `docs/VULNERABILITY-PATCHING.md`, `docs/THREAT-INTELLIGENCE.md` |
 | VULN-2 | **P2** | No vendor CVE/advisory ingestion pipeline; core checksum integrity relies on WordPress.org. | **External** | Same |
