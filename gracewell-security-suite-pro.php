@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/joshua-sundar/gracewell-security-suite-pro
  * Update URI: https://github.com/joshua-sundar/gracewell-security-suite-pro
  * Description: WordPress firewall, passkeys and two-factor recovery, login protection, scheduled file integrity scans, IP restrictions and security audit logs.
- * Version: 1.2.0-rc.2
+ * Version: 1.3.0-rc.5
  * Author: gracewell89
  * Author URI: https://gracewell.in/
  * Contributors: gracewell89
@@ -30,8 +30,8 @@ if ( GWQSH_Pro_Compatibility::conflicts( __FILE__ ) || defined( 'GWQSH_PLUGIN_FI
 
 define( 'GWQSH_PATH', plugin_dir_path( __FILE__ ) );
 define( 'GWQSH_URL', plugin_dir_url( __FILE__ ) );
-define( 'GWQSH_VERSION', '1.2.0-rc.2' );
-define( 'GWQSH_DB_VERSION', '1.6.0' );
+define( 'GWQSH_VERSION', '1.3.0-rc.5' );
+define( 'GWQSH_DB_VERSION', '1.6.1' );
 define( 'GWQSH_PLUGIN_FILE', __FILE__ );
 define( 'GWQSH_PLUGIN_DIR', GWQSH_PATH );
 define( 'GWQSH_PLUGIN_URL', GWQSH_URL );
@@ -42,6 +42,25 @@ if ( ! defined( 'GWQSH_DISABLE_LOGIN_URL' ) && defined( 'GQS_DISABLE_LOGIN_URL' 
 	define( 'GWQSH_DISABLE_LOGIN_URL', GQS_DISABLE_LOGIN_URL ); }
 if ( ! defined( 'GWQSH_TRUSTED_PROXIES' ) && defined( 'GQS_TRUSTED_PROXIES' ) ) {
 	define( 'GWQSH_TRUSTED_PROXIES', GQS_TRUSTED_PROXIES ); }
+
+// Register modern namespaced module autoloader.
+spl_autoload_register( function ( $class ) {
+	$prefix = 'Gracewell\\SecurityPro\\';
+	if ( 0 !== strpos( $class, $prefix ) ) {
+		return;
+	}
+	$relative_class = substr( $class, strlen( $prefix ) );
+	$parts          = explode( '\\', $relative_class );
+	if ( count( $parts ) >= 2 ) {
+		$sub      = strtolower( array_shift( $parts ) );
+		$cls      = array_pop( $parts );
+		$filename = 'class-' . strtolower( str_replace( '_', '-', $cls ) ) . '.php';
+		$file     = GWQSH_PATH . 'includes/' . $sub . '/' . $filename;
+		if ( file_exists( $file ) ) {
+			require_once $file;
+		}
+	}
+} );
 
 // Load backend modules.
 require_once GWQSH_PATH . 'includes/interface-gwqsh-delivery-provider.php';
@@ -76,6 +95,7 @@ require_once GWQSH_PATH . 'includes/class-gwqsh-settings.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-activity-logger.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-activity-view-data.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-security-report.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-security-doctor.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-cli.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-login-protection.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-two-factor.php';
@@ -92,13 +112,18 @@ require_once GWQSH_PATH . 'includes/class-gwqsh-file-integrity.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-database-scanner.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-safe-data.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-database-context.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-database-remediation.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-incident-recovery.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-quarantine-manager.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-ajax.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-admin.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-bot-shield.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-firewall.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-dashboard-data.php';
 require_once GWQSH_PATH . 'includes/class-gwqsh-login-view-data.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-alert-service.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-auth-hardening.php';
+require_once GWQSH_PATH . 'includes/class-gwqsh-backup-engine.php';
 
 // Activation and Deactivation lifecycle hooks.
 register_activation_hook( __FILE__, 'gwqsh_pro_activate_plugin' );
@@ -119,6 +144,7 @@ function gwqsh_pro_activate_plugin() {
  */
 function gwqsh_pro_deactivate_plugin() {
 	GWQSH_Database_Scanner::deactivate();
+	GWQSH_Backup_Engine::deactivate();
 	wp_clear_scheduled_hook( GWQSH_Vulnerabilities::HOOK );
 	foreach ( array( 'gwqsh_deliver_events', 'gwqsh_reputation_lookup', 'gwqsh_update_signatures', 'gwqsh_refresh_cloudflare_ranges' ) as $hook ) {
 		wp_clear_scheduled_hook( $hook ); }
@@ -131,6 +157,7 @@ function gwqsh_pro_deactivate_plugin() {
 	wp_clear_scheduled_hook( 'gwqsh_daily_log_cleanup' );
 	wp_clear_scheduled_hook( 'gwqsh_activity_search_backfill' );
 	wp_clear_scheduled_hook( 'gwqsh_cleanup_lockouts' );
+	wp_clear_scheduled_hook( GWQSH_Alert_Service::HOOK );
 	GWQSH_Hardening::sync_uploads_protection( false );
 }
 
@@ -150,6 +177,7 @@ function gwqsh_pro_bootstrap() {
 	GWQSH_Country_Access::init();
 	GWQSH_Signatures::init();
 	GWQSH_Vulnerabilities::init();
+	GWQSH_License::init();
 	GWQSH_Enterprise_UI::init();
 	GWQSH_Network::init();
 	GWQSH_IP_Blocks::init();
@@ -165,9 +193,12 @@ function gwqsh_pro_bootstrap() {
 	GWQSH_Hardening::init();
 	GWQSH_File_Integrity::init();
 	GWQSH_Database_Scanner::init();
+	GWQSH_Backup_Engine::init();
 	GWQSH_Scheduler::init();
 	GWQSH_Guardian::init();
 	GWQSH_Firewall::init();
+	GWQSH_Alert_Service::init();
+	GWQSH_Auth_Hardening::init();
 	GWQSH_Ajax::init();
 	GWQSH_Admin::init();
 }

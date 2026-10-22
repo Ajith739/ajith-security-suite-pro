@@ -233,8 +233,8 @@ final class GWQSH_Enterprise_UI {
 			$data = json_decode( $input['settings'] ?? '', true );
 			return is_array( $data ) ? GWQSH_Setup_Wizard::save( $data ) : new WP_Error( 'wizard', 'Invalid checkpoint.' );}
 		if ( in_array( $action, array( 'signature_update', 'signature_rollback', 'advisory_update', 'advisory_rollback' ), true ) ) {
-			$service = str_starts_with( $action, 'signature_' ) ? 'GWQSH_Signatures' : 'GWQSH_Vulnerabilities';
-			$result  = str_ends_with( $action, '_rollback' ) ? $service::rollback( (int) ( $input['expected_version'] ?? 0 ) ) : $service::update();
+			$service = 0 === strpos( $action, 'signature_' ) ? 'GWQSH_Signatures' : 'GWQSH_Vulnerabilities';
+			$result  = '_rollback' === substr( $action, -9 ) ? $service::rollback( (int) ( $input['expected_version'] ?? 0 ) ) : $service::update();
 			return is_wp_error( $result ) ? $result : array( 'version' => 'GWQSH_Signatures' === $service ? GWQSH_Signatures::version() : ( GWQSH_Vulnerabilities::database()['version'] ?? 0 ) );
 		}
 		if ( 'refresh_cloudflare' === $action ) {

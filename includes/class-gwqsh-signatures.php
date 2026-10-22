@@ -17,6 +17,14 @@ final class GWQSH_Signatures {
 	public static function trusted_keys() {
 		$keys = defined( 'GWQSH_SIGNATURE_PUBLIC_KEYS' ) ? GWQSH_SIGNATURE_PUBLIC_KEYS : ( defined( 'GWQSH_SIGNATURE_PUBLIC_KEY' ) ? array( GWQSH_SIGNATURE_PUBLIC_KEY ) : array() );
 		$keys = apply_filters( 'gwqsh_signature_trusted_keys', $keys );
+		$keys = is_array( $keys ) ? $keys : array();
+		$trust = (array) apply_filters( 'gwqsh_signature_envelope_trust', array( 'keys' => defined( 'GWQSH_SIGNATURE_KEYS' ) ? GWQSH_SIGNATURE_KEYS : array() ) );
+		foreach ( (array) ( $trust['keys'] ?? array() ) as $identity ) {
+			if ( is_array( $identity ) && is_int( $identity['not_before'] ?? null ) && is_int( $identity['not_after'] ?? null ) && $identity['not_before'] <= time() && $identity['not_after'] > time() ) {
+				$keys[] = $identity['public_key'] ?? '';
+			}
+		}
+		$keys = is_array( $keys ) ? array_values( array_unique( $keys, SORT_REGULAR ) ) : array();
 		return is_array( $keys ) && count( $keys ) <= 3 ? array_values(
 			array_filter(
 				$keys,
@@ -47,7 +55,11 @@ final class GWQSH_Signatures {
 	 */
 	public static function database() {
 		$state = (array) get_option( self::STATE, array() );
-		return (array) ( $state['current']['data'] ?? get_option( 'gwqsh_signature_database', array() ) );}
+		$data = (array) ( $state['current']['data'] ?? get_option( 'gwqsh_signature_database', array() ) );
+		if ( ! empty( $data['_envelope_trust'] ) && is_wp_error( self::verify( $state['current']['json'] ?? '', $state['current']['signature'] ?? '' ) ) ) {
+			return array();
+		}
+		return $data;}
 	/**
 	 * Version.
 	 *
@@ -70,6 +82,16 @@ final class GWQSH_Signatures {
 		if ( ! is_string( $json ) || strlen( $json ) > 1048576 || ! is_string( $signature ) || strlen( $signature ) > 128 ) {
 			return new WP_Error( 'size', 'Invalid signature envelope size.' );
 		}
+		$envelope = json_decode( $json, true, 32 );
+		$v2 = is_array( $envelope ) && 2 === ( $envelope['schema'] ?? null );
+		if ( $v2 ) {
+			$trust = (array) apply_filters( 'gwqsh_signature_envelope_trust', array( 'publisher' => defined( 'GWQSH_SIGNATURE_PUBLISHER' ) ? GWQSH_SIGNATURE_PUBLISHER : '', 'keys' => defined( 'GWQSH_SIGNATURE_KEYS' ) ? GWQSH_SIGNATURE_KEYS : array() ) );
+			$identity = is_array( $trust['keys'] ?? null ) && is_string( $envelope['key_id'] ?? null ) ? ( $trust['keys'][ $envelope['key_id'] ] ?? array() ) : array();
+			if ( ! is_array( $identity ) || empty( $trust['publisher'] ) || ( $envelope['publisher'] ?? null ) !== $trust['publisher'] || 'signatures' !== ( $envelope['feed'] ?? null ) || '1' !== ( $envelope['min_engine'] ?? null ) || ! is_string( $identity['public_key'] ?? null ) || ! is_int( $identity['not_before'] ?? null ) || ! is_int( $identity['not_after'] ?? null ) || $identity['not_before'] > time() || $identity['not_after'] <= time() || ( $envelope['created_at'] ?? 0 ) < $identity['not_before'] || ( $envelope['expires_at'] ?? PHP_INT_MAX ) > $identity['not_after'] || ! is_string( $envelope['payload_sha256'] ?? null ) || ! hash_equals( hash( 'sha256', json_encode( $envelope['signatures'] ?? null, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) ), $envelope['payload_sha256'] ) ) {
+				return new WP_Error( 'trust', 'Signature publisher, key window, engine or payload digest is invalid.' );
+			}
+			$public_key = $identity['public_key'];
+		}
 		$sig   = base64_decode( $signature, true );
 		$keys  = null === $public_key ? self::trusted_keys() : array( $public_key );
 		$valid = false;
@@ -85,7 +107,7 @@ final class GWQSH_Signatures {
 		}
 		$data = json_decode( $json, true, 32 );
 		$now  = time();
-		if ( ! is_array( $data ) || array_diff( array_keys( $data ), array( 'schema', 'version', 'created_at', 'expires_at', 'signatures' ) ) || ( $data['schema'] ?? null ) !== 1 || ! is_int( $data['version'] ?? null ) || $data['version'] < 1 || ! is_int( $data['created_at'] ?? null ) || $data['created_at'] < 0 || ! is_int( $data['expires_at'] ?? null ) || $data['created_at'] > $now + 300 || $data['expires_at'] <= $now || $data['expires_at'] > $data['created_at'] + 90 * DAY_IN_SECONDS || $data['created_at'] >= $data['expires_at'] || ! is_array( $data['signatures'] ?? null ) || count( $data['signatures'] ) > 2000 ) {
+		if ( ! is_array( $data ) || array_diff( array_keys( $data ), ( $v2 ? array( 'schema', 'version', 'created_at', 'expires_at', 'signatures', 'publisher', 'feed', 'key_id', 'min_engine', 'payload_sha256' ) : array( 'schema', 'version', 'created_at', 'expires_at', 'signatures' ) ) ) || ! in_array( $data['schema'] ?? null, array( 1, 2 ), true ) || ! is_int( $data['version'] ?? null ) || $data['version'] < 1 || ! is_int( $data['created_at'] ?? null ) || $data['created_at'] < 0 || ! is_int( $data['expires_at'] ?? null ) || $data['created_at'] > $now + 300 || $data['expires_at'] <= $now || $data['expires_at'] > $data['created_at'] + 90 * DAY_IN_SECONDS || $data['created_at'] >= $data['expires_at'] || ! is_array( $data['signatures'] ?? null ) || count( $data['signatures'] ) > 2000 ) {
 			return new WP_Error( 'schema', 'Expired, replayed or malformed signature database.' );
 		}
 		$ids = array();
@@ -93,13 +115,14 @@ final class GWQSH_Signatures {
 			if ( ! is_array( $r ) || array_diff( array_keys( $r ), array( 'id', 'type', 'value', 'score', 'scopes' ) ) || ! is_string( $r['id'] ?? null ) || ! preg_match( '/^[A-Za-z0-9_.-]{1,64}$/D', $r['id'] ) || isset( $ids[ $r['id'] ] ) || ! in_array( $r['type'] ?? null, array( 'sha256', 'literal' ), true ) || ! is_string( $r['value'] ?? null ) || ! is_int( $r['score'] ?? null ) || $r['score'] < 40 || $r['score'] > 100 || ! is_array( $r['scopes'] ?? null ) || count( $r['scopes'] ) > 4 || count( array_filter( $r['scopes'], 'is_string' ) ) !== count( $r['scopes'] ) || array_diff( $r['scopes'], array( 'Core', 'Plugin', 'Theme', 'Uploads' ) ) ) {
 				return new WP_Error( 'entry', 'Invalid signature entry.' );
 			}
-			if ( ( 'sha256' === $r['type'] && ! preg_match( '/^[a-f0-9]{64}$/D', $r['value'] ) ) || ( 'literal' === $r['type'] && ( strlen( $r['value'] ) < 8 || strlen( $r['value'] ) > 256 || str_contains( $r['value'], "\0" ) ) ) ) {
+			if ( ( 'sha256' === $r['type'] && ! preg_match( '/^[a-f0-9]{64}$/D', $r['value'] ) ) || ( 'literal' === $r['type'] && ( strlen( $r['value'] ) < 8 || strlen( $r['value'] ) > 256 || false !== strpos( $r['value'], "\0" ) ) ) ) {
 				return new WP_Error( 'pattern', 'Unsafe or malformed signature pattern. Regex and executable entries are not supported.' );
 			}
 			$ids[ $r['id'] ] = true;
 		}
 		$data['_key_fingerprint'] = hash( 'sha256', $key );
 		$data['_managed_trust']   = null === $public_key;
+		$data['_envelope_trust'] = $v2;
 		return $data;
 	}
 

@@ -11,6 +11,8 @@ defined( 'ABSPATH' ) || exit;
  * GWQSH Activity Logger implementation.
  */
 final class GWQSH_Activity_Logger {
+	/** Prevent option/schema observers from recursively initializing the same site. */
+	private static $preparing_sites = array();
 	/**
 	 * Init.
 	 */
@@ -45,6 +47,19 @@ final class GWQSH_Activity_Logger {
 	 */
 	public static function log( $event_name, $details = '', $event_type = 'System', $user = null, $ip = null ) {
 		global $wpdb;
+		// wp_initialize_site grants the first role after core tables exist, but
+		// before a later request can run plugin bootstrap for the new blog.
+		if ( is_multisite() && GWQSH_DB_VERSION !== get_option( 'gwqsh_db_version', '0' ) ) {
+			$site = $wpdb->prefix;
+			if ( isset( self::$preparing_sites[ $site ] ) ) { return 0; }
+			self::$preparing_sites[ $site ] = true;
+			try {
+				GWQSH_DB::init();
+			} finally {
+				unset( self::$preparing_sites[ $site ] );
+			}
+			if ( GWQSH_DB_VERSION !== get_option( 'gwqsh_db_version', '0' ) ) { return 0; }
+		}
 
 		if ( null === $ip ) {
 			$ip = GWQSH_Settings::get_client_ip();

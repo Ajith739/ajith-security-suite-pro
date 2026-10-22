@@ -26,6 +26,18 @@ final class GWQSH_Events {
 		add_action( 'gwqsh_deliver_events', array( __CLASS__, 'work' ) );
 		add_action( 'gwqsh_daily_log_cleanup', array( __CLASS__, 'cleanup' ) );
 		add_action( 'wp_login', array( __CLASS__, 'login' ), 20, 2 );
+		self::schedule();
+	}
+	/** Recover a missing cron wakeup after insertion/worker crashes.
+	 * Scheduling is advisory; durable queue rows remain the source of truth.
+	 */
+	private static function schedule() {
+		global $wpdb;
+		if ( wp_next_scheduled( 'gwqsh_deliver_events' ) ) { return; }
+		$next = $wpdb->get_var( "SELECT MIN(available_at) FROM {$wpdb->prefix}gwqsh_delivery_queue WHERE status IN ('pending','processing')" );
+		if ( null !== $next ) {
+			wp_schedule_single_event( max( time() + 10, (int) $next ), 'gwqsh_deliver_events' );
+		}
 	}
 	/**
 	 * Classify.
@@ -116,13 +128,14 @@ final class GWQSH_Events {
 		}
 		try {
 			$table = $wpdb->prefix . 'gwqsh_delivery_queue';
+			$bucket = intdiv( time(), max( 60, $cooldown ) );
+			$key = hash( 'sha256', $channel . '|' . ( $event['delivery_identity'] ?? ( $event['category'] . '|' . $event['event'] . '|' . $event['ip'] . '|' . $bucket ) ) );
+			if ( $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$table} WHERE delivery_key=%s", $key ) ) ) { return true; }
 			if ( (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" ) >= 1000 ) {
 				$wpdb->query( "DELETE FROM {$table} WHERE status IN ('delivered','failed') ORDER BY id LIMIT 100" );}
 			if ( (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" ) >= 1000 ) {
 				return new WP_Error( 'capacity', 'Delivery queue is full; local audit logging is retained.' );
 			}
-			$bucket = intdiv( time(), max( 60, $cooldown ) );
-			$key    = hash( 'sha256', $channel . '|' . $event['category'] . '|' . $event['event'] . '|' . $event['ip'] . '|' . $bucket );
 			$insert = $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO {$table} (delivery_key,channel,payload,available_at,created_at) VALUES (%s,%s,%s,%d,%d)", $key, $channel, wp_json_encode( $event ), time(), time() ) );
 			if ( false === $insert ) {
 				return new WP_Error( 'storage', 'Unable to queue delivery.' );
@@ -207,47 +220,57 @@ final class GWQSH_Events {
 	 */
 	public static function work() {
 		global $wpdb;
-		$lock = GWQSH_Enterprise_Store::lock( 'delivery-worker', 60 );
+		$lock = GWQSH_Enterprise_Store::lock( 'delivery-worker', 300 );
 		if ( ! $lock ) {
+			// Cron consumes its event before calling us. Preserve recovery if the
+			// current owner dies after this contending invocation returns.
+			if ( ! wp_next_scheduled( 'gwqsh_deliver_events' ) ) {
+				wp_schedule_single_event( time() + 301, 'gwqsh_deliver_events' );
+			}
 			return;
-		}$table = $wpdb->prefix . 'gwqsh_delivery_queue';
-		$start  = microtime( true );
+		}
+		$table = $wpdb->prefix . 'gwqsh_delivery_queue';
+		$start = microtime( true );
 		try {
-			$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE status='pending' AND available_at<=%d ORDER BY id LIMIT 5", time() ), ARRAY_A );
+			// Attempts are charged when claimed, so repeated crashes cannot retry forever.
+			$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET status=IF(attempts>=5,'failed','pending'),last_error='lease_expired' WHERE status='processing' AND available_at<=%d", time() ) );
+			$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE status='pending' AND available_at<=%d ORDER BY id LIMIT 20", time() ), ARRAY_A );
 			foreach ( $rows as $row ) {
-				if ( microtime( true ) - $start > 8 ) {
-							break;
-				}
-				if ( 1 !== $wpdb->query( $wpdb->prepare( "UPDATE {$table} SET status='processing',available_at=%d WHERE id=%d AND status='pending'", time() + 120, $row['id'] ) ) ) {
-					continue;
+				if ( microtime( true ) - $start >= 15 ) { break; }
+				$token = 'lease:' . bin2hex( random_bytes( 16 ) );
+				if ( 1 !== $wpdb->query( $wpdb->prepare( "UPDATE {$table} SET status='processing',available_at=%d,attempts=attempts+1,last_error=%s,lease_token=%s WHERE id=%d AND status='pending' AND available_at<=%d", time() + 300, $token, substr( $token, 6 ), $row['id'], time() ) ) ) { continue; }
+				// Never enter provider I/O without a durable recovery wakeup.
+				if ( ! wp_next_scheduled( 'gwqsh_deliver_events' ) && true !== wp_schedule_single_event( time() + 301, 'gwqsh_deliver_events', array(), true ) ) {
+					break;
 				}
 				try {
-					$result = self::deliver( $row['channel'], json_decode( $row['payload'], true ) );
+					$event = json_decode( $row['payload'], true );
+					$result = is_array( $event ) ? self::deliver( $row['channel'], $event ) : new WP_Error( 'payload', 'Invalid queued payload.' );
 				} catch ( Throwable $error ) {
-					$result = new WP_Error( 'delivery', 'Delivery provider failed.' );}
+					$result = new WP_Error( 'delivery', 'Delivery provider failed.' );
+				}
 				$attempts = (int) $row['attempts'] + 1;
-				$ok       = true === $result;
-				$code     = is_wp_error( $result ) ? sanitize_key( $result->get_error_code() ) : 'delivery';
-				$wpdb->update(
-					$table,
-					array(
-						'status'       => $ok ? 'delivered' : ( $attempts >= 5 ? 'failed' : 'pending' ),
-						'attempts'     => $attempts,
-						'available_at' => time() + min( 3600, 30 * ( 2 ** $attempts ) ),
-						'last_error'   => $ok ? '' : substr( $code, 0, 100 ),
-					),
-					array( 'id' => $row['id'] )
-				);
+				$ok = true === $result;
+				$code = is_wp_error( $result ) ? sanitize_key( $result->get_error_code() ) : 'delivery';
+				// Compare-and-swap prevents an expired worker overwriting a newer claim.
+				// "delivered" is legacy storage vocabulary: provider accepted, not recipient read.
+				$wpdb->query( $wpdb->prepare(
+					"UPDATE {$table} SET status=%s,available_at=%d,last_error=%s,lease_token='' WHERE id=%d AND status='processing' AND last_error=%s AND lease_token=%s AND available_at>%d",
+					$ok ? 'delivered' : ( $attempts >= 5 ? 'failed' : 'pending' ),
+					time() + min( 3600, 30 * ( 2 ** $attempts ) ),
+					$ok ? 'provider_accepted' : substr( $code, 0, 100 ),
+					$row['id'], $token, substr( $token, 6 ), time()
+				) );
 			}
-			// A crashed worker's claimed items can be retried; downstream receivers should deduplicate by event_id.
-			$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET status='pending' WHERE status='processing' AND available_at<%d", time() ) );
 			$next = $wpdb->get_var( "SELECT MIN(available_at) FROM {$table} WHERE status IN ('pending','processing')" );
 			if ( $next && ! wp_next_scheduled( 'gwqsh_deliver_events' ) ) {
 				wp_schedule_single_event( max( time() + 10, (int) $next ), 'gwqsh_deliver_events' );
 			}
 		} finally {
-			GWQSH_Enterprise_Store::unlock( 'delivery-worker', $lock );}
+			GWQSH_Enterprise_Store::unlock( 'delivery-worker', $lock );
+		}
 	}
+
 	/**
 	 * Cleanup.
 	 *
@@ -256,7 +279,7 @@ final class GWQSH_Events {
 	public static function cleanup() {
 		global $wpdb;
 		$days = GWQSH_Enterprise_Config::get( 'privacy' )['delivery_retention'];
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}gwqsh_delivery_queue WHERE created_at<%d LIMIT 500", time() - $days * DAY_IN_SECONDS ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}gwqsh_delivery_queue WHERE status IN ('delivered','failed') AND created_at<%d LIMIT 500", time() - $days * DAY_IN_SECONDS ) );
 		GWQSH_Enterprise_Store::prune();
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}gwqsh_auth_challenges WHERE expires_at<%d LIMIT 500", time() ) );}
 	/**

@@ -42,6 +42,7 @@ final class GWQSH_Enterprise_Store {
  available_at bigint(20) unsigned NOT NULL,
  created_at bigint(20) unsigned NOT NULL,
  last_error varchar(100) NOT NULL DEFAULT '',
+ lease_token char(32) NOT NULL DEFAULT '',
  PRIMARY KEY  (id),
  UNIQUE KEY delivery_key (delivery_key),
  KEY pending (status,available_at),
@@ -50,7 +51,7 @@ final class GWQSH_Enterprise_Store {
 		);
 		foreach ( array(
 			'gwqsh_security_state' => array( 'state_key', 'kind', 'payload', 'counter', 'expires_at' ),
-			'gwqsh_delivery_queue' => array( 'id', 'delivery_key', 'channel', 'payload', 'status', 'attempts', 'available_at', 'created_at', 'last_error' ),
+			'gwqsh_delivery_queue' => array( 'id', 'delivery_key', 'channel', 'payload', 'status', 'attempts', 'available_at', 'created_at', 'last_error', 'lease_token' ),
 		) as $suffix => $required ) {
 			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Suffix is from the fixed internal table allowlist above; wpdb prefix is trusted.
 			$columns = $wpdb->get_col( 'SHOW COLUMNS FROM ' . $wpdb->prefix . $suffix );
@@ -164,12 +165,13 @@ final class GWQSH_Enterprise_Store {
 	 * @param mixed $name Name.
 	 * @param mixed $identity Identity.
 	 * @param mixed $seconds Seconds.
+	 * @param int|null $issued_at Server-issued challenge time for a stable window across retries.
 	 * @return mixed Operation result.
 	 */
-	public static function hit( $name, $identity, $seconds = 60 ) {
+	public static function hit( $name, $identity, $seconds = 60, $issued_at = null ) {
 		global $wpdb;
 		$seconds = max( 1, (int) $seconds );
-		$key     = self::key( 'counter', $name . '|' . $identity . '|' . intdiv( time(), $seconds ) );
+		$key     = self::key( 'counter', $name . '|' . $identity . '|' . intdiv( null === $issued_at ? time() : (int) $issued_at, $seconds ) );
 		$table   = $wpdb->prefix . 'gwqsh_security_state';
 		$changed = $wpdb->query( $wpdb->prepare( "UPDATE {$table} SET counter=LAST_INSERT_ID(counter+1) WHERE state_key=%s", $key ) );
 		if ( false === $changed ) {
@@ -178,6 +180,21 @@ final class GWQSH_Enterprise_Store {
 		if ( 0 === $changed ) {
 			// New counter admission uses the same capacity gate; increment itself is atomic SQL.
 			$lock = self::lock( 'admission', 5 );
+			// A concurrent caller may be admitting this very counter. Give it a
+			// bounded chance to finish, then increment the existing row atomically.
+			// Never insert without the capacity lock or wait for its full lease.
+			for ( $retry = 0; ! $lock && $retry < 8; ++$retry ) {
+				usleep( 1000 );
+				$changed = $wpdb->query( $wpdb->prepare( "UPDATE {$table} SET counter=LAST_INSERT_ID(counter+1) WHERE state_key=%s", $key ) );
+				if ( false === $changed ) {
+					return null;
+				}
+				if ( $changed ) {
+					$count = $wpdb->get_var( 'SELECT LAST_INSERT_ID()' );
+					return null === $count ? null : (int) $count;
+				}
+				$lock = self::lock( 'admission', 5 );
+			}
 			if ( ! $lock ) {
 				return null;
 			}

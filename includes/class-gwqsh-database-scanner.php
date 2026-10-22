@@ -320,6 +320,30 @@ final class GWQSH_Database_Scanner {
 		if ( preg_match( '/<\?php\b[\s\S]{0,1024}\b(?:eval|system|shell_exec)\s*\([^;]{0,512}\$_(?:GET|POST|REQUEST)/i', $value ) ) {
 			$rules['DB-1008'] = 'Stored PHP fragment correlates request input with execution; review code storage and persistence context.';
 		}
+		// Base64-encoded script or PHP payload in stored content.
+		if ( preg_match( '/(?:base64_decode|atob)\s*\(\s*[\'"][A-Za-z0-9+\/=]{40,}/i', $value ) && preg_match( '/(?:eval|document\.write|innerHTML)\s*(?:\(|=)/i', $value ) ) {
+			$rules['DB-1009'] = 'Base64-encoded executable payload in stored content requires review.';
+		}
+		// Obfuscated variable function calls in stored content.
+		if ( preg_match( '/\$[a-zA-Z_][a-zA-Z0-9_]{0,20}\s*\(\s*\$[a-zA-Z_][a-zA-Z0-9_]{0,20}\s*\)/i', $value ) && preg_match( '/(?:chr|ord|str_rot13|base64_decode|gzinflate)\s*\(/i', $value ) ) {
+			$rules['DB-1010'] = 'Obfuscated variable function call with encoding: review for backdoor activity.';
+		}
+		// Suspicious cron entries with remote URL fetching.
+		if ( 'options' === $source && in_array( $label, array( 'cron' ), true ) && preg_match( '/https?:\/\/[^\s\'"]{10,}/i', $value ) && preg_match( '/(?:wp_remote|curl|file_get_contents|fetch)/i', $value ) ) {
+			$rules['DB-1011'] = 'Scheduled task references external URL: verify the task is authorized.';
+		}
+		// SEO spam link injection patterns.
+		if ( 'posts' === $source && preg_match( '/<a\b[^>]{0,500}href\s*=\s*[\'"]https?:\/\/[^"\']{10,}/i', $value ) && preg_match( '/(?:viagra|cialis|pharmacy|casino|payday|poker|betting|buy.?cheap)/i', $value ) ) {
+			$rules['DB-1012'] = 'Content contains SEO spam link injection pattern: verify editorial intent.';
+		}
+		// Malicious widget HTML injection.
+		if ( 'options' === $source && preg_match( '/^widget_/i', $label ) && preg_match( '/<(?:script|iframe)\b/i', $value ) ) {
+			$rules['DB-1013'] = 'Widget contains script or iframe element: verify the widget source and content.';
+		}
+		// Suspicious serialized object with shell/eval references.
+		if ( preg_match( '/O:[0-9]+:"[^"]{1,100}":[0-9]+:\{/', $value ) && preg_match( '/(?:eval|system|exec|passthru|shell_exec|assert)\s*\(/i', $value ) ) {
+			$rules['DB-1016'] = 'Serialized object references executable function: review for object injection attack.';
+		}
 		return $rules;
 	}
 

@@ -18,39 +18,144 @@ final class GWQSH_Guardian {
 		return defined( 'WPMU_PLUGIN_DIR' ) ? WPMU_PLUGIN_DIR : WP_CONTENT_DIR . '/mu-plugins';
 	}
 
-	/**
-	 * Use the existing site-specific private quarantine location, outside webroot.
+	/** Resolve configured durable storage without silently relocating existing evidence.
+	 * GWQSH_PRIVATE_STORAGE_DIR is an operator-owned absolute base directory.
+	 * Existing installations retain their legacy location unless explicitly configured.
 	 */
 	public static function state_dir() {
 		$hash = substr( hash_hmac( 'sha256', home_url(), wp_salt( 'auth' ) ), 0, 20 );
+		if ( defined( 'GWQSH_PRIVATE_STORAGE_DIR' ) ) {
+			return is_string( GWQSH_PRIVATE_STORAGE_DIR ) && '' !== GWQSH_PRIVATE_STORAGE_DIR ? rtrim( GWQSH_PRIVATE_STORAGE_DIR, '/' ) . '/gwqsh-quarantine-' . $hash : '';
+		}
 		return rtrim( realpath( get_temp_dir() ) ? realpath( get_temp_dir() ) : get_temp_dir(), '/\\' ) . '/gwqsh-quarantine-' . $hash;
 	}
 
-	/** Ensure private state cannot be placed below a public document root. */
-	public static function state_dir_is_private() {
-		$state = self::state_dir();
-		if ( ! is_string( $state ) || '' === $state || is_link( $state ) ) {
+	/** Validate the final destination and every existing ancestor, including missing parents.
+	 * Additional vhost/alias document roots must be declared through GWQSH_PUBLIC_DOCUMENT_ROOTS.
+	 * Unknown server aliases cannot be discovered safely from PHP.
+	 *
+	 * @param string $state Absolute candidate directory.
+	 * @return bool Whether the candidate is outside every known public root.
+	 */
+	public static function private_path( $state ) {
+		if ( ! is_string( $state ) || '' === $state || preg_match( '/[\x00-\x1f\x7f]/', $state ) || false !== strpos( $state, '://' ) ) {
 			return false;
 		}
-		$state_root = realpath( dirname( $state ) );
-		if ( ! $state_root ) {
+		$windows = 'Windows' === PHP_OS_FAMILY;
+		if ( $windows ) {
+			$state = str_replace( '\\', '/', $state );
+			// Only local absolute drives: no UNC, device namespaces, ADS or aliases.
+			if ( ! preg_match( '#^[a-zA-Z]:/[^:]++$#D', $state ) || strpos( $state, '//') !== false || preg_match( '/[<>"|?*]/', $state ) ) { return false; }
+			foreach ( explode( '/', substr( $state, 3 ) ) as $part ) {
+				if ( '' !== $part && ( preg_match( '/[. ]$/D', $part ) || preg_match( '/^(?:CON|PRN|AUX|NUL|COM[1-9\x{00b9}\x{00b2}\x{00b3}]|LPT[1-9\x{00b9}\x{00b2}\x{00b3}])(?:\.|$)/iu', $part ) ) ) { return false; }
+			}
+		} elseif ( '/' !== substr( $state, 0, 1 ) || str_starts_with( $state, '//' ) || false !== strpos( $state, '\\' ) ) { return false; }
+		if ( preg_match( '#(^|/)\.{1,2}(/|$)#', $state ) ) { return false; }
+		$state = rtrim( $state, '/' );
+		$probe = $state;
+		while ( dirname( $probe ) !== $probe ) {
+			if ( is_link( $probe ) || ( file_exists( $probe ) && ! is_dir( $probe ) ) ) {
+				return false;
+			}
+			if ( $windows && file_exists( $probe ) ) {
+				// PHP is_link does not consistently identify all junctions. Compare
+				// each existing ancestor with its resolved path, case-insensitively.
+				$resolved = realpath( $probe );
+				if ( ! $resolved || 0 !== strcasecmp( rtrim( str_replace( '\\', '/', $resolved ), '/' ), $probe ) ) { return false; }
+			}
+			$probe = dirname( $probe );
+		}
+		$ancestor = $state;
+		while ( ! file_exists( $ancestor ) && dirname( $ancestor ) !== $ancestor ) {
+			$ancestor = dirname( $ancestor );
+		}
+		$real = realpath( $ancestor );
+		if ( ! $real ) {
 			return false;
 		}
-		$state_root = rtrim( str_replace( '\\', '/', $state_root ), '/' );
-		$public_roots = array( ABSPATH, WP_CONTENT_DIR );
+		$candidate = rtrim( str_replace( '\\', '/', $real ), '/' ) . substr( $state, strlen( $ancestor ) );
+		if ( $windows ) { $candidate = strtolower( $candidate ); }
+		$public_roots = array_merge( array( ABSPATH, WP_CONTENT_DIR ), GWQSH_Path_Guard::allowed_roots() );
 		if ( ! empty( $_SERVER['DOCUMENT_ROOT'] ) && is_string( $_SERVER['DOCUMENT_ROOT'] ) ) {
 			$public_roots[] = wp_unslash( $_SERVER['DOCUMENT_ROOT'] );
 		}
+		if ( defined( 'GWQSH_PUBLIC_DOCUMENT_ROOTS' ) ) {
+			if ( ! is_array( GWQSH_PUBLIC_DOCUMENT_ROOTS ) ) {
+				return false;
+			}
+			$public_roots = array_merge( $public_roots, GWQSH_PUBLIC_DOCUMENT_ROOTS );
+		}
 		foreach ( $public_roots as $root ) {
-			$real = realpath( $root );
-			if ( $real ) {
-				$real = rtrim( str_replace( '\\', '/', $real ), '/' );
-				if ( $state_root === $real || 0 === strpos( $state_root, $real . '/' ) ) {
-					return false;
-				}
+			if ( ! is_string( $root ) || '' === $root || ! realpath( $root ) ) {
+				return false;
+			}
+			$public = rtrim( str_replace( '\\', '/', realpath( $root ) ), '/' );
+			if ( $windows ) { $public = strtolower( $public ); }
+			// Reject public descendants and ancestors: never chmod a document-root parent.
+			if ( $candidate === $public || 0 === strpos( $candidate, $public . '/' ) || 0 === strpos( $public, $candidate . '/' ) ) {
+				return false;
 			}
 		}
-		return true;
+		return '' !== $candidate;
+	}
+
+	/** Read native Windows ACLs; never modify permissions or interpolate shell input.
+	 * Reject unknown owners and any Allow ACE outside this process, SYSTEM and
+	 * local Administrators. Disabled process support or failed inspection is unsafe.
+	 * Missing descendants inherit only from the nearest existing private directory.
+	 */
+	public static function windows_private_acl( $path ) {
+		static $cache = array();
+		if ( 'Windows' !== PHP_OS_FAMILY || ! self::private_path( $path ) || ! function_exists( 'proc_open' ) ) { return false; }
+		while ( ! file_exists( $path ) && dirname( $path ) !== $path ) { $path = dirname( $path ); }
+		$system_root = getenv( 'SystemRoot' );
+		if ( ! is_string( $system_root ) || ! preg_match( '#^[a-zA-Z]:[\\\\/]#', $system_root ) ) { return false; }
+		$cache_key = $path . '|' . $system_root;
+		if ( isset( $cache[ $cache_key ] ) ) { return $cache[ $cache_key ]; }
+		$executable = rtrim( $system_root, '/\\' ) . '/System32/WindowsPowerShell/v1.0/powershell.exe';
+		if ( ! is_file( $executable ) || ! is_dir( $path ) ) { return false; }
+		$encoded = base64_encode( $path );
+		$script = '$ErrorActionPreference="Stop";try{' .
+			'$p=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String("' . $encoded . '"));' .
+			'$a=Get-Acl -LiteralPath $p;$s=[Security.Principal.WindowsIdentity]::GetCurrent().User.Value;' .
+			'$allowed=@($s,"S-1-5-18","S-1-5-32-544");$ok=$allowed -contains $a.GetOwner([Security.Principal.SecurityIdentifier]).Value;' .
+			'$q=$p;while($q){if((Get-Item -LiteralPath $q -Force).Attributes -band [IO.FileAttributes]::ReparsePoint){$ok=$false};$q=[IO.Path]::GetDirectoryName($q)};' .
+			'$rules=$a.GetAccessRules($true,$true,[Security.Principal.SecurityIdentifier]);$allow=0;' .
+			'foreach($r in $rules){if($r.AccessControlType -eq "Allow"){$allow++;if($allowed -notcontains $r.IdentityReference.Value){$ok=$false}}};' .
+			'[Console]::Write((@{private=($ok -and $allow -gt 0)}|ConvertTo-Json -Compress));exit 0}catch{exit 1}';
+		$process = null; $pipes = array();
+		try {
+			$process = @proc_open( array( $executable, '-NoProfile', '-NonInteractive', '-Command', $script ), array( 0 => array( 'pipe', 'r' ), 1 => array( 'pipe', 'w' ), 2 => array( 'pipe', 'w' ) ), $pipes, null, null, array( 'bypass_shell' => true ) );
+			if ( ! is_resource( $process ) ) { return false; }
+			fclose( $pipes[0] ); unset( $pipes[0] );
+			stream_set_blocking( $pipes[1], false ); stream_set_blocking( $pipes[2], false );
+			$output = ''; $errors = ''; $deadline = microtime( true ) + 10;
+			do {
+				$output .= stream_get_contents( $pipes[1] ); $errors .= stream_get_contents( $pipes[2] );
+				$status = proc_get_status( $process );
+				if ( strlen( $output ) + strlen( $errors ) > 65536 || microtime( true ) >= $deadline ) { proc_terminate( $process ); return false; }
+				if ( $status['running'] ) { usleep( 10000 ); }
+			} while ( $status['running'] );
+			$output .= stream_get_contents( $pipes[1] ); $errors .= stream_get_contents( $pipes[2] );
+			$result = json_decode( $output, true );
+			$is_private = ( 0 === $status['exitcode'] && '' === $errors && is_array( $result ) && true === ( $result['private'] ?? false ) );
+			$cache[ $cache_key ] = $is_private;
+			return $is_private;
+		} catch ( Throwable $error ) {
+			return false;
+		} finally {
+			foreach ( $pipes as $pipe ) { if ( is_resource( $pipe ) ) { fclose( $pipe ); } }
+			if ( is_resource( $process ) ) { proc_close( $process ); }
+		}
+	}
+
+	/** Ensure private state cannot be placed below a known public document root. */
+	public static function state_dir_is_private() {
+		// Windows needs an explicitly provisioned ACL-protected durable base;
+		// do not probe or create a default temporary directory on ordinary requests.
+		if ( 'Windows' === PHP_OS_FAMILY && ! defined( 'GWQSH_PRIVATE_STORAGE_DIR' ) ) { return false; }
+		$path = self::state_dir();
+		return self::private_path( $path ) && ( 'Windows' !== PHP_OS_FAMILY || self::windows_private_acl( $path ) );
 	}
 
 	/**

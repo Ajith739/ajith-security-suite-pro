@@ -128,6 +128,11 @@ if ( ! class_exists( 'GWQSH_Security_Runtime', false ) ) {
 				$syntax = '';
 				for ( $j = $i + 2; $j < $count; $j++ ) {
 					if ( strlen( $raw ) >= 8192 ) {
+						$calls[] = array(
+							'name'   => '__analysis_limit',
+							'raw'    => '',
+							'syntax' => '',
+						);
 						break;
 					}
 					$part = $tokens[ $j ];
@@ -164,7 +169,8 @@ if ( ! class_exists( 'GWQSH_Security_Runtime', false ) ) {
 		 * @param mixed $content Content.
 		 */
 		public static function analyze( $content ) {
-			$content = substr( $content, 0, self::LIMIT );
+			$truncated = strlen( $content ) > self::LIMIT;
+			$content   = substr( $content, 0, self::LIMIT );
 			if ( ! self::token_budget( $content ) ) {
 				return array(
 					'score'      => 0,
@@ -206,7 +212,7 @@ if ( ! class_exists( 'GWQSH_Security_Runtime', false ) ) {
 				'score'      => $rules ? max( $rules ) : 0,
 				'rules'      => array_keys( $rules ),
 				'auto_block' => ! empty( $rules ),
-				'partial'    => in_array( '__analysis_limit', $names, true ),
+				'partial'    => $truncated || in_array( '__analysis_limit', $names, true ),
 			);
 		}
 
@@ -217,7 +223,7 @@ if ( ! class_exists( 'GWQSH_Security_Runtime', false ) ) {
 		 * @param mixed $content Content.
 		 */
 		public static function atomic_write( $path, $content ) {
-			if ( is_link( $path ) || ! self::safe_path( dirname( $path ) . DIRECTORY_SEPARATOR . 'index.php', dirname( $path ) ) ) {
+			if ( ! self::safe_path( dirname( $path ) . DIRECTORY_SEPARATOR . 'index.php', dirname( $path ) ) ) {
 				return false;
 			}
 			$temp = dirname( $path ) . '/.' . bin2hex( random_bytes( 12 ) ) . '.tmp';
@@ -233,7 +239,8 @@ if ( ! class_exists( 'GWQSH_Security_Runtime', false ) ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_chmod -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
 			@chmod( $temp, 0600 );
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
-			$ok = $ok && ! is_link( $path ) && @rename( $temp, $path );
+			clearstatcache( true, $path );
+				$ok = $ok && ! is_link( $path ) && @rename( $temp, $path );
 			if ( is_file( $temp ) ) {
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink -- Validated local security file operation; atomic writes, locks and verified failure handling require direct filesystem access.
 				@unlink( $temp );

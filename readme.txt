@@ -4,7 +4,7 @@ Tags: security, firewall, two factor authentication, passkeys, file integrity
 Requires at least: 5.3
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.2.0-rc.1
+Stable tag: 1.3.0-rc.5
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,13 @@ The upgrade was tested on the local WordPress 7.1.3 / PHP 8.0.30 installation. P
 8. Module configuration and import/export in light/dark themes.
 
 == Changelog ==
+
+= 1.3.0-rc.5 (development candidate, staging only) =
+* Merge enhanced bounded WAF multipart, XML and REST inspection with RC4 private-file probe shield.
+* Restore policy-respecting XML-RPC restrictions, hardened malware file root containment and exact-password breach checks.
+* Add permission-checked Security Doctor in settings and WP-CLI.
+* Additional validation is required before production deployment; no commercial threat-intelligence service is included.
+
 
 = 1.2.0-rc.1 =
 * Fail closed on malformed Ed25519 signatures across native and WordPress Sodium implementations.

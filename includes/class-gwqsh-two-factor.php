@@ -736,18 +736,22 @@ final class GWQSH_Two_Factor {
 			return new WP_Error( 'gwqsh_challenge_invalid', 'The 2FA session has expired. Sign in with your password again.' ); }
 		$key  = 'gwqsh_2fa_challenge_' . hash( 'sha256', $token );
 		$data = get_transient( $key );
-		if ( ! is_array( $data ) || empty( $data['user_id'] ) || $data['expires'] <= time() || $data['attempts'] >= 5 || ! hash_equals( $data['ip'], hash( 'sha256', GWQSH_Settings::get_client_ip() ) ) ) {
+		if ( ! is_array( $data ) || empty( $data['user_id'] ) || ! is_int( $data['expires'] ?? null ) || $data['expires'] <= time() || ! is_string( $data['ip'] ?? null ) || ! hash_equals( $data['ip'], hash( 'sha256', GWQSH_Settings::get_client_ip() ) ) ) {
 			delete_transient( $key );
 			return new WP_Error( 'gwqsh_challenge_invalid', 'The 2FA session has expired. Sign in with your password again.' );
 		}
-		// Disabling 2FA invalidates pending challenges instead of turning one into a password substitute.
-		if ( ! self::effective_enabled( $data['user_id'] ) || empty( $data['factor'] ) || ! hash_equals( $data['factor'], hash( 'sha256', (string) get_user_meta( $data['user_id'], 'gwqsh_2fa_secret', true ) ) ) ) {
+		// Password resets and factor changes both invalidate password-issued challenges.
+		$resolved_user = get_userdata( $data['user_id'] );
+		if ( ! $resolved_user || ! is_string( $data['fingerprint'] ?? null ) || ! hash_equals( $data['fingerprint'], hash( 'sha256', $resolved_user->user_pass ) ) || ! self::effective_enabled( $data['user_id'] ) || ! is_string( $data['factor'] ?? null ) || ! hash_equals( $data['factor'], hash( 'sha256', (string) get_user_meta( $data['user_id'], 'gwqsh_2fa_secret', true ) ) ) ) {
 			delete_transient( $key );
 			return new WP_Error( 'gwqsh_challenge_invalid', 'Authentication settings changed. Sign in with your password again.' ); }
-		++$data['attempts'];
-		set_transient( $key, $data, max( 1, $data['expires'] - time() ) );
+		// Atomic database counter prevents parallel requests losing attempt increments.
+		$attempts = GWQSH_Enterprise_Store::hit( '2fa-challenge', hash( 'sha256', $token ), 600, $data['expires'] - 300 );
+		if ( null === $attempts || $attempts > 5 ) {
+			delete_transient( $key );
+			return new WP_Error( 'gwqsh_challenge_invalid', 'The 2FA session has expired. Sign in with your password again.' );
+		}
 		$GLOBALS['gwqsh_2fa_challenge'] = $token;
-		$resolved_user                  = get_userdata( $data['user_id'] );
 		return $resolved_user ? $resolved_user : new WP_Error( 'gwqsh_challenge_invalid', 'Account unavailable.' );
 	}
 	/**
@@ -793,6 +797,7 @@ final class GWQSH_Two_Factor {
 					array(
 						'user_id'  => $user->ID,
 						'factor'   => hash( 'sha256', (string) get_user_meta( $user->ID, 'gwqsh_2fa_secret', true ) ),
+						'fingerprint' => hash( 'sha256', $user->user_pass ),
 						'expires'  => time() + 300,
 						'attempts' => 0,
 						'ip'       => hash( 'sha256', GWQSH_Settings::get_client_ip() ),

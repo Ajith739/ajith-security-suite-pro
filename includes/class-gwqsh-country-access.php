@@ -134,7 +134,7 @@ final class GWQSH_Country_Access {
 			return new WP_Error( 'ranges', 'Invalid proxy range database.' );
 		}
 		foreach ( $ranges as $range ) {
-			if ( ! is_string( $range ) || ! str_contains( $range, '/' ) || ! GWQSH_Network::matches( explode( '/', $range )[0], $range ) ) {
+			if ( ! is_string( $range ) || false === strpos( $range, '/' ) || ! GWQSH_Network::matches( explode( '/', $range )[0], $range ) ) {
 				return new WP_Error( 'ranges', 'Invalid proxy CIDR.' );
 			}
 		}

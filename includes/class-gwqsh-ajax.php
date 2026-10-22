@@ -57,7 +57,7 @@ final class GWQSH_Ajax {
 				wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 ); }
 			wp_send_json_success( $result );
 		}
-		$high_risk = array( 'restore_file', 'restore_trusted', 'restore_quarantine', 'bulk_restore_quarantine', 'delete_quarantine', 'bulk_delete_quarantine', 'clear_all_quarantine', 'accept_current', 'rebuild_baseline', 'config_import' );
+		$high_risk = array( 'restore_file', 'restore_trusted', 'restore_quarantine', 'bulk_restore_quarantine', 'delete_quarantine', 'bulk_delete_quarantine', 'clear_all_quarantine', 'accept_current', 'rebuild_baseline', 'config_import', 'backup_delete' );
 		if ( in_array( $subaction, $high_risk, true ) ) {
 			$verification = GWQSH_Enterprise_UI::consume_proof( sanitize_text_field( wp_unslash( $_POST['operation_token'] ?? '' ) ) );
 			if ( is_wp_error( $verification ) ) {
@@ -110,6 +110,21 @@ final class GWQSH_Ajax {
 				}
 				wp_send_json_success( $result );
 				break;
+			case 'database_repair_preview':
+			case 'database_repair_apply':
+			case 'database_repair_rollback':
+				if ( 'database_repair_preview' === $subaction ) {
+					$result = GWQSH_Database_Remediation::preview( $request['job_id'] ?? '', absint( $request['post_id'] ?? 0 ), $request['replacement'] ?? '' );
+				} elseif ( 'database_repair_apply' === $subaction ) {
+					$result = GWQSH_Database_Remediation::apply( $request['ticket'] ?? '', $request['confirmed'] ?? '', $request['operation_token'] ?? '' );
+				} else {
+					$result = GWQSH_Database_Remediation::rollback( $request['ticket'] ?? '', $request['confirmed'] ?? '', $request['operation_token'] ?? '' );
+				}
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
 			case 'database_baseline_rollback':
 				$result = GWQSH_Database_Context::rollback( sanitize_text_field( wp_unslash( $_POST['confirmed'] ?? '' ) ), sanitize_text_field( wp_unslash( $_POST['operation_token'] ?? '' ) ) );
 				if ( is_wp_error( $result ) ) {
@@ -144,6 +159,125 @@ final class GWQSH_Ajax {
 					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
 				}
 				wp_send_json_success( $result );
+				break;
+
+			/* ── Backup Engine ──────────────────────────────────────── */
+			case 'backup_create':
+				$context = sanitize_key( $request['context'] ?? 'manual' );
+				$result  = GWQSH_Backup_Engine::create_database_backup( $context );
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'backup_continue':
+			case 'backup_cancel':
+				$id = sanitize_text_field( $request['backup_id'] ?? '' );
+				$result = 'backup_cancel' === $subaction ? GWQSH_Backup_Engine::cancel_database_backup( $id ) : GWQSH_Backup_Engine::continue_database_backup( $id );
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'backup_list':
+				$result = GWQSH_Backup_Engine::list_backups();
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'backup_verify':
+				$result = GWQSH_Backup_Engine::verify_backup( sanitize_text_field( $request['backup_id'] ?? '' ) );
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'backup_delete':
+				if ( ( $request['confirmation'] ?? '' ) !== 'DELETE ' . ( $request['backup_id'] ?? '' ) ) {
+					wp_send_json_error( array( 'message' => 'Confirm the exact backup identifier.' ), 400 );
+				}
+				$result = GWQSH_Backup_Engine::delete_backup( sanitize_text_field( $request['backup_id'] ?? '' ) );
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( array( 'deleted' => true ) );
+				break;
+			case 'backup_core_check':
+				$result = GWQSH_Backup_Engine::restore_core_files();
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+
+			/* ── Options Remediation ────────────────────────────────── */
+			case 'db_option_preview':
+				$result = GWQSH_Database_Remediation::preview_option(
+					sanitize_text_field( $request['job_id'] ?? '' ),
+					absint( $request['option_id'] ?? 0 ),
+					wp_unslash( $request['replacement'] ?? '' )
+				);
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'db_option_apply':
+				$result = GWQSH_Database_Remediation::apply_option(
+					sanitize_text_field( $request['ticket'] ?? '' ),
+					sanitize_text_field( $request['confirmation'] ?? '' ),
+					sanitize_text_field( $request['proof'] ?? '' )
+				);
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'db_option_rollback':
+				$result = GWQSH_Database_Remediation::rollback_option(
+					sanitize_text_field( $request['ticket'] ?? '' ),
+					sanitize_text_field( $request['confirmation'] ?? '' ),
+					sanitize_text_field( $request['proof'] ?? '' )
+				);
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+
+			/* ── Auth Hardening Audit ───────────────────────────────── */
+			case 'app_password_audit':
+				$result = GWQSH_Auth_Hardening::audit_application_passwords();
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+
+			/* ── Wordfence-Grade Security Integrations ──────────────── */
+			case 'diff_plugin_file':
+				$file   = sanitize_text_field( $request['file'] ?? '' );
+				$result = GWQSH_File_Integrity::diff_plugin_file( $file );
+				if ( is_wp_error( $result ) ) {
+					wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+				}
+				wp_send_json_success( $result );
+				break;
+			case 'plugin_checksums_check':
+				$slug    = sanitize_text_field( $request['slug'] ?? '' );
+				$version = sanitize_text_field( $request['version'] ?? '' );
+				$result  = GWQSH_File_Integrity::get_plugin_checksums( $slug, $version );
+				wp_send_json_success( array( 'slug' => $slug, 'version' => $version, 'count' => count( $result ), 'checksums' => $result ) );
+				break;
+			case 'abandoned_plugins_audit':
+				$result = GWQSH_Vulnerabilities::audit_installed_plugins();
+				wp_send_json_success( array( 'findings' => $result, 'total' => count( $result ) ) );
+				break;
+			case 'verify_leaked_password':
+				$pw     = (string) ( $request['password'] ?? '' );
+				$leaked = GWQSH_Auth_Hardening::is_password_leaked( $pw );
+				wp_send_json_success( array( 'leaked' => $leaked ) );
 				break;
 			case 'config_export':
 				wp_send_json_success( GWQSH_Customization::export() );

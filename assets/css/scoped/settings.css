@@ -554,3 +554,13 @@ html[data-theme="dark"] #gracewell-security-suite-pro-app {
     align-items: center;
     flex-wrap: wrap;
 }
+/* Read-only diagnostics span the settings grid at every breakpoint. */
+#gracewell-security-suite-pro-app .qs-settings-grid-10 #gwqsh-security-doctor {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+#gracewell-security-suite-pro-app #gwqsh-security-doctor .qs-info-table small {
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+  margin-top: 0.25rem;
+}

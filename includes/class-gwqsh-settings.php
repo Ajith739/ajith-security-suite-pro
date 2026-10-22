@@ -17,14 +17,9 @@ final class GWQSH_Settings {
 	public static function migrate_removed_features() {
 		if ( get_option( 'gwqsh_per_user_2fa_migration' ) ) {
 			return; }
-		$settings = (array) get_option( 'gwqsh_settings', array() );
-		foreach ( array( 'emailnotif', 'email', 'n_failed', 'n_files', 'n_updates' ) as $key ) {
-			unset( $settings[ $key ] ); }
-		update_option( 'gwqsh_settings', $settings );
-		$policy = (array) get_option( 'gwqsh_two_factor_settings', array() );
-		unset( $policy['enabled'], $policy['email_notifications'] );
-		update_option( 'gwqsh_two_factor_settings', $policy );
-		delete_metadata( 'user', 0, 'gwqsh_recovery_email', '', true );
+		// Readers whitelist supported settings and ignore retired global switches.
+		// Keep original options and legacy metadata intact for operator rollback;
+		// recovery uses only separately verified destinations, never this legacy data.
 		update_option( 'gwqsh_per_user_2fa_migration', 1, false );
 	}
 

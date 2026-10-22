@@ -113,31 +113,8 @@ final class GWQSH_DB {
         ) {$charset_collate};";
 		dbDelta( $sql_history );
 
-		if ( '0' === $previous_version ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-			$wpdb->delete(
-				$table_activity,
-				array(
-					'event_name' => 'Plugin activated',
-					'details'    => 'Gracewell Security Suite Pro initialized and active',
-					'ip_address' => '127.0.0.1',
-				)
-			);
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-			$wpdb->delete(
-				$table_activity,
-				array(
-					'event_name' => 'Settings changed',
-					'details'    => 'Security defaults established',
-					'ip_address' => '127.0.0.1',
-				)
-			);
-		}
-
-		if ( '0' === $previous_version ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Fixed plugin-owned table identifier from the WordPress prefix.
-			$wpdb->query( "DELETE FROM {$table_scan} WHERE file_type = 'Core' AND file_path LIKE '/wp-content/%'" );
-		}
+		// A missing version marker does not make existing logs or findings disposable.
+		// Initialization only adds schema; evidence changes require explicit review.
 
 		if ( is_wp_error( GWQSH_Enterprise_Store::install() ) ) {
 			return; }

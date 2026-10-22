@@ -420,6 +420,7 @@ require GWQSH_PATH . 'admin/views/dashboard-icons.php';
 			</div>
 		</section>
 
+		<?php GWQSH_Security_Doctor::render(); ?>
 	</div>
 </div>
 </main>

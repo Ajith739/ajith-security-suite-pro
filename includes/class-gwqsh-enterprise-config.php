@@ -98,7 +98,7 @@ final class GWQSH_Enterprise_Config {
 				'delivery_retention' => array( 'number', 7, 'Delivery audit retention (days)', array( 1, 30 ) ),
 			),
 			'waf'        => array(
-				'mode'          => array(
+				'mode'                 => array(
 					'select',
 					'block',
 					'Firewall operation mode',
@@ -109,9 +109,9 @@ final class GWQSH_Enterprise_Config {
 						'recovery' => 'Emergency recovery (WAF paused)',
 					),
 				),
-				'enforce_new'   => array( 'bool', false, 'Enforce new rules (otherwise report only)' ),
+				'enforce_new'          => array( 'bool', false, 'Enforce new rules (otherwise report only)' ),
 				'enforce_sql_extended' => array( 'bool', false, 'Enforce extended SQL correlations (validate compatibility in report mode first)' ),
-				'authenticated' => array(
+				'authenticated'        => array(
 					'select',
 					'report',
 					'Authenticated request inspection',
@@ -121,14 +121,18 @@ final class GWQSH_Enterprise_Config {
 						'block'    => 'Block tested matches',
 					),
 				),
-				'traversal'     => array( 'bool', true, 'Path traversal detection' ),
-				'inclusion'     => array( 'bool', true, 'File inclusion detection' ),
-				'uploads'       => array( 'bool', true, 'Unauthenticated executable upload attempts' ),
-				'post'          => array( 'bool', true, 'Inspect bounded noncredential POST values' ),
-				'rest_json'     => array( 'bool', true, 'Inspect bounded REST JSON after authentication (test in report mode first)' ),
-				'rate'          => array( 'bool', false, 'Enable unauthenticated request rate limit' ),
-				'requests'      => array( 'number', 100, 'Requests per minute per IP', array( 10, 10000 ) ),
-				'exclusions'    => array( 'paths', '', 'Excluded exact paths (one per line)' ),
+				'traversal'            => array( 'bool', true, 'Path traversal detection' ),
+				'inclusion'            => array( 'bool', true, 'File inclusion detection' ),
+				'uploads'              => array( 'bool', true, 'Unauthenticated executable upload attempts' ),
+				'post'                 => array( 'bool', true, 'Inspect bounded noncredential POST values' ),
+				'rest_json'            => array( 'bool', true, 'Inspect bounded REST JSON after authentication (test in report mode first)' ),
+				'bot_probe'            => array( 'bool', true, 'Detect high-confidence anonymous private-file probing; enforce in WAF block mode' ),
+				'bot_auto_hold'        => array( 'bool', false, 'Optional temporary IP holds for repeated private-file probes (confirm proxy/NAT settings first)' ),
+				'bot_threshold'        => array( 'number', 5, 'Probes per 2 minutes before a temporary hold', array( 3, 50 ) ),
+				'bot_hold_seconds'     => array( 'number', 600, 'Temporary hold in seconds', array( 60, 3600 ) ),
+				'rate'                 => array( 'bool', false, 'Enable unauthenticated request rate limit' ),
+				'requests'             => array( 'number', 100, 'Requests per minute per IP', array( 10, 10000 ) ),
+				'exclusions'           => array( 'paths', '', 'Excluded exact paths (one per line)' ),
 			),
 			'signatures' => array(
 				'enabled'         => array( 'bool', false, 'Enable configured signed-feed updates' ),
@@ -150,11 +154,55 @@ final class GWQSH_Enterprise_Config {
 	 */
 	public static function get( $section ) {
 		$all = (array) get_option( 'gwqsh_enterprise', array() );
+		if ( is_multisite() && 'waf' === $section ) {
+			$network = (array) get_site_option( 'gwqsh_enterprise_policy', array() );
+			if ( is_array( $network['waf']['settings'] ?? null ) ) {
+				$local      = (array) ( $all['waf'] ?? array() );
+				$all['waf'] = ! empty( $network['waf']['locked'] ) ? array_merge( $local, $network['waf']['settings'] ) : array_merge( $network['waf']['settings'], $local );
+			}
+		}
 		$out = array();
 		foreach ( self::schema()[ $section ] ?? array() as $key => $field ) {
 			$out[ $key ] = 'secret' === $field[0] ? '' : ( $all[ $section ][ $key ] ?? $field[1] );}
 		return $out;
 	}
+	/** Save or revoke the validated, nonsecret network WAF policy.
+	 * Site overrides remain stored, so removing a network lock restores local choices.
+	 *
+	 * @param array|null $input Full WAF settings, or null to revoke inheritance.
+	 * @param bool       $locked Whether the network settings override saved site settings.
+	 * @return true|WP_Error Outcome.
+	 */
+	public static function save_network_waf( $input, $locked = true ) {
+		if ( ! is_multisite() || ! is_super_admin() || ! current_user_can( 'manage_network_options' ) ) {
+			return new WP_Error( 'permission', 'A network super administrator is required.' );
+		}
+		$policy = (array) get_site_option( 'gwqsh_enterprise_policy', array() );
+		if ( null === $input ) {
+			unset( $policy['waf'] );
+		} else {
+			if ( ! is_array( $input ) || ! is_bool( $locked ) || array_diff( array_keys( $input ), array_keys( self::schema()['waf'] ) ) ) {
+				return new WP_Error( 'policy', 'Use the existing WAF settings schema and a boolean override lock.' );
+			}
+			$value = self::validate( 'waf', $input );
+			if ( is_wp_error( $value ) ) {
+				return $value;
+			}
+			$policy['waf'] = array(
+				'settings'   => $value,
+				'locked'     => $locked,
+				'updated_at' => time(),
+				'updated_by' => get_current_user_id(),
+			);
+		}
+		update_site_option( 'gwqsh_enterprise_policy', $policy );
+		if ( get_site_option( 'gwqsh_enterprise_policy', array() ) !== $policy ) {
+			return new WP_Error( 'storage', 'The network policy could not be verified.' );
+		}
+		GWQSH_Activity_Logger::log( 'Network WAF policy changed', null === $input ? 'Network inheritance removed; retained site settings apply.' : ( $locked ? 'Network WAF policy locked.' : 'Network WAF defaults; site overrides retained.' ), 'Security' );
+		return true;
+	}
+
 	/**
 	 * Secret.
 	 *

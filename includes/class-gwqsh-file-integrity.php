@@ -113,6 +113,112 @@ final class GWQSH_File_Integrity {
 			ARRAY_FILTER_USE_BOTH
 		);
 	}
+
+	/** Fetch official plugin checksums from WordPress.org API with transient caching.
+	 *
+	 * @param string $slug Plugin directory slug.
+	 * @param string $version Installed version.
+	 * @return array Checksum mapping [relative_path => ['md5' => hash]].
+	 */
+	public static function get_plugin_checksums( $slug, $version ) {
+		if ( ! is_string( $slug ) || ! is_string( $version ) || '' === $slug || '' === $version ) {
+			return array();
+		}
+		$cache_key = 'gwqsh_plug_chk_' . md5( $slug . '|' . $version );
+		$cached    = get_transient( $cache_key );
+		if ( is_array( $cached ) ) {
+			return $cached;
+		}
+		$url      = sprintf( 'https://downloads.wordpress.org/plugin-checksums/%s/%s.json', rawurlencode( $slug ), rawurlencode( $version ) );
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout'             => 4,
+				'limit_response_size' => 2097152,
+			)
+		);
+		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			set_transient( $cache_key, array(), HOUR_IN_SECONDS );
+			return array();
+		}
+		$data  = json_decode( wp_remote_retrieve_body( $response ), true );
+		$files = is_array( $data['files'] ?? null ) ? $data['files'] : array();
+		set_transient( $cache_key, $files, WEEK_IN_SECONDS );
+		return $files;
+	}
+
+	/** Compare a local plugin file against the official WordPress.org repository version and produce a diff.
+	 *
+	 * @param string $relative_path Relative path from ABSPATH, e.g. wp-content/plugins/akismet/akismet.php.
+	 * @return array|WP_Error Comparison metadata and formatted diff.
+	 */
+	public static function diff_plugin_file( $relative_path ) {
+		if ( ! current_user_can( GWQSH_Admin::management_capability() ) ) {
+			return new WP_Error( 'permission', 'Administrative permission required.' );
+		}
+		$resolved = GWQSH_Path_Guard::validate( $relative_path, false );
+		if ( ! $resolved || ! is_file( $resolved['canonical'] ) ) {
+			return new WP_Error( 'not_found', 'Local file not found.' );
+		}
+		if ( ! preg_match( '~^wp-content/plugins/([^/]+)/(.+)$~', $relative_path, $matches ) ) {
+			return new WP_Error( 'invalid_path', 'Not a standard plugin file.' );
+		}
+		$slug       = $matches[1];
+		$inner_path = $matches[2];
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$all_plugins = get_plugins();
+		$version     = '';
+		foreach ( $all_plugins as $file => $meta ) {
+			if ( 0 === strpos( $file, $slug . '/' ) || $file === $slug . '.php' ) {
+				$version = $meta['Version'] ?? '';
+				break;
+			}
+		}
+		if ( ! $version ) {
+			return new WP_Error( 'version_unknown', 'Could not determine installed plugin version.' );
+		}
+		$svn_url  = sprintf( 'https://plugins.svn.wordpress.org/%s/tags/%s/%s', rawurlencode( $slug ), rawurlencode( $version ), str_replace( '%2F', '/', rawurlencode( $inner_path ) ) );
+		$response = wp_remote_get( $svn_url, array( 'timeout' => 8, 'limit_response_size' => 1048576 ) );
+		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			$svn_url  = sprintf( 'https://plugins.svn.wordpress.org/%s/trunk/%s', rawurlencode( $slug ), str_replace( '%2F', '/', rawurlencode( $inner_path ) ) );
+			$response = wp_remote_get( $svn_url, array( 'timeout' => 8, 'limit_response_size' => 1048576 ) );
+			if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+				return new WP_Error( 'repo_unavailable', 'Could not fetch original file from WordPress.org repository.' );
+			}
+		}
+		$repo_content  = wp_remote_retrieve_body( $response );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$local_content = file_get_contents( $resolved['canonical'] );
+		$local_hash    = md5( $local_content );
+		$repo_hash     = md5( $repo_content );
+		$is_identical  = hash_equals( $local_hash, $repo_hash );
+
+		if ( ! $is_identical && function_exists( 'wp_text_diff' ) ) {
+			$diff_html = wp_text_diff(
+				$repo_content,
+				$local_content,
+				array(
+					'title'       => 'File Difference',
+					'title_left'  => 'WordPress.org Original (v' . esc_html( $version ) . ')',
+					'title_right' => 'Local Modified File',
+				)
+			);
+		} else {
+			$diff_html = $is_identical ? '<p class="gwqsh-clean">File is identical to the official repository version.</p>' : '<p class="gwqsh-modified">File differs from official repository release.</p>';
+		}
+
+		return array(
+			'file'         => $relative_path,
+			'slug'         => $slug,
+			'version'      => $version,
+			'is_identical' => $is_identical,
+			'local_md5'    => $local_hash,
+			'repo_md5'     => $repo_hash,
+			'diff_html'    => $diff_html,
+		);
+	}
 	/**
 	 * Get scan history.
 	 */

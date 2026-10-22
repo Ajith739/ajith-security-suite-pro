@@ -13,6 +13,8 @@ final class GWQSH_Vulnerabilities {
 	const HOOK   = 'gwqsh_update_advisories';
 	const ENGINE = '1';
 	const CORE   = 'core:wordpress';
+	/** One request-local verified package, invalidated by bytes, trust or clock second. */
+	private static $runtime_cache = array();
 
 	/** Register asynchronous updates and REST inspection. */
 	public static function init() {
@@ -87,9 +89,10 @@ final class GWQSH_Vulnerabilities {
 	 *
 	 * @param mixed $json Exact response body.
 	 * @param mixed $signature Base64 detached Ed25519 signature.
+	 * @param bool  $allow_retired_patches Permit elapsed patch TTLs when reading or rolling back an otherwise current signed feed. Scoped selection still retires each expired patch.
 	 * @return array|WP_Error Validated package.
 	 */
-	public static function verify( $json, $signature ) {
+	public static function verify( $json, $signature, $allow_retired_patches = false ) {
 		if ( ! function_exists( 'sodium_crypto_sign_verify_detached' ) || ! is_string( $json ) || strlen( $json ) > 1048576 || ! is_string( $signature ) || strlen( $signature ) > 128 ) {
 			return new WP_Error( 'envelope', 'Ed25519 and a bounded signature envelope are required.' );
 		}
@@ -131,7 +134,7 @@ final class GWQSH_Vulnerabilities {
 		}
 		$patch_ids = array();
 		foreach ( $data['patches'] as $patch ) {
-			if ( ! is_array( $patch ) || array_diff( array_keys( $patch ), array( 'id', 'advisory', 'method', 'path', 'parameter', 'operator', 'value', 'expires_at', 'action' ) ) || ! self::identifier( $patch['id'] ?? null ) || isset( $patch_ids[ $patch['id'] ] ) || ! is_string( $patch['advisory'] ?? null ) || ! isset( $ids[ $patch['advisory'] ] ) || ! in_array( $patch['method'] ?? null, array( 'GET', 'POST', 'PUT', 'PATCH', 'DELETE' ), true ) || ! is_string( $patch['path'] ?? null ) || ! preg_match( '~^/(?:wp-json/[A-Za-z0-9_/-]{1,180}|wp-admin/admin-ajax\.php)$~D', $patch['path'] ) || ! is_string( $patch['parameter'] ?? null ) || ! preg_match( '/^[A-Za-z0-9_-]{1,64}$/D', $patch['parameter'] ) || ! in_array( $patch['operator'] ?? null, array( 'equals', 'contains' ), true ) || ! is_string( $patch['value'] ?? null ) || strlen( $patch['value'] ) < 1 || strlen( $patch['value'] ) > 256 || ! is_int( $patch['expires_at'] ?? null ) || $patch['expires_at'] <= $now || $patch['expires_at'] > $data['expires_at'] ) {
+			if ( ! is_array( $patch ) || array_diff( array_keys( $patch ), array( 'id', 'advisory', 'method', 'path', 'parameter', 'operator', 'value', 'expires_at', 'action' ) ) || ! self::identifier( $patch['id'] ?? null ) || isset( $patch_ids[ $patch['id'] ] ) || ! is_string( $patch['advisory'] ?? null ) || ! isset( $ids[ $patch['advisory'] ] ) || ! in_array( $patch['method'] ?? null, array( 'GET', 'POST', 'PUT', 'PATCH', 'DELETE' ), true ) || ! is_string( $patch['path'] ?? null ) || ! preg_match( '~^/(?:wp-json/[A-Za-z0-9_/-]{1,180}|wp-admin/admin-ajax\.php)$~D', $patch['path'] ) || ! is_string( $patch['parameter'] ?? null ) || ! preg_match( '/^[A-Za-z0-9_-]{1,64}$/D', $patch['parameter'] ) || ! in_array( $patch['operator'] ?? null, array( 'equals', 'contains' ), true ) || ! is_string( $patch['value'] ?? null ) || strlen( $patch['value'] ) < 1 || strlen( $patch['value'] ) > 256 || ! is_int( $patch['expires_at'] ?? null ) || $patch['expires_at'] <= 0 || ( ! $allow_retired_patches && $patch['expires_at'] <= $now ) || $patch['expires_at'] > $data['expires_at'] ) {
 				return new WP_Error( 'patch', 'Invalid advisory-bound virtual patch.' );
 			}
 			if ( '/wp-admin/admin-ajax.php' === $patch['path'] && ( ! is_string( $patch['action'] ?? null ) || ! preg_match( '/^[A-Za-z0-9_-]{1,64}$/D', $patch['action'] ) ) ) {
@@ -217,10 +220,22 @@ final class GWQSH_Vulnerabilities {
 	 */
 	public static function database() {
 		$state = (array) get_option( self::STATE, array() );
-		$data  = $state['current']['data'] ?? array();
-		$trust = self::trust();
-		$key   = $trust['keys'][ $data['key_id'] ?? '' ] ?? array();
-		return ( $data['expires_at'] ?? 0 ) > time() && ( $data['publisher'] ?? null ) === ( $trust['publisher'] ?? '' ) && ( $key['not_before'] ?? PHP_INT_MAX ) <= ( $data['issued_at'] ?? 0 ) && ( $key['not_after'] ?? 0 ) >= ( $data['expires_at'] ?? 0 ) && hash_equals( $state['current']['key_fingerprint'] ?? '', hash( 'sha256', $key['public_key'] ?? '' ) ) ? $data : array();
+		// Cached parsed metadata is not authenticated by a public-key fingerprint.
+		// Derive every runtime rule from the exact signed bytes under current trust.
+		$json      = $state['current']['json'] ?? null;
+		$signature = $state['current']['signature'] ?? null;
+		if ( ! is_string( $json ) || strlen( $json ) > 1048576 || ! is_string( $signature ) || strlen( $signature ) > 128 ) {
+			return array();
+		}
+		$fingerprint = hash( 'sha256', $json . "\0" . $signature . "\0" . wp_json_encode( self::trust() ) . "\0" . time() );
+		if ( ( self::$runtime_cache['fingerprint'] ?? '' ) !== $fingerprint ) {
+			$data = self::verify( $json, $signature, true );
+			self::$runtime_cache = array(
+				'fingerprint' => $fingerprint,
+				'data'        => is_wp_error( $data ) ? array() : $data,
+			);
+		}
+		return self::$runtime_cache['data'];
 	}
 
 	/** Revert only to independently reverified bytes; keep downgrade watermark/revocations.
@@ -239,7 +254,7 @@ final class GWQSH_Vulnerabilities {
 			if ( ( $state['current']['data']['version'] ?? 0 ) !== $expected || empty( $state['previous'] ) ) {
 				return new WP_Error( 'changed', 'No previous package or advisory version changed.' );
 			}
-			$data = self::verify( $state['previous']['json'], $state['previous']['signature'] );
+			$data = self::verify( $state['previous']['json'], $state['previous']['signature'], true );
 			if ( is_wp_error( $data ) ) {
 				return $data;
 			}
@@ -367,9 +382,11 @@ final class GWQSH_Vulnerabilities {
 		}
 		$data      = self::database();
 		$state     = (array) get_option( self::STATE, array() );
-		$installed = $state['current']['data'] ?? array();
+		$installed = $data;
 		$inventory = self::inventory();
 		$findings  = array();
+		$assessments = array();
+		$coverage    = array_fill_keys( array_keys( $inventory ), $data ? 'unknown' : 'intelligence_unavailable' );
 		foreach ( $data['advisories'] ?? array() as $advisory ) {
 			// Preserve exact signed bytes and historical packages; normalize lookup only.
 			$key = 'core:WordPress' === $advisory['component'] ? self::CORE : $advisory['component'];
@@ -378,12 +395,30 @@ final class GWQSH_Vulnerabilities {
 			}
 			$component = $inventory[ $key ];
 			$affected  = self::affected( $component['version'], $advisory['ranges'] );
-			if ( false !== $affected ) {
-				$findings[] = array(
-					'advisory'  => $advisory,
-					'installed' => $component,
-					'status'    => null === $affected ? 'Version requires manual review' : 'Affected; update the component',
-				);
+			$revoked   = in_array( $advisory['id'], $state['revoked'] ?? array(), true );
+			$status    = $revoked ? 'revoked' : ( null === $affected ? 'potentially_affected' : ( $affected ? 'confirmed_vulnerable' : 'not_affected' ) );
+			if ( ! $revoked && false === $affected ) {
+				// A version below introduction is not a fixed installation.
+				$fixed = true;
+				foreach ( $advisory['ranges'] as $range ) {
+					if ( null === $range['fixed'] || version_compare( $component['version'], $range['fixed'], '<' ) ) {
+						$fixed = false;
+					}
+				}
+				$status = $fixed ? 'fixed' : 'not_affected';
+			}
+			$assessment = array(
+				'advisory'    => $advisory,
+				'installed'   => $component,
+				'status_code' => $status,
+				'status'      => $revoked ? 'Advisory revoked by publisher' : ( null === $affected ? 'Version requires manual review' : ( $affected ? 'Affected; update the component' : 'Outside the known affected ranges' ) ),
+			);
+			$assessments[] = $assessment;
+			if ( ! $revoked ) {
+				$coverage[ $key ] = 'advisories_available';
+				if ( false !== $affected ) {
+					$findings[] = $assessment;
+				}
 			}
 		}
 		return array(
@@ -394,50 +429,115 @@ final class GWQSH_Vulnerabilities {
 			'publisher'   => $installed['publisher'] ?? '',
 			'inventory'   => $inventory,
 			'findings'    => $findings,
+			'assessments' => $assessments,
+			'coverage'    => $coverage,
 			'health'      => get_option( 'gwqsh_advisory_health', array() ),
 		);
 	}
 
-	/** Match data-only predicates with fresh affected-version gating.
+	/** Select active patches only for this exact endpoint, method and affected version.
+	 * No generic body-size policy may deny unrelated endpoints.
 	 *
-	 * @param string $path Exact normalized endpoint path.
+	 * @param string $path Exact endpoint.
 	 * @param string $method HTTP method.
-	 * @param array  $input Bounded request parameters, never logged.
-	 * @return string Matched patch ID, or no match.
+	 * @return array Applicable verified patch definitions.
 	 */
-	public static function match( $path, $method, array $input ) {
+	public static function scoped_patches( $path, $method ) {
 		$data     = self::database();
 		$state    = (array) get_option( self::STATE, array() );
 		$rules    = array_column( $data['advisories'] ?? array(), null, 'id' );
-		$until    = microtime( true ) + 0.015;
-		$version  = array();
 		$disabled = array_merge( $state['revoked'] ?? array(), explode( "\n", GWQSH_Enterprise_Config::get( 'advisories' )['disabled'] ) );
+		$versions = array();
+		$matches  = array();
 		foreach ( $data['patches'] ?? array() as $patch ) {
-			if ( microtime( true ) > $until ) {
-				self::coverage( 'patch_time_budget' );
-				break;
-			}
-			if ( $patch['path'] !== $path || $patch['method'] !== $method || $patch['expires_at'] <= time() || in_array( $patch['id'], $disabled, true ) || in_array( $patch['advisory'], $disabled, true ) || ! isset( $rules[ $patch['advisory'] ], $input[ $patch['parameter'] ] ) || ! is_string( $input[ $patch['parameter'] ] ) || strlen( $input[ $patch['parameter'] ] ) > 2048 ) {
-				continue;
-			}
-			if ( isset( $patch['action'] ) && ( $input['action'] ?? null ) !== $patch['action'] ) {
-				continue;
-			}
-			$value = $input[ $patch['parameter'] ];
-			if ( 'equals' === $patch['operator'] ? $value !== $patch['value'] : false === strpos( $value, $patch['value'] ) ) {
+			if ( $patch['path'] !== $path || $patch['method'] !== $method || $patch['expires_at'] <= time() || in_array( $patch['id'], $disabled, true ) || in_array( $patch['advisory'], $disabled, true ) || ! isset( $rules[ $patch['advisory'] ] ) ) {
 				continue;
 			}
 			$advisory  = $rules[ $patch['advisory'] ];
 			$component = $advisory['component'];
-			if ( ! array_key_exists( $component, $version ) ) {
-				$version[ $component ] = self::installed_version( $component );
+			if ( ! array_key_exists( $component, $versions ) ) {
+				$versions[ $component ] = self::installed_version( $component );
 			}
-			if ( null === $version[ $component ] || true !== self::affected( $version[ $component ], $advisory['ranges'] ) ) {
+			if ( null !== $versions[ $component ] && true === self::affected( $versions[ $component ], $advisory['ranges'] ) ) {
+				$matches[] = $patch;
+			}
+		}
+		return $matches;
+	}
+
+	/** Evaluate exact patch inputs without silently truncating protected parameters.
+	 *
+	 * @param array $patches Applicable verified patches.
+	 * @param array $input Parsed input, never logged.
+	 * @return array Verdict, ID and explicit coverage reason.
+	 */
+	public static function evaluate( array $patches, array $input, array $limited_parameters = array() ) {
+		$until = microtime( true ) + 0.015;
+		foreach ( $patches as $patch ) {
+			if ( microtime( true ) > $until ) {
+				return array(
+					'status' => 'budget_exceeded',
+					'id'     => $patch['id'],
+					'reason' => 'patch_time_budget',
+				);
+			}
+			if ( isset( $patch['action'] ) ) {
+				$action = $input['action'] ?? null;
+				if ( is_array( $action ) && ( count( $action ) > 8 || in_array( $patch['action'], $action, true ) ) ) {
+					return array( 'status' => 'unsupported_type', 'id' => $patch['id'], 'reason' => 'protected_action_conflict' );
+				}
+				if ( $action !== $patch['action'] ) { continue; }
+			}
+			if ( ! array_key_exists( $patch['parameter'], $input ) ) {
 				continue;
 			}
-			return $patch['id'];
+			if ( isset( $limited_parameters[ $patch['parameter'] ] ) ) {
+				return array( 'status' => 'budget_exceeded', 'id' => $patch['id'], 'reason' => 'protected_parameter_bounds' );
+			}
+			$value = $input[ $patch['parameter'] ];
+			if ( ! is_string( $value ) || strlen( $value ) > 65536 ) {
+				return array(
+					'status' => is_string( $value ) ? 'budget_exceeded' : 'unsupported_type',
+					'id'     => $patch['id'],
+					'reason' => 'protected_parameter_bounds',
+				);
+			}
+			if ( 'equals' === $patch['operator'] ? $value === $patch['value'] : false !== strpos( $value, $patch['value'] ) ) {
+				return array(
+					'status' => 'malicious_match',
+					'id'     => $patch['id'],
+					'reason' => '',
+				);
+			}
 		}
-		return '';
+		return array(
+			'status' => 'fully_inspected',
+			'id'     => '',
+			'reason' => '',
+		);
+	}
+
+	/** Do not silently overwrite conflicting evidence from independent request sources. */
+	public static function merge_input( array $query, array $body ) {
+		foreach ( $body as $key => $value ) {
+			$query[ $key ] = array_key_exists( $key, $query ) && $query[ $key ] !== $value ? array( $query[ $key ], $value ) : $value;
+		}
+		return $query;
+	}
+
+	/** Compatibility adapter: incomplete protected inputs follow patch rollout policy.
+	 *
+	 * @param string $path Endpoint.
+	 * @param string $method Method.
+	 * @param array  $input Parsed inputs.
+	 * @return string Matched or incomplete protected patch ID.
+	 */
+	public static function match( $path, $method, array $input ) {
+		$verdict = self::evaluate( self::scoped_patches( $path, $method ), $input );
+		if ( $verdict['reason'] ) {
+			self::coverage( $verdict['reason'] );
+		}
+		return $verdict['id'];
 	}
 
 	/** Disclose bounded inspection gaps without persisting request content.
@@ -464,23 +564,61 @@ final class GWQSH_Vulnerabilities {
 		if ( null !== $result || ! GWQSH_Settings::is_active() || ! GWQSH_Firewall::settings()['enabled'] || in_array( $policy['mode'], array( 'disabled', 'recovery' ), true ) || 'disabled' === $mode || GWQSH_Country_Access::emergency() || GWQSH_Login_Protection::is_ip_allowlisted( GWQSH_Settings::get_client_ip() ) || in_array( $path, explode( "\n", $policy['exclusions'] ), true ) ) {
 			return $result;
 		}
-		$input = $request->get_query_params();
-		if ( count( $input ) > 128 || strlen( $request->get_body() ) > 16384 || count( $request->get_body_params() ) > 128 ) {
-			self::coverage( 'request_bounds' );
-			if ( 'block' === $mode && ! empty( GWQSH_Enterprise_Config::get( 'advisories' )['enforce'] ) ) {
-				return new WP_Error( 'gwqsh_virtual_patch_incomplete', 'This request exceeded the configured virtual-patch inspection limits.', array( 'status' => 413 ) );
+		$patches = self::scoped_patches( $path, $request->get_method() );
+		if ( ! $patches ) {
+			return $result;
+		}
+		$input  = $request->get_query_params();
+		$reason = '';
+		$limited_parameters = array();
+		if ( strlen( $request->get_body() ) > 1048576 ) {
+			$reason = 'budget_exceeded';
+		} elseif ( $request->get_header( 'content-encoding' ) && 'identity' !== strtolower( $request->get_header( 'content-encoding' ) ) ) {
+			$reason = 'unsupported_type';
+		} elseif ( $request->is_json_content_type() ) {
+			$body = json_decode( $request->get_body(), true, 32 );
+			if ( JSON_ERROR_NONE !== json_last_error() || ! is_array( $body ) ) {
+				$reason = 'parse_error';
+			} else {
+				$input = self::merge_input( $input, $body );
+			}
+		} else {
+			$type  = strtolower( trim( explode( ';', $request->get_header( 'content-type' ) )[0] ) );
+			if ( 'multipart/form-data' === $type ) {
+				$multipart = GWQSH_Firewall::multipart_request( $request );
+				if ( $multipart['error'] ) {
+					$reason = 'inspection_budget_exceeded' === $multipart['state'] ? 'budget_exceeded' : ( 'unsupported_request_format' === $multipart['state'] ? 'unsupported_type' : 'parse_error' );
+				} else {
+					$input = self::merge_input( $input, $multipart['input'] );
+					$limited_parameters = $multipart['limited_parameters'];
+				}
+			} elseif ( in_array( $type, array( '', 'application/x-www-form-urlencoded' ), true ) ) {
+				$request->get_params(); // Trigger WordPress lazy parsing for non-POST form methods.
+				$input = self::merge_input( $input, $request->get_body_params() );
+			} elseif ( $request->get_body() ) {
+				$reason = 'unsupported_type';
+			}
+		}
+		$verdict = $reason ? array(
+			'status' => $reason,
+			'reason' => $reason,
+			'id'     => '',
+		) : self::evaluate( $patches, $input, $limited_parameters );
+		if ( $verdict['reason'] ) {
+			self::coverage( $verdict['reason'] );
+			if ( 'block' === $policy['mode'] && 'block' === $mode && ! empty( GWQSH_Enterprise_Config::get( 'advisories' )['enforce'] ) ) {
+				return new WP_Error(
+					'gwqsh_virtual_patch_incomplete',
+					'The protected endpoint could not be inspected within its security policy.',
+					array(
+						'status'   => 'budget_exceeded' === $verdict['status'] ? 413 : 400,
+						'coverage' => $verdict['status'],
+					)
+				);
 			}
 			return $result;
 		}
-		if ( $request->is_json_content_type() ) {
-			$body = json_decode( $request->get_body(), true, 10 );
-			if ( is_array( $body ) ) {
-				$input = array_merge( $input, $body );
-			}
-		} else {
-			$input = array_merge( $input, $request->get_body_params() );
-		}
-		$id = self::match( $path, $request->get_method(), $input );
+		$id = $verdict['id'];
 		if ( ! $id ) {
 			return $result;
 		}
@@ -498,5 +636,71 @@ final class GWQSH_Vulnerabilities {
 			);
 		}
 		return $report ? $result : new WP_Error( 'gwqsh_virtual_patch', 'This request matched an advisory-specific security rule.', array( 'status' => 403 ) );
+	}
+
+	/** Audit installed plugins against WordPress.org API to detect abandoned or closed plugins.
+	 *
+	 * @return array Findings for outdated, abandoned, or closed plugins.
+	 */
+	public static function audit_installed_plugins() {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$plugins  = get_plugins();
+		$findings = array();
+		foreach ( $plugins as $file => $meta ) {
+			$slug = dirname( $file );
+			if ( '.' === $slug || ! $slug ) {
+				$slug = sanitize_title( $meta['Name'] ?? basename( $file, '.php' ) );
+			}
+			$cache_key = 'gwqsh_plug_info_v2_' . md5( $slug );
+			$info      = get_transient( $cache_key );
+			if ( false === $info ) {
+				$url      = sprintf( 'https://api.wordpress.org/plugins/info/1.2/?action=plugin_information&request[slug]=%s', rawurlencode( $slug ) );
+				$response = wp_remote_get( $url, array( 'timeout' => 3, 'limit_response_size' => 1048576 ) );
+				if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+					$info = array( 'status' => 'unknown' );
+				} else {
+					$body = json_decode( wp_remote_retrieve_body( $response ), true );
+					if ( is_array( $body ) && isset( $body['error'] ) ) {
+						// Private/premium/missing slugs have the same not-found response.
+						// This API result cannot prove closure or a vulnerability.
+						$info = array( 'status' => 'repository_unavailable' );
+					} elseif ( ! is_array( $body ) || ! is_string( $body['version'] ?? null ) || '' === $body['version'] ) {
+						$info = array( 'status' => 'unknown' );
+					} else {
+						$last_updated = isset( $body['last_updated'] ) ? strtotime( $body['last_updated'] ) : 0;
+						$abandoned    = ( $last_updated > 0 && ( time() - $last_updated ) > 730 * DAY_IN_SECONDS );
+						$info         = array(
+							'status'       => $abandoned ? 'abandoned' : 'active',
+							'version'      => $body['version'] ?? '',
+							'last_updated' => $body['last_updated'] ?? '',
+							'abandoned'    => $abandoned,
+						);
+					}
+				}
+				set_transient( $cache_key, $info, DAY_IN_SECONDS );
+			}
+			if ( 'abandoned' === ( $info['status'] ?? '' ) ) {
+				$findings[] = array(
+					'plugin'   => $file,
+					'name'     => $meta['Name'] ?? $slug,
+					'version'  => $meta['Version'] ?? '',
+					'type'     => 'abandoned',
+					'severity' => 'Medium',
+					'message'  => sprintf( 'Plugin "%s" has not been updated in over 2 years (last updated %s). It may lack modern security maintenance.', $meta['Name'] ?? $slug, $info['last_updated'] ?? 'unknown' ),
+				);
+			} elseif ( 'repository_unavailable' === ( $info['status'] ?? '' ) ) {
+				$findings[] = array(
+					'plugin'   => $file,
+					'name'     => $meta['Name'] ?? $slug,
+					'version'  => $meta['Version'] ?? '',
+					'type'     => 'repository_unavailable',
+					'severity' => 'Low',
+					'message'  => sprintf( 'WordPress.org metadata for "%s" is unavailable. Private or premium plugins may not be listed; this does not confirm closure or a vulnerability. Check the plugin publisher.', $meta['Name'] ?? $slug ),
+				);
+			}
+		}
+		return $findings;
 	}
 }
