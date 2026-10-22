@@ -34,17 +34,19 @@ Generated evidence:
 
 * `docs/evidence/lint.json` — files linted, failures
 * `docs/evidence/phpunit-results.json` — per-assertion results, PHP version, extension probe
+* `docs/evidence/package-check.json` — release gate result
 * `docs/evidence/phpunit-results.json` timing detail for the `performance` group
 
 ## 3. Results (verbatim from the runner)
 
 ```
-Linted 103 PHP files, 0 failures
+Linted 108 PHP files, 0 failures
 
 SKIP  [inspector-parsers] XML parser tests — DOM extension is unavailable in this PHP runtime
 SKIP  [ssrf] Public hostname acceptance — DNS resolution unavailable in this runtime
 
-PHP 8.4.1 | 128 passed, 0 failed, 2 skipped, 130 total
+PHP 8.4.1 | 204 passed, 0 failed, 2 skipped, 206 total
+Package check: blocked (2 disclosed runtime assets missing)
 ```
 
 Group breakdown:
@@ -65,6 +67,10 @@ Group breakdown:
 | false-positives | 2 | 0 | 14 legitimate payloads allowed; 5 known-aggressive shapes recorded |
 | malware-analyzer | 6 | 0 | 8/8 synthetic malicious flagged, 10/10 benign clean, uploads/oversize states |
 | integration-manifest | 10 | 0 | wired/unwired engine claims match the code |
+| settings | 18 | 0 | clamping, boolean coercion, unknown-key rejection, proxy sanitization |
+| xmlrpc | 15 | 0 | method/header policy follows block/report/disabled and hardening gates |
+| vulnerability-ranges | 33 | 0 | version grammar and inclusive/exclusive advisory boundaries |
+| release-metadata | 10 | 0 | four version sources agree; missing assets disclosed |
 
 ## 4. Defects found and fixed by this suite
 
@@ -77,6 +83,7 @@ Group breakdown:
 | 5 | Serialized object nested in an array (`a:1:{i:0;O:7:"WP_User":…}`) was missed; only objects starting the value matched. | `serialized_object()` matches the object shape anywhere in a value. |
 | 6 | Executable PHP in request data (`<?php system($_GET[c]); ?>`) had no rule at all. | New **report-first** rule `GWQSH-1017` (needs `enforce_new` to block). |
 | 7 | `advanced()` walked the evidence tree twice per call (once for values, once for SQL), on every request. | Single bounded walk per collection. |
+| 9 | A negative `retention` setting (`-40`) became **40 days** because `absint()` ran before the clamp, silently extending audit-log retention. | Cast then clamp; `settings` group asserts `-40 → 0`. |
 | 8 | Malware analyzer scored 0 for remote `include("http://…")` and for obfuscated callable assembly (`$f = "sys"."tem"; $f($_POST)`), both live dropper patterns. | Token-level `remote_include` and `obfuscated_callable` rules; analyzer `VERSION` 6 → 7 to invalidate cached scan verdicts. |
 
 ## 5. Deliberately aggressive detections (documented, not hidden)

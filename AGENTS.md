@@ -63,7 +63,8 @@ edit distribution metadata that belongs to it.
 | Command | Purpose |
 | --- | --- |
 | `php tests/lint.php .` | Token-parser syntax lint of every PHP file |
-| `php tests/run-tests.php --verbose` | 130 isolated assertions against real plugin source |
+| `php tests/run-tests.php --verbose` | 206 isolated assertions against real plugin source |
+| `php tests/tools/package-check.php .` | release gate: version consistency, require targets, guarded assets, secrets, dev artifacts |
 | `node tests/tools/php-wasm-runner.mjs` | Same, inside a WASM PHP runtime when no PHP binary exists |
 
 Skipped checks must stay recorded as skipped. Anything requiring a real
@@ -95,14 +96,14 @@ legitimate score component, and 10/10 is an aspiration, not a claim.
 | Authentication | 6.5/10 | TOTP replay guards and WebAuthn ceremony validation are tested in isolation; bundled WebAuthn runtime is missing from this checkout, so passkeys are unavailable here |
 | File integrity / cleanup | 5.0/10 | Scheduled scans, quarantine and baseline tooling exist; not exercised against live WordPress in this session |
 | Backup / recovery | 3.5/10 | Backup engine plus staged import trait exist; full restore not validated end-to-end |
-| Security operations (logs, alerts) | 5.5/10 | Audit log, durable queue and fixed-destination delivery; no live provider test, no scheduled-report validation |
+| Security operations (logs, alerts) | 5.5/10 | Audit log, durable queue and fixed-destination delivery; settings validation and XML-RPC policy now covered by assertions; no live provider test |
 | Hardening | 6.0/10 | Reversible settings with real hooks; server-level effects depend on the host |
 | Premium infrastructure | 3.0/10 | Signed-feed client code only; no publisher, keys, rotation or monitoring operated here |
 | Performance | 5.5/10 | Bounded work (sub-millisecond typical in-harness); no production p50/p95 latency measurement |
 | Compatibility | 4.0/10 | PHP 8.4 WASM lint/tests only; no WooCommerce, Gutenberg, multisite or browser run |
-| Release security | 5.5/10 | Version/db-version discipline, provenance docs, no secrets in repo; vendor assets missing from version control |
+| Release security | 6.0/10 | Automated gate: version consistency (4 sources), 0 broken require targets, 90 shipped files secret-scanned clean, dev artifacts absent, missing assets disclosed; gate blocks release |
 
-Overall earned score for this checkout: **5.2/10** — a bounded, tested local
+Overall earned score for this checkout: **5.4/10** — a bounded, tested local
 security suite with honest gaps, not a Wordfence-Premium equivalent.
 
 ## 7. Open blockers (must stay visible in release notes)

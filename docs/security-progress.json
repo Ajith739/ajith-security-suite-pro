@@ -29,13 +29,13 @@
   },
   "verification": {
     "lint": {
-      "files": 103,
+      "files": 108,
       "failures": 0,
       "evidence": "docs/evidence/lint.json"
     },
     "regression_suite": {
-      "total": 130,
-      "passed": 128,
+      "total": 206,
+      "passed": 204,
       "failed": 0,
       "skipped": 2,
       "skipped_reasons": [
@@ -43,6 +43,16 @@
         "DNS unavailable (public webhook host)"
       ],
       "evidence": "docs/evidence/phpunit-results.json"
+    },
+    "package_gate": {
+      "result": "blocked",
+      "evidence": "docs/evidence/package-check.json",
+      "version_sources_agree": true,
+      "broken_requires": 0,
+      "guarded_missing_assets": 2,
+      "shipped_files_secret_scanned": 90,
+      "secret_findings": 0,
+      "dev_artifacts_present": []
     }
   },
   "changes": [
@@ -90,6 +100,41 @@
       "file": "tests/cases/110-malware-analyzer.php",
       "type": "tests",
       "summary": "synthetic malicious/benign PHP corpus against the real analyzer"
+    },
+    {
+      "file": "includes/class-gwqsh-settings.php",
+      "type": "security-fix",
+      "summary": "negative retention was converted to a positive value by absint(); now cast then clamp"
+    },
+    {
+      "file": "tests/cases/120-settings-normalize.php",
+      "type": "tests",
+      "summary": "settings validation/clamping, boolean coercion, trusted proxy sanitization"
+    },
+    {
+      "file": "tests/cases/130-xmlrpc-policy.php",
+      "type": "tests",
+      "summary": "XML-RPC method/header policy follows block/report/disabled and suite/hardening gates"
+    },
+    {
+      "file": "tests/cases/140-vulnerability-ranges.php",
+      "type": "tests",
+      "summary": "version grammar and inclusive/exclusive advisory range boundaries"
+    },
+    {
+      "file": "tests/cases/150-release-metadata.php",
+      "type": "tests",
+      "summary": "version consistency across four sources and documented missing assets"
+    },
+    {
+      "file": "tests/tools/package-check.php",
+      "type": "release-gate",
+      "summary": "version, require-target, asset, secret and artifact checks with machine-readable evidence"
+    },
+    {
+      "file": "docs/PACKAGE-CHECK.md",
+      "type": "docs",
+      "summary": "release gate documentation"
     }
   ],
   "fixed_gaps": [
@@ -99,7 +144,9 @@
     "WAF-4",
     "WAF-5",
     "SCAN-3",
-    "SCAN-4"
+    "SCAN-4",
+    "CFG-1",
+    "REL-1"
   ],
   "open_gaps": [
     "WAF-6",
@@ -134,8 +181,8 @@
     "premium_infrastructure": 3.0,
     "performance": 5.5,
     "compatibility": 4.0,
-    "release_security": 5.5,
-    "overall": 5.2
+    "release_security": 6.0,
+    "overall": 5.4
   },
   "not_verified": [
     "WordPress activation/deactivation and Free-to-Pro migration",

@@ -27,6 +27,9 @@ limits), **Open** (not addressed), **External** (needs a third party),
 | VULN-2 | **P2** | No vendor CVE/advisory ingestion pipeline; core checksum integrity relies on WordPress.org. | **External** | Same |
 | REC-1 | **P1** | Full-site disaster recovery (filesystem + cutover + rollback) not validated end-to-end. | **Open** | `docs/RECOVERY-VALIDATION.md` |
 | OPS-1 | **P2** | No live test of email/Slack delivery, scheduled reports, or multisite network policy. | **External/Open** | `docs/REPORTING.md` |
+| CFG-1 | **P3** | A negative `retention` value (`-40`) was converted to **40 days** by `absint()` before clamping, so "no retention" silently meant "keep logs 40 days". | **Fixed** | Cast then clamp in `GWQSH_Settings::normalize()`; `tests/cases/120-settings-normalize.php` |
+| REL-1 | **P2** | An undisclosed missing runtime asset could reach a release; version drift had no automated check. | **Fixed (gate)** | `tests/tools/package-check.php` + `tests/cases/150-release-metadata.php`; gate currently `blocked` on the two disclosed assets |
+| REL-2 | **P2** | No full release archive is built or inspected; Plugin Check/PHPCS/PHPStan/`composer audit` never ran. | **Open** | `docs/PACKAGE-CHECK.md` §“What this does NOT do” |
 | SEC-1 | **P3** | `GWQSH_Settings::forwarded_ip()` computes an unused `$peers` array. | **Open (cosmetic)** | Cleanup candidate |
 | SEC-2 | **P3** | No PHPCS/PHPStan/Plugin Check run (toolchain and Composer manifest absent). | **Open** | `docs/RELEASE-READINESS.md` |
 

@@ -1,5 +1,5 @@
 {
-    "generated_at": "2026-10-22T08:21:48+00:00",
+    "generated_at": "2026-10-22T08:26:25+00:00",
     "php_version": "8.4.1",
     "extensions": {
         "sodium": false,
@@ -9,10 +9,10 @@
         "pdo": true
     },
     "summary": {
-        "passed": 128,
+        "passed": 204,
         "failed": 0,
         "skipped": 2,
-        "total": 130
+        "total": 206
     },
     "results": [
         {
@@ -669,13 +669,13 @@
             "group": "performance",
             "test": "Typical request evaluation stays bounded",
             "passed": true,
-            "detail": "436.7 \u00b5s/request (WASM)"
+            "detail": "403.3 \u00b5s/request (WASM)"
         },
         {
             "group": "performance",
             "test": "Worst-case budgeted body stays bounded",
             "passed": true,
-            "detail": "1950.0 \u00b5s/request for ~30KB values (WASM)"
+            "detail": "1300.0 \u00b5s/request for ~30KB values (WASM)"
         },
         {
             "group": "performance",
@@ -687,7 +687,7 @@
             "group": "performance",
             "test": "WAF timing summary",
             "passed": true,
-            "detail": "typical=436.7\u00b5s, heavy=1950.0\u00b5s, nested=980.0\u00b5s (PHP 8.4.1, WASM runtime)"
+            "detail": "typical=403.3\u00b5s, heavy=1300.0\u00b5s, nested=980.0\u00b5s (PHP 8.4.1, WASM runtime)"
         },
         {
             "group": "false-positives",
@@ -796,6 +796,462 @@
             "test": "Analysis returns an explainable shape",
             "passed": true,
             "detail": "keys=score,severity,confidence,evidence,signature_ids,auto_block,analysis_partial,version"
+        },
+        {
+            "group": "settings",
+            "test": "Unknown keys are discarded on read",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Defaults fill missing keys",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Plugin active state honoured",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Retention is clamped to the maximum",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Scan budget is clamped to the maximum",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Unknown theme falls back to light",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Unknown proxy header falls back to xff",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Boolean false is honoured",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Boolean true is honoured",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Trusted proxies keep CIDR and IPv6",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Trusted proxies drop invalid entries",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Negative retention clamps to zero",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Zero scan budget clamps to one",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Truthy string becomes true",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Zero becomes false",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "String true becomes true",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Non-scalar values are ignored rather than coerced",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Inactive status disables the suite gate",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement active in block mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "system.multicall is removed (amplification)",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "pingback.ping is removed (DDoS amplification)",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "pingback getPingbacks is removed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Legitimate publishing methods are kept",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "X-Pingback header removed in block mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Other headers untouched",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement inactive in report mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Methods untouched in report mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Pingback header kept in report mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement inactive when the WAF is disabled",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement inactive when the suite is switched off",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement inactive when the firewall toggle is off",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Hardening rule disables XML-RPC entirely",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "XML-RPC stays enabled when hardening is off",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.2",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.2.3",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.2.3.4",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 2.0.0-beta",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.9.9-RC2",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.0.0.dev",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: ",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: v1.2.3",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.3 ",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.3.4.5",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.3-",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.x",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.3\\n2.0",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: <1.2.3",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1,2,3",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Version below introduction is unaffected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Introduction boundary is affected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Mid-range is affected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Fixed version is not affected (exclusive)",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Later version is not affected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Open-ended range affects all later versions",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Open-ended range excludes earlier versions",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "last_affected boundary is inclusive",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Version after last_affected is unaffected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "First range matched",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Gap between ranges unaffected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Second range matched",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Second range fix respected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Empty range list is not affected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Unsupported vendor version requires manual review",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Empty installed version requires manual review",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Non-string version requires manual review",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Plugin header declares a version",
+            "passed": true,
+            "detail": "1.3.0-rc.6"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Runtime constant matches the header",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "readme.txt stable tag matches the header",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Progress record matches the header",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Database version is unchanged by this release",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Database version constant is present",
+            "passed": true,
+            "detail": ""
+        },
+        {
+            "group": "release-metadata",
+            "test": "Required process documents exist",
+            "passed": true,
+            "detail": "10 documents present"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Every manifest engine file exists",
+            "passed": true,
+            "detail": "all present"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Missing asset is disclosed in release notes: WebAuthn.php",
+            "passed": true,
+            "detail": "docs/RELEASE-READINESS.md must name the asset"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Missing asset is disclosed in release notes: three.module.js",
+            "passed": true,
+            "detail": "docs/RELEASE-READINESS.md must name the asset"
         }
     ]
 }

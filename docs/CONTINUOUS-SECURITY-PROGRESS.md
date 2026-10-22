@@ -54,11 +54,22 @@
     PHP 8+ and are recorded as documented non-detections. Analyzer `VERSION`
     bumped to force re-analysis of cached scan results.
 
+11. **Settings, XML-RPC, advisory ranges, release metadata** — added 76 assertions.
+    Found one real defect: `GWQSH_Settings::normalize()` used `absint()` before
+    clamping, so `retention = -40` became **40 days** instead of "no retention"
+    (silently extending audit-log retention). Fixed; test asserts `-40 → 0`.
+12. **Release gate** — `tests/tools/package-check.php` now verifies version
+    consistency across four sources, every `require` target, guarded optional
+    assets, secret shapes in 90 shipped files, and development artifacts. It
+    classifies the two missing runtime assets as declared blockers (release
+    `blocked`, not silently `pass`).
+
 ### Measured outcome
 
 ```
-Linted 103 PHP files, 0 failures
-PHP 8.4.1 | 128 passed, 0 failed, 2 skipped, 130 total
+Linted 108 PHP files, 0 failures
+PHP 8.4.1 | 204 passed, 0 failed, 2 skipped, 206 total
+Package check: blocked (2 disclosed assets missing)
 ```
 
 Timing (WASM runtime, not production):

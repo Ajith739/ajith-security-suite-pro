@@ -31,6 +31,14 @@
 | Hardening | Verify each reversible setting's actual server effect; document host responsibilities |
 | Ops | WP-CLI report parity, scheduled agency reports, multisite policy inheritance |
 
+## 2b. Completed since the previous checkpoint
+
+* Settings validation, XML-RPC policy, advisory range boundaries and release
+  metadata now have executed assertions (76 added).
+* Release gate (`tests/tools/package-check.php`) covers version drift, require
+  targets, secrets and dev artifacts; it correctly reports `blocked` because of
+  the two missing vendor assets.
+
 ## 3. Toolchain still missing
 
 PHPCS (WordPress ruleset), PHPStan (level ≥5), Plugin Check, `composer audit`

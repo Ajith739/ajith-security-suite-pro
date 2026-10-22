@@ -25,6 +25,8 @@ require_once $root . '/includes/class-gwqsh-bot-shield.php';
 require_once $root . '/includes/class-gwqsh-security-runtime.php';
 require_once $root . '/includes/class-gwqsh-signatures.php';
 require_once $root . '/includes/class-gwqsh-malware-analyzer.php';
+require_once $root . '/includes/class-gwqsh-hardening.php';
+require_once $root . '/includes/class-gwqsh-vulnerabilities.php';
 require_once $root . '/includes/class-gwqsh-firewall.php';
 require_once $root . '/includes/waf/class-gracewell-waf-inspector.php';
 require_once $root . '/includes/alerts/class-gracewell-ssrf-safe-dispatcher.php';
@@ -96,4 +98,6 @@ if ( '' !== $json_path ) {
 	echo "Wrote {$json_path}\n";
 }
 
-exit( $failed > 0 ? 1 : 0 );
+if ( ! defined( 'GW_TESTS_EMBEDDED' ) ) {
+	exit( $failed > 0 ? 1 : 0 );
+}

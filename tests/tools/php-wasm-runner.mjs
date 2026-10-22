@@ -45,7 +45,7 @@ php.addEventListener('output', (e) => {
   output += e.detail.join('');
 });
 
-const files = collect(root).filter(([rel]) => rel.endsWith('.php') || rel.endsWith('.json'));
+const files = collect(root).filter(([rel]) => /\.(php|json|txt|md)$/.test(rel));
 const ensured = new Set();
 async function ensureDir(dir) {
   if (ensured.has(dir) || dir === '/repo') return;
@@ -79,15 +79,18 @@ await php.writeFile(
   '/repo/run.php',
   `<?php chdir('/repo');
 define('GW_LINT_EMBEDDED', true);
+define('GW_TESTS_EMBEDDED', true);
 $argv = array('lint.php', '/repo'); $argc = 2; require '/repo/tests/lint.php';
 $argv = array('run-tests.php', '--json=/repo/docs/evidence/phpunit-results.json'); $argc = 2; require '/repo/tests/run-tests.php';
+define('GW_PACKAGE_CHECK_EMBEDDED', true);
+$argv = array('package-check.php', '/repo'); $argc = 2; require '/repo/tests/tools/package-check.php';
 `,
 );
 
 await php.run(`<?php require '/repo/run.php';`);
 process.stdout.write(output);
 
-for (const evidence of ['phpunit-results.json', 'lint.json']) {
+for (const evidence of ['phpunit-results.json', 'lint.json', 'package-check.json']) {
   try {
     const rawEvidence = await php.readFile('/repo/docs/evidence/' + evidence);
     const text = typeof rawEvidence === 'string' ? rawEvidence : new TextDecoder().decode(rawEvidence);

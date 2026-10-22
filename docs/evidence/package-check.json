@@ -1,0 +1,39 @@
+{
+    "generated_at": "2026-10-22T08:26:25+00:00",
+    "php_version": "8.4.1",
+    "root": "/repo",
+    "version": {
+        "header": "1.3.0-rc.6",
+        "constant": "1.3.0-rc.6",
+        "stable_tag": "1.3.0-rc.6",
+        "progress": "1.3.0-rc.6"
+    },
+    "references": {
+        "checked": 88,
+        "missing": [],
+        "guarded_optional": [
+            "includes/vendor/webauthn/src/WebAuthn.php"
+        ]
+    },
+    "assets": {
+        "includes/vendor/webauthn/src/WebAuthn.php": {
+            "present": false,
+            "feature": "Passkey enrollment and login",
+            "gate": "includes/vendor/webauthn/src/WebAuthn.php (Passkey enrollment and login unavailable in a clean checkout)"
+        },
+        "assets/vendor/three/three.module.js": {
+            "present": false,
+            "feature": "Hero bird animation",
+            "gate": "assets/vendor/three/three.module.js (Hero bird animation unavailable in a clean checkout)"
+        }
+    },
+    "forbidden": [],
+    "secrets": [],
+    "metadata": [
+        "documented blocker: includes/vendor/webauthn/src/WebAuthn.php",
+        "documented blocker: assets/vendor/three/three.module.js",
+        "secret scan: 90 shipped files"
+    ],
+    "gate": "blocked",
+    "failures": []
+}

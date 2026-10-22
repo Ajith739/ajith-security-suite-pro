@@ -89,7 +89,8 @@ The upgrade was tested on the local WordPress 7.1.3 / PHP 8.0.30 installation. P
 * Detect single-segment path traversal (`../wp-config.php`), quoted and comment-obfuscated SQL tautologies/unions, serialized objects nested inside arrays, and parenthesised SQL tautologies.
 * Add report-first rule GWQSH-1017 for executable PHP in request data; enforcement still requires explicit `enforce_new` approval.
 * Detect remote PHP includes and obfuscated callable assembly in the malware analyzer; bump the analyzer version so cached scan results are re-analysed.
-* Add an executable regression harness (tests/, 130 assertions) covering the WAF corpus, false-positive boundaries, IP/trusted-proxy handling, Bot Shield, rollout policy, parsers and authentication guards, plus `docs/engine-manifest.json` wiring guard.
+* Fix negative retention being silently converted to a positive day count; add a release gate (`tests/tools/package-check.php`) for version drift, broken include targets, secrets and missing assets.
+* Add an executable regression harness (tests/, 206 assertions) covering the WAF corpus, false-positive boundaries, IP/trusted-proxy handling, Bot Shield, rollout policy, parsers and authentication guards, plus `docs/engine-manifest.json` wiring guard.
 * Document which namespaced engine classes are unwired duplicates (see docs/ENGINE-INTEGRATION-AUDIT.md) instead of implying extra protection.
 * No dashboard, theme, animation or Free-plugin change.
 
