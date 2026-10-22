@@ -25,3 +25,6 @@ tests/.setup-audit.php
 tests/.audit-account.json
 tests/.results/
 .audit-runtime/
+
+# Local test scratch space
+tests/tmp/
