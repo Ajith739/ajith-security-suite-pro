@@ -4,7 +4,7 @@ Tags: security, firewall, two factor authentication, passkeys, file integrity
 Requires at least: 5.3
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.3.0-rc.5
+Stable tag: 1.3.0-rc.6
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,14 @@ The upgrade was tested on the local WordPress 7.1.3 / PHP 8.0.30 installation. P
 8. Module configuration and import/export in light/dark themes.
 
 == Changelog ==
+
+= 1.3.0-rc.6 (development candidate, staging only) =
+* Close credential-parameter inspection blind spot: password/token/session/code values are now screened for injection, traversal, inclusion, command, SSRF and object-injection shapes without ever being logged.
+* Detect single-segment path traversal (`../wp-config.php`), quoted and comment-obfuscated SQL tautologies/unions, serialized objects nested inside arrays, and parenthesised SQL tautologies.
+* Add report-first rule GWQSH-1017 for executable PHP in request data; enforcement still requires explicit `enforce_new` approval.
+* Add an executable regression harness (tests/, 122 assertions) covering the WAF corpus, false-positive boundaries, IP/trusted-proxy handling, Bot Shield, rollout policy, parsers and authentication guards, plus `docs/engine-manifest.json` wiring guard.
+* Document which namespaced engine classes are unwired duplicates (see docs/ENGINE-INTEGRATION-AUDIT.md) instead of implying extra protection.
+* No dashboard, theme, animation or Free-plugin change.
 
 = 1.3.0-rc.5 (development candidate, staging only) =
 * Merge enhanced bounded WAF multipart, XML and REST inspection with RC4 private-file probe shield.
