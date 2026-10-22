@@ -1,16 +1,64 @@
-# Release readiness: 1.2.0-rc.1
+# Release readiness — 1.3.0-rc.6 (2026-10-22)
 
-Status: review candidate; the full premium-parity objective is not complete. No commercial detection, exploit-coverage or certification claim is authorized by these results.
+**Status: review candidate, not release-ready.** No commercial detection,
+exploit-coverage, certification or parity claim is authorized by these results.
 
-Implemented: fail-closed Ed25519 verification across native Sodium and WordPress fallback; malformed reputation response validation; modular WAF metadata and separately approved SQL correlations; MU-plugin advisory inventory/version gating; native editor hardening constant; administrator-confirmed Guardian containment policy; protected HTML/JSON reports over the existing activity store; read-only WP-CLI report/inventory commands; reproducible packaging and regression evidence.
+## Delivered in this revision
 
-Release blockers:
+* Closed a **complete WAF bypass**: values of parameters named `password`, `pwd`,
+  `log`, `token`, `session`, `code`, `secret`, `nonce` (and nested credential
+  objects) were never inspected. Now screened for injection-class attacks without
+  ever being logged. Regression: `waf-credential-keys`.
+* Single-segment traversal, quoted/`LIKE` SQL tautologies, comment-obfuscated
+  unions, version-comment keywords, `WAITFOR DELAY`, nested `SLEEP()`, and
+  serialized objects nested in arrays are now correlated.
+* New **report-first** rule `GWQSH-1017` (executable PHP in request data);
+  enforcement requires `enforce_new`.
+* One evidence walk per collection in `advanced()` (was two).
+* First executable regression harness in the repository: 124 assertions
+  (122 pass, 2 honest skips) plus a 102-file syntax lint, and
+  `docs/engine-manifest.json` with a test that fails when capability claims drift
+  from the code.
 
-- Representative real malware and exploit corpora, independent false-positive review, OWASP ZAP/WPScan and penetration testing have not run. Synthetic results are regression evidence only.
-- No production signed malware/advisory publisher, provider credentials, authorized Patchstack/NVD mapping pipeline, VirusTotal integration, verified license authority or Twilio adapter was supplied. Existing AbuseIPDB code requires opt-in/key; it was not live-tested.
-- General proposed-edit database malware cleanup/diff/rollback, full-site disaster recovery, network-level containment and general reinfection scheduling are not delivered here. Existing file quarantine/restore and limited contextual database baseline rollback remain available.
-- Browser passkey enrollment/login, WooCommerce checkout, comprehensive UI screenshots, multiple PHP/WP versions, multisite runtime tests, concurrency stress and load/TTFB benchmarks remain outstanding.
-- Plugin Check retains five baseline errors and now reports 57 warnings (baseline: 43). Its process exit code does not establish readiness. See SECURITY-AUDIT.md.
-- No independent audit or certification took place. Do not invent an audit firm, report, score or approval.
+## Hard blockers (do not ship a customer package)
 
-Deployment checklist: verify artifact SHA-256; restore-test the private SQL/plugin backup in a disposable environment; review Guardian deprecation; review this source diff; validate real traffic in report mode; test authentication/checkout and recovery; review CSP using the existing hardening controls; validate each external service and data-sharing policy. Keep new SQL enforcement off until that site's compatibility review is approved. No schema version is changed and no legacy records are removed by this upgrade.
+1. **Passkeys are unavailable in a clean checkout** — `includes/vendor/webauthn/`
+   is gitignored and absent. Either ship the locked, namespace-scoped runtime or
+   remove the passkey feature claim from the readme.
+2. **Hero bird animation asset missing** — `assets/vendor/three/three.module.js`
+   is gitignored; the dynamic import fails silently.
+3. **No WordPress validation of any kind** in this session: activation,
+   deactivation, Free→Pro migration, settings save, cron, admin UI.
+4. **No restore or recovery validation** — backup/restore is advertised in the UI
+   but a restore has not been proven.
+5. **No compatibility run** — WooCommerce checkout, Gutenberg save, multisite,
+   PHP 8.0–8.3.
+6. **Toolchain absent** — PHPCS, PHPStan, Plugin Check and `composer audit` were
+   not run (there is no root Composer manifest).
+7. **Nine namespaced engines, eight unwired** — remove or wire them before any
+   marketing text implies the extra capability.
+
+## Documented residuals (acceptable with disclosure)
+
+* The detector is lexical; five benign shapes are flagged on purpose
+  (`docs/WAF-VALIDATION.md` §5).
+* Encrypted/compressed/oversized bodies yield an explicit "incomplete coverage"
+  state, not a verdict.
+* No pre-WordPress firewall layer.
+* Signed-feed clients require an operator-supplied trust anchor and feed; no
+  service is operated from this repository.
+
+## Verification checklist before packaging
+
+| Step | Command / action |
+| --- | --- |
+| Syntax | `php tests/lint.php .` → 0 failures |
+| Regression | `php tests/run-tests.php --verbose` → 0 failures |
+| Assets | Confirm `includes/vendor/webauthn/src/WebAuthn.php` and `assets/vendor/three/three.module.js` exist in the archive |
+| Secrets | Scan the archive for keys, tokens, `.env`, `node_modules`, `tests/.runtime` |
+| Install | Activate on a disposable WordPress with the previous version installed; verify migration and settings |
+| Traffic | Run the WAF in report mode against real traffic for a day; review "Firewall inspection incomplete" and false positives |
+| Commerce | Complete a WooCommerce checkout and a Gutenberg post save with WAF in block mode |
+| Recovery | Create a backup, stage-import, verify row counts, cutover, roll back |
+| Auth | Enrol TOTP and a passkey on a staging origin; verify replay rejection |
+| Deploy | Only after all of the above; keep `GWQSH_DB_VERSION` unchanged (1.6.1) |

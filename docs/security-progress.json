@@ -1,0 +1,71 @@
+{
+  "product": "Gracewell Security Suite Pro",
+  "version": "1.3.0-rc.6",
+  "db_version": "1.6.1",
+  "updated_at": "2026-10-22",
+  "branch": "arena/a0b93feb-ajith-security-suite-pro",
+  "base_commit": "4728e6c",
+  "environment": {
+    "php": "8.4.1 (WebAssembly via php-wasm 0.2.0, Node 22.22.3)",
+    "extensions_present": ["hash", "tokenizer", "filter", "pdo", "ctype", "json", "pcre"],
+    "extensions_absent": ["sodium", "openssl", "mbstring", "dom", "dns"],
+    "wordpress": "not installed in this environment",
+    "mysql": "unavailable",
+    "php_cli": "unavailable"
+  },
+  "verification": {
+    "lint": { "files": 102, "failures": 0, "evidence": "docs/evidence/lint.json" },
+    "regression_suite": {
+      "total": 124,
+      "passed": 122,
+      "failed": 0,
+      "skipped": 2,
+      "skipped_reasons": ["DOM extension unavailable (XML parser tests)", "DNS unavailable (public webhook host)"],
+      "evidence": "docs/evidence/phpunit-results.json"
+    }
+  },
+  "changes": [
+    { "file": "includes/class-gwqsh-firewall.php", "type": "security-fix", "summary": "credential-scope inspection, single-segment traversal, tautology/comment/object/PHP-code correlations, single evidence walk" },
+    { "file": "includes/waf/rules.php", "type": "metadata", "summary": "registered report-first rule GWQSH-1017" },
+    { "file": "gracewell-security-suite-pro.php", "type": "version", "summary": "1.3.0-rc.6" },
+    { "file": "readme.txt", "type": "version", "summary": "stable tag and changelog" },
+    { "file": "tests/", "type": "tests", "summary": "new isolated regression harness (14 groups, 124 assertions) plus WASM runner and lint" },
+    { "file": "docs/engine-manifest.json", "type": "architecture-guard", "summary": "declares wired vs unwired engine classes" },
+    { "file": "AGENTS.md", "type": "docs", "summary": "authoritative contributor rules and measured scorecard" }
+  ],
+  "fixed_gaps": ["WAF-1", "WAF-2", "WAF-3", "WAF-4", "WAF-5"],
+  "open_gaps": ["WAF-6", "WAF-7", "WAF-8", "INT-2", "AUTH-1", "AUTH-2", "UI-1", "SCAN-1", "SCAN-2", "REC-1", "OPS-1", "SEC-1", "SEC-2"],
+  "external_dependencies": ["VULN-1", "VULN-2", "OPS-1"],
+  "self_assessed_scores": {
+    "waf_request_inspection": 7.5,
+    "bot_and_ip_defense": 6.0,
+    "malware_detection": 5.0,
+    "vulnerability_intelligence": 4.0,
+    "authentication": 6.5,
+    "file_integrity_and_cleanup": 5.0,
+    "backup_and_recovery": 3.5,
+    "security_operations": 5.5,
+    "hardening": 6.0,
+    "premium_infrastructure": 3.0,
+    "performance": 5.5,
+    "compatibility": 4.0,
+    "release_security": 5.5,
+    "overall": 5.2
+  },
+  "not_verified": [
+    "WordPress activation/deactivation and Free-to-Pro migration",
+    "WooCommerce checkout, Gutenberg publish, REST/AJAX round trips",
+    "multisite network behaviour",
+    "browser passkey enrolment/login and TOTP UI",
+    "malware corpus detection rate and false positives",
+    "backup/restore/cutover/rollback",
+    "alert delivery, cron reliability, scheduled reports",
+    "PHPCS, PHPStan, Plugin Check, composer audit",
+    "production latency and memory ceilings"
+  ],
+  "next_tasks": [
+    "Ship the locked WebAuthn and three.js vendor assets (or fail release) and add a packaging check",
+    "Run the suite inside a disposable WordPress install (activation, migration, WAF end-to-end, quarantine round trip)",
+    "Delete the eight unwired duplicate engines or wire the ones that add capability; keep the manifest test green"
+  ]
+}

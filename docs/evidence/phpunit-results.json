@@ -1,0 +1,765 @@
+{
+    "generated_at": "2026-10-22T08:20:19+00:00",
+    "php_version": "8.4.1",
+    "extensions": {
+        "sodium": false,
+        "openssl": false,
+        "mbstring": false,
+        "tokenizer": true,
+        "pdo": true
+    },
+    "summary": {
+        "passed": 122,
+        "failed": 0,
+        "skipped": 2,
+        "total": 124
+    },
+    "results": [
+        {
+            "group": "waf",
+            "test": "SQL injection corpus detected",
+            "passed": true,
+            "detail": "12 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "XSS corpus detected",
+            "passed": true,
+            "detail": "8 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "Path traversal corpus detected",
+            "passed": true,
+            "detail": "5 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "File inclusion corpus detected",
+            "passed": true,
+            "detail": "5 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "Command injection corpus detected",
+            "passed": true,
+            "detail": "4 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "SSRF corpus detected",
+            "passed": true,
+            "detail": "6 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "PHP object injection corpus detected",
+            "passed": true,
+            "detail": "2 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "Benign traffic allowed",
+            "passed": true,
+            "detail": "19 benign samples allowed"
+        },
+        {
+            "group": "waf",
+            "test": "SQL injection obfuscation corpus detected",
+            "passed": true,
+            "detail": "9 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "XSS obfuscation corpus detected",
+            "passed": true,
+            "detail": "6 samples matched"
+        },
+        {
+            "group": "waf-credential-keys",
+            "test": "Credential-named parameters still inspected for high-confidence attacks",
+            "passed": true,
+            "detail": "7 samples matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 exact match",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 CIDR /24 inside",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 CIDR /24 outside",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 CIDR /0 matches all",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 non-octet boundary /33 rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv6 CIDR inside",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv6 CIDR outside",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Mixed-family comparison rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Malformed range rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Non-numeric prefix rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Canonical IPv4-mapped IPv6",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Canonical rejects garbage",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "XFF rightmost untrusted hop is the visitor",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Client-supplied left entries cannot choose identity",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "All-trusted chain returns empty (use peer address)",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Malformed chain element returns empty",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Oversized chain rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Credential-like header value is not accepted as an IP",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Proxy disabled ignores forged X-Forwarded-For",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Untrusted peer cannot inject X-Forwarded-For",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Trusted peer proxy header accepted",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Trusted peer chain resolved to nearest visitor",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Forged Cloudflare header ignored for non-Cloudflare peer",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Sensitive-file probes detected",
+            "passed": true,
+            "detail": "17 samples matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Ordinary requests are not treated as probes",
+            "passed": true,
+            "detail": "20 benign samples allowed"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Hold requires block mode, enabled Bot Shield and anonymous traffic",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Hold allowed for anonymous traffic in block mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Hold refused in report mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Hold refused for private/reserved addresses",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Legacy rule blocks in block mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Report mode records the match instead of blocking",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Report mode keeps the matched rule identifier",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "New rule is report-only until enforce_new",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "New rule still reported as the matched rule",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "New rule blocks after enforce_new approval",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Extended SQL correlation needs its own approval",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Extended SQL correlation blocks with both approvals",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Virtual patch blocks only when approved",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Virtual patch is report-only without approval",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Report-only rule cannot shadow a legacy block",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Authenticated traffic defaults to report",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Guest traffic uses the global mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Authenticated enforcement is possible when configured",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Strictest inspection state wins",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Parsing error beats partial inspection",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Clean state reported as fully inspected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Oversized REST JSON is not parsed as an attack verdict",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Malformed JSON is a parsing error",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "JSON scalar is an unsupported format",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Valid JSON object is inspected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "WooCommerce REST bodies get a larger budget",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Anonymous REST bodies stay small",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Authenticated editor bodies are larger",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Deeply nested input is bounded and reported",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Wide input is bounded and reported",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Inspection status reflects the budget",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Credential keys are not ordinary evidence",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Credential keys are still collected for injection screening",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Nested JSON is fully inspected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Nested JSON values reach the input list",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Malformed JSON is reported as a parsing error",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Oversized body is reported as a budget limit",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Unsupported content types are reported honestly",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Multipart fields parsed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Multipart filename captured as metadata",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Multipart parsing reported success",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Missing boundary fails closed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Invalid boundary grammar fails closed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Oversized multipart body hits the budget state",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Truncated multipart body fails closed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "XML parser tests",
+            "passed": null,
+            "skipped": true,
+            "detail": "DOM extension is unavailable in this PHP runtime"
+        },
+        {
+            "group": "inspector-rate",
+            "test": "First request within the limit",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-rate",
+            "test": "Third request exceeds a limit of two",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-rate",
+            "test": "Credential stuffing across usernames detected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-rate",
+            "test": "Distinct username count is reported",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "First TOTP use in a window is accepted",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Same TOTP window cannot be replayed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Older TOTP window is rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Newer TOTP window is accepted",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Replay state is per user",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Valid assertion accepted",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Origin mismatch rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Wrong ceremony type rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Challenge mismatch rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Cloned-authenticator counter regression rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Malformed clientDataJSON rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Zero counter authenticators remain usable",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Trailing slash origin is normalized",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Plain HTTP webhook rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Missing scheme rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Empty host rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Loopback IP literal rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Private range IP literal rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Link-local metadata IP rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "IPv6 loopback rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "IPv6 unique-local rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Public hostname acceptance",
+            "passed": null,
+            "skipped": true,
+            "detail": "DNS resolution unavailable in this runtime"
+        },
+        {
+            "group": "performance",
+            "test": "Typical request evaluation stays bounded",
+            "passed": true,
+            "detail": "370.0 \u00b5s/request (WASM)"
+        },
+        {
+            "group": "performance",
+            "test": "Worst-case budgeted body stays bounded",
+            "passed": true,
+            "detail": "1350.0 \u00b5s/request for ~30KB values (WASM)"
+        },
+        {
+            "group": "performance",
+            "test": "Nested cart-like payloads stay bounded",
+            "passed": true,
+            "detail": "1060.0 \u00b5s/request for 120 nested values (WASM)"
+        },
+        {
+            "group": "performance",
+            "test": "WAF timing summary",
+            "passed": true,
+            "detail": "typical=370.0\u00b5s, heavy=1350.0\u00b5s, nested=1060.0\u00b5s (PHP 8.4.1, WASM runtime)"
+        },
+        {
+            "group": "false-positives",
+            "test": "Legitimate content remains allowed",
+            "passed": true,
+            "detail": "14 samples matched"
+        },
+        {
+            "group": "false-positives",
+            "test": "Aggressive heuristics are explicit and documented",
+            "passed": true,
+            "detail": "5 samples matched"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_WAF_Inspector is genuinely wired",
+            "passed": true,
+            "detail": "manifest claims wired but no production file references it"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Auth_Guard is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_SSRF_Safe_Dispatcher is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Malware_Scanner is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Virtual_Patch_Engine is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Signed_Feed_Verifier is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Threat_Feed_Manager is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_DB_Malware_Remediator is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Safe_DB_Restore is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Manifest coverage",
+            "passed": true,
+            "detail": "1 wired, 8 unwired"
+        }
+    ]
+}

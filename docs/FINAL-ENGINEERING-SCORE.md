@@ -1,7 +1,15 @@
-# Engineering assessment
+# Engineering score
 
-No numeric commercial score is assigned. Current evidence supports a bounded local release candidate with targeted security fixes and repeatable regression coverage. It does not support the complete premium-parity goal or independent certification.
+Superseded by the authoritative scorecard in [`AGENTS.md` §6](../AGENTS.md) and the
+per-dimension evidence in
+[`docs/SECURITY-BENCHMARK-MATRIX.md`](SECURITY-BENCHMARK-MATRIX.md).
 
-Verified here: syntax baseline, synthetic WAF/malware matrix, signed-feed failure/rollback/replay behavior, protected reports, MU version inventory, administrator-confirmed Guardian policy, one inert file quarantine/restore round trip and read-only database scanning. Evidence JSON includes individual checks rather than invented code-coverage percentages.
+Current evidence-based result for v1.3.0-rc.6 (2026-10-22):
 
-Not verified: representative exploit/malware detection rates, browser passkey interoperability, WooCommerce, multisite runtime behavior, stress/load targets, full backup restore, general database remediation, production provider service, regulatory compliance or support readiness. See RELEASE-READINESS.md.
+* Docker/CI-free isolated suite: **122 passed, 0 failed, 2 skipped** (124 assertions)
+* Syntax lint: **102 files, 0 failures**
+* Weighted overall earned score: **5.2 / 10**
+
+No independent audit, penetration test or certification has taken place. Earlier
+numeric scores in this repository's history were self-assessments and must not be
+quoted as verified results.
