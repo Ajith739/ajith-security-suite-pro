@@ -111,11 +111,13 @@ final class GWQSH_Settings {
 				}
 			}
 		}
-		$current['retention']   = (string) min( 3650, max( 0, absint( $current['retention'] ) ) );
+		// absint() would silently turn "-40" into 40 days of retention. Cast first,
+		// then clamp, so a negative value means "no retention" as intended.
+		$current['retention']   = (string) min( 3650, max( 0, (int) $current['retention'] ) );
 		$current['theme']       = in_array( $current['theme'], array( 'light', 'dark', 'system' ), true ) ? $current['theme'] : 'light';
 		$current['proxyheader'] = in_array( $current['proxyheader'], array( 'xff', 'cf', 'xreal', 'trueclient' ), true ) ? $current['proxyheader'] : 'xff';
 
-		$current['scan_budget']     = (string) min( 8, max( 1, absint( $current['scan_budget'] ) ) );
+		$current['scan_budget']     = (string) min( 8, max( 1, (int) $current['scan_budget'] ) );
 		$ranges                     = preg_split( '/[\s,]+/', $current['trusted_proxies'], -1, PREG_SPLIT_NO_EMPTY );
 		$current['trusted_proxies'] = implode(
 			"\n",

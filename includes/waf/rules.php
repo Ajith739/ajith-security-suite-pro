@@ -186,6 +186,16 @@ return array(
 		'action'           => 'block',
 		'version'          => 1,
 	),
+	'GWQSH-1017' => array(
+		'rule_id'          => '4d42aa94-679c-4bc9-a0b9-000000001017',
+		'category'         => 'code_injection',
+		'severity'         => 'High',
+		'confidence'       => 'Review',
+		'severity_score'   => 7,
+		'confidence_score' => 0.7,
+		'action'           => 'report',
+		'version'          => 1,
+	),
 	'SQL Injection' => array(
 		'rule_id' => '4d42aa94-679c-4bc9-a0b9-000000002001',
 		'category' => 'sql',

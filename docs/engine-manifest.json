@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-10-22",
+  "description": "Integration manifest for namespaced engine classes under includes/. Production code must reach every engine marked 'wired'. Unwired engines are listed explicitly so no capability is claimed from an unreferenced class.",
+  "engines": [
+    {
+      "class": "Gracewell\\SecurityPro\\WAF\\Gracewell_WAF_Inspector",
+      "file": "includes/waf/class-gracewell-waf-inspector.php",
+      "status": "wired",
+      "entry_point": "GWQSH_Firewall::inspect()/inspect_rest() -> normalized_request()/multipart_request()/native_body()",
+      "hook": "init (priority 2), rest_pre_dispatch",
+      "note": "Used as the bounded parser adapter (multipart, XML, normalization). Enforcement policy remains in GWQSH_Firewall."
+    },
+    {
+      "class": "Gracewell\\SecurityPro\\Auth\\Gracewell_Auth_Guard",
+      "file": "includes/auth/class-gracewell-auth-guard.php",
+      "status": "unwired",
+      "reason": "duplicate",
+      "replacement": "GWQSH_Two_Factor::consume_totp() uses a compare-and-swap on gwqsh_2fa_last_slice for the same replay guard; GWQSH_Passkeys validates origin/challenge/counter through the bundled WebAuthn verifier.",
+      "note": "Do not claim extra authentication protection from this class. Regression tests cover the class itself only."
+    },
+    {
+      "class": "Gracewell\\SecurityPro\\Alerts\\Gracewell_SSRF_Safe_Dispatcher",
+      "file": "includes/alerts/class-gracewell-ssrf-safe-dispatcher.php",
+      "status": "unwired",
+      "reason": "duplicate",
+      "replacement": "GWQSH_Secure_HTTP::allowed() pins each outbound service to a fixed host and path (hooks.slack.com etc.) and is stricter than DNS-based validation.",
+      "note": "Active webhook destination validation exists; this class is not part of it."
+    },
+    {
+      "class": "Gracewell\\SecurityPro\\Scanner\\Gracewell_Malware_Scanner",
+      "file": "includes/scanner/class-gracewell-malware-scanner.php",
+      "status": "unwired",
+      "reason": "duplicate",
+      "replacement": "GWQSH_Scan_Engine::inspect() -> GWQSH_Malware_Analyzer::analyze() (token analysis, signatures, archive inspection).",
+      "note": "Scanner scheduling and results flow through GWQSH_File_Integrity/GWQSH_Scan_Engine only."
+    },
+    {
+      "class": "Gracewell\\SecurityPro\\Vulnerabilities\\Gracewell_Virtual_Patch_Engine",
+      "file": "includes/vulnerabilities/class-gracewell-virtual-patch-engine.php",
+      "status": "unwired",
+      "reason": "duplicate",
+      "replacement": "GWQSH_Vulnerabilities::match()/evaluate()/scoped_patches() drives virtual patching and is called from GWQSH_Firewall::inspect()/inspect_rest().",
+      "note": "Virtual patches are data-only signed advisories; no external vendor feed is configured."
+    },
+    {
+      "class": "Gracewell\\SecurityPro\\Intelligence\\Gracewell_Signed_Feed_Verifier",
+      "file": "includes/intelligence/class-gracewell-signed-feed-verifier.php",
+      "status": "unwired",
+      "reason": "duplicate",
+      "replacement": "GWQSH_Crypto::verify_ed25519() plus the feed verification in GWQSH_Signatures and GWQSH_Vulnerabilities.",
+      "note": "Requires the sodium extension; the plugin has a WordPress-polyfill path. Not exercised by this harness (no sodium in the test runtime)."
+    },
+    {
+      "class": "Gracewell\\SecurityPro\\Intelligence\\Gracewell_Threat_Feed_Manager",
+      "file": "includes/intelligence/class-gracewell-threat-feed-manager.php",
+      "status": "unwired",
+      "reason": "duplicate",
+      "replacement": "GWQSH_Signatures::update()/rollback() and GWQSH_Vulnerabilities::update()/accept()/rollback() implement staged fetch, verify, activate and rollback.",
+      "note": "No production publisher or trusted public key is configured; nothing in this repository operates a live intelligence network."
+    },
+    {
+      "class": "Gracewell\\SecurityPro\\Cleanup\\Gracewell_DB_Malware_Remediator",
+      "file": "includes/cleanup/class-gracewell-db-malware-remediator.php",
+      "status": "unwired",
+      "reason": "duplicate",
+      "replacement": "GWQSH_Database_Remediation::preview()/apply()/rollback() with operation-token approval in GWQSH_Ajax.",
+      "note": "Broad automatic database rewriting is intentionally not enabled."
+    },
+    {
+      "class": "Gracewell\\SecurityPro\\Recovery\\Gracewell_Safe_DB_Restore",
+      "file": "includes/recovery/class-gracewell-safe-db-restore.php",
+      "status": "unwired",
+      "reason": "duplicate",
+      "replacement": "GWQSH_Backup_Engine plus includes/trait-gwqsh-database-restore.php implement staged import, verification and cutover.",
+      "note": "Full-site disaster recovery has not been validated end to end in this session."
+    }
+  ]
+}

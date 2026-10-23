@@ -9,3 +9,22 @@ Regression checks cover valid signing, changed message bytes, replay, expiry, re
 Health reports last attempt, installed version, verification and expiry times. Existing admin feed controls remain in their existing sections. AbuseIPDB has a bounded opt-in adapter and encrypted API key storage; nested category values now fail validation. Live provider quotas, results and commercial feed operation were not tested. VirusTotal, NVD and Patchstack ingestion pipelines are outstanding. Unsigned upstream data must be reviewed/versioned/signed by an authorized publisher before local activation; no provider is fabricated.
 
 Reproduce declared bundled-package advisory screening with `composer audit --working-dir=tools/dependency-audit --locked`. No runtime Composer installation is required. This metadata does not verify that vendored source is byte-identical to upstream.
+
+---
+
+## Status at v1.3.0-rc.6 (2026-10-22)
+
+Unchanged in this session, and still **client-only**. Verified facts:
+
+* No publisher, no trusted public key, no key rotation and no monitoring service
+  is configured or operated from this repository.
+* The two namespaced intelligence classes
+  (`Gracewell_Signed_Feed_Verifier`, `Gracewell_Threat_Feed_Manager`) are
+  **unwired duplicates**; the active paths are `GWQSH_Crypto::verify_ed25519()`,
+  `GWQSH_Signatures` and `GWQSH_Vulnerabilities`
+  (`docs/ENGINE-INTEGRATION-AUDIT.md`).
+* Signature-verification assertions could not run here: the test runtime has no
+  sodium or openssl extension. They are recorded as not run, not as passing.
+
+Therefore the plugin provides **no live threat intelligence** out of the box, and
+no document may describe it as a threat-intelligence network.

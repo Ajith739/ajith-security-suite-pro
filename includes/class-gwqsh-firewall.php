@@ -339,23 +339,33 @@ final class GWQSH_Firewall {
 	}
 	/**
 	 * Collect request evidence with shared byte, node and nesting limits.
-	 * Credential subtrees are excluded before traversal, including nested values.
+	 *
+	 * Values whose parameter name identifies credential material (password, token,
+	 * nonce, session, ...) are not treated as ordinary evidence, but they are no
+	 * longer an inspection blind spot: they are collected separately as
+	 * "credential values" and evaluated only against high-confidence detectors
+	 * that do not depend on markup interpretation. A parameter named "password"
+	 * must not be able to carry a SQL injection or traversal payload past the
+	 * firewall, and no credential value is ever written to the audit log.
 	 *
 	 * @param array $input Untrusted parsed request values.
 	 * @return array Values and explicit coverage limitations; never persisted as content.
 	 */
 	public static function evidence( array $input ) {
 		$result = array(
-			'values'   => array(),
-			'limits'   => array(),
-			'excluded' => 0,
-			'status'   => 'fully_inspected',
+			'values'             => array(),
+			'credential_values'  => array(),
+			'limits'             => array(),
+			'excluded'           => 0,
+			'status'             => 'fully_inspected',
 		);
 		$nodes  = 128;
 		$bytes  = 16384;
 		$until  = microtime( true ) + 0.01;
-		self::collect( $input, 0, $nodes, $bytes, $until, $result );
+		self::collect( $input, 0, $nodes, $bytes, $until, $result, false );
 		$result['limits'] = array_values( array_unique( $result['limits'] ) );
+		// A credential-scope sample is intentionally evaluated by a narrower rule
+		// set, so coverage is reported as partial for that scope only.
 		$result['status'] = $result['limits'] ? 'budget_exceeded' : ( $result['excluded'] ? 'intentionally_partial' : 'fully_inspected' );
 		return $result;
 	}
@@ -368,35 +378,54 @@ final class GWQSH_Firewall {
 	 * @param int   $bytes Remaining bytes.
 	 * @param float $until Deadline.
 	 * @param array $result Collected evidence.
+	 * @param bool  $credential_scope Whether this subtree is credential material.
 	 */
-	private static function collect( array $input, $depth, &$nodes, &$bytes, $until, &$result ) {
+	private static function collect( array $input, $depth, &$nodes, &$bytes, $until, &$result, $credential_scope = false ) {
 		foreach ( $input as $key => $value ) {
 			if ( --$nodes < 0 || $bytes <= 0 || microtime( true ) > $until ) {
 				$result['limits'][] = 'request_budget';
 				return;
 			}
 			// Match credential components, not substrings such as postcode, passage or shortcode.
-			if ( is_string( $key ) && preg_match( '/(?:^|[_-])(?:pass|password|passwd|pwd|token|nonce|wpnonce|secret|code|assert|assertion|cookie|session|credit|card|payment|authorization|log|user_login|user_email)(?:$|[_-])/i', substr( $key, 0, 256 ) ) ) {
+			$credential_key = is_string( $key ) && preg_match( self::credential_key_pattern(), substr( $key, 0, 256 ) );
+			if ( $credential_key ) {
 				++$result['excluded'];
-				continue;
 			}
+			$scope = $credential_scope || $credential_key;
 			if ( is_array( $value ) ) {
 				if ( $depth >= 8 ) {
 					$result['limits'][] = 'request_depth';
 					continue;
 				}
-				self::collect( $value, $depth + 1, $nodes, $bytes, $until, $result );
+				self::collect( $value, $depth + 1, $nodes, $bytes, $until, $result, $scope );
 			} elseif ( is_scalar( $value ) ) {
 				$value = (string) $value;
 				$size  = min( 2048, $bytes );
 				if ( strlen( $value ) > $size ) {
 					$result['limits'][] = 'value_size';
 				}
-				$value              = substr( $value, 0, $size );
-				$bytes             -= strlen( $value );
-				$result['values'][] = rawurldecode( $value );
+				$value  = substr( $value, 0, $size );
+				$bytes -= strlen( $value );
+				if ( $scope ) {
+					if ( count( $result['credential_values'] ) < 32 ) {
+						$result['credential_values'][] = rawurldecode( $value );
+					} else {
+						$result['limits'][] = 'credential_value_count';
+					}
+				} else {
+					$result['values'][] = rawurldecode( $value );
+				}
 			}
 		}
+	}
+
+	/**
+	 * Parameter-name grammar for credential material.
+	 *
+	 * @return string Regular expression.
+	 */
+	private static function credential_key_pattern() {
+		return '/(?:^|[_-])(?:pass|password|passwd|pwd|token|nonce|wpnonce|secret|code|assert|assertion|cookie|session|credit|card|payment|authorization|log|user_login|user_email)(?:$|[_-])/i';
 	}
 
 	/**
@@ -409,30 +438,83 @@ final class GWQSH_Firewall {
 	 * @return string Matched rule, or an empty string.
 	 */
 	public static function match( array $values, $agent, $path, array $settings ) {
-		foreach ( self::evidence( $values )['values'] as $value ) {
-			if ( $settings['sql'] && (
-				preg_match( '/\bunion\s+(?:all\s+)?select\s+(?:null|[0-9]+)\s*,/i', $value ) ||
-				preg_match( '/[\'"]\s*(?:or|and)\s+[0-9]{1,8}\s*=\s*[0-9]{1,8}\s*(?:--|#|\/\*)/i', $value ) ||
-				( preg_match( '/(?:--|#|\/\*)\s*$/m', $value ) && preg_match( '/\bunion\b.*\bselect\b/is', $value ) ) ||
-				preg_match( '/\bselect\b[^;]{1,200}\bfrom\b[^;]{1,200}\binformation_schema\b/i', $value ) ||
-				preg_match( '/(?:0x[0-9a-f]{8,}|char\s*\(\s*[0-9]+(?:\s*,\s*[0-9]+){3,}\s*\))/i', $value )
-			) ) {
+		$evidence = self::evidence( $values );
+		foreach ( $evidence['values'] as $value ) {
+			if ( $settings['sql'] && self::sql_high_confidence( $value ) ) {
 				return 'SQL Injection';
 			}
-			if ( $settings['xss'] && (
-				preg_match( '/<\s*(?:script\b[^>]{0,256}>|(?:img|svg|body|iframe|object|embed|details|math|video|audio|source|input|select|textarea|button|form)\b[^>]{0,256}\bon(?:error|load|click|mouse(?:over|enter|move)|focus|blur|change|submit|key(?:up|down|press)|input|animationend|toggle|pointerover)\s*=)/i', $value ) ||
-				preg_match( '/(?:javascript|vbscript|livescript)\s*:/i', $value ) ||
-				preg_match( '/<\s*(?:svg|math)\b[^>]{0,256}>.*<\s*(?:script|handler|set|animate)/is', $value ) ||
-				preg_match( '/data\s*:\s*(?:text\/html|application\/xhtml)[^,]{0,64};?base64\s*,/i', $value )
-			) ) {
+			if ( $settings['xss'] && self::xss_high_confidence( $value ) ) {
 				return 'XSS Attempt';
 			}
 		}
+		// Credential-named parameters are evaluated for injection only. Markup rules
+		// are skipped here because a literal "<script>" inside a passphrase is not
+		// evidence of an injection attempt, while "' OR 1=1" always is.
+		if ( $settings['sql'] ) {
+			foreach ( $evidence['credential_values'] as $value ) {
+				if ( self::sql_high_confidence( $value ) ) {
+					return 'SQL Injection';
+				}
+			}
+		}
 		// Correlate a scanner agent with an exploit-only path; agent alone never denies.
-		if ( $settings['bots'] && preg_match( '/(?:sqlmap|nikto|nuclei|dirsearch|gobuster|wpscan|masscan|nmap|acunetrix|burpsuite)/i', substr( $agent, 0, 256 ) ) && preg_match( '~/(?:\.env(?:$|/)|\.git/|vendor/phpunit/|wp-config\.php$|\.aws/|wp-config\.bak$|wp-config\.old$)~i', substr( $path, 0, 512 ) ) ) {
+		if ( $settings['bots'] && preg_match( '/(?:sqlmap|nikto|nuclei|dirsearch|gobuster|wpscan|masscan|nmap|acunetix|acunetrix|burpsuite)/i', substr( (string) $agent, 0, 256 ) ) && preg_match( '~/(?:\.env(?:$|/)|\\.git/|vendor/phpunit/|wp-config\.php$|\.aws/|wp-config\.bak$|wp-config\.old$)~i', substr( (string) $path, 0, 512 ) ) ) {
 			return 'Bad Bot';
 		}
 		return '';
+	}
+
+	/**
+	 * High-confidence SQL injection shapes, safe to evaluate in every scope.
+	 *
+	 * These are lexical correlations, not a SQL parser and not proof of
+	 * exploitation. Every pattern is bounded to the already-truncated value.
+	 *
+	 * @param string $value Bounded request evidence.
+	 * @return bool Whether a blocking-family correlation matched.
+	 */
+	public static function sql_high_confidence( $value ) {
+		$value = substr( (string) $value, 0, 2048 );
+		return (bool) preg_match( '/\bunion\s+(?:all\s+)?select\s+(?:null|[0-9]+)\s*,/i', $value )
+			|| preg_match( '/[\'"]\s*(?:or|and)\s+[0-9]{1,8}\s*=\s*[0-9]{1,8}\s*(?:--|#|\/\*)/i', $value )
+			|| ( preg_match( '/(?:--|#|\/\*)\s*$/m', $value ) && preg_match( '/\bunion\b.*\bselect\b/is', $value ) )
+			|| preg_match( '/\bselect\b[^;]{1,200}\bfrom\b[^;]{1,200}\binformation_schema\b/i', $value )
+			|| preg_match( '/(?:0x[0-9a-f]{8,}|char\s*\(\s*[0-9]+(?:\s*,\s*[0-9]+){3,}\s*\))/i', $value )
+			// Tautology families: ' OR 'x'='x, " OR ""=", 1' OR 1=1, 'or'1'='1, OR 1 LIKE 1.
+			// Operands are restricted to quoted strings, integers or quoted/numeric
+			// comparisons so ordinary prose and arithmetic text are not flagged.
+			|| preg_match( '/(?<![\w.\/-])(?:or|and)\s+\'[^\']{0,32}\'\s*(?:=|like|is)\s*(?:\'[^\']{0,32}\'?|[0-9]{1,8}|")/i', $value )
+			|| preg_match( '/(?<![\w.\/-])(?:or|and)\s+"[^"]{0,32}"\s*(?:=|like|is)\s*(?:"[^"]{0,32}"?|[0-9]{1,8}|\')/i', $value )
+			|| preg_match( '/(?<![\w.\/-])(?:or|and)\s*\(?\s*[0-9]{1,8}\s*\)?\s*(?:=|like|is)\s*\(?\s*[0-9]{1,8}\s*\)?(?![\w.])/i', $value )
+			// Quote-wrapped conjunction: 'or'1'='1 (the closing quote of the keyword
+			// is reused as the opening quote of the operand).
+			|| preg_match( '/(?<![\w.\/-])(?:or|and)[\x27"]?\s*[0-9]{1,8}[\x27"]?\s*(?:=|like|is)\s*[\x27"]?[0-9]{1,8}/i', $value )
+			|| preg_match( '/(?<![\w.\/-])(?:or|and)\s+([\'"])[^\'"]{0,32}\1\s*(?:=|like)\s*[0-9]{1,8}(?![\w.])/i', $value )
+			|| preg_match( '/(?<![\w.\/-])(?:or|and)\s+[0-9]{1,8}\s*(?:=|like)\s*([\'"])[^\'"]{0,32}\1/i', $value )
+			// Comment-obfuscated keyword pairs: UNION/**/SELECT, /*!50000UNION*/ SELECT.
+			|| preg_match( '/\bunion(?:\s|\/\*[^*]{0,64}\*\/)+(?:all(?:\s|\/\*[^*]{0,64}\*\/)+)?select\b/i', $value )
+			|| preg_match( '/\/\*!\s*[0-9]{0,6}\s*(?:union|select|sleep|benchmark|updatexml|extractvalue|outfile)/i', $value )
+			// Time-based, error-based and file-access functions in parameter context.
+			|| preg_match( '/\b(?:sleep|pg_sleep|benchmark)\s*\(\s*[0-9]{1,8}\s*[,)]/i', $value )
+			|| preg_match( '/\bwaitfor\s+delay\b/i', $value )
+			|| preg_match( '/\b(?:extractvalue|updatexml)\s*\(/i', $value )
+			|| preg_match( '/\binto\s+(?:out|dump)file\s/i', $value )
+			|| preg_match( '/\bload_file\s*\(/i', $value )
+			|| preg_match( '/;\s*(?:drop|truncate|alter)\s+table\b/i', $value );
+	}
+
+	/**
+	 * High-confidence XSS shapes. Applied to ordinary request values only.
+	 *
+	 * @param string $value Bounded request evidence.
+	 * @return bool Whether an XSS correlation matched.
+	 */
+	public static function xss_high_confidence( $value ) {
+		$value = substr( (string) $value, 0, 2048 );
+		return (bool) preg_match( '/<\s*(?:script\b[^>]{0,256}>|(?:img|svg|body|iframe|object|embed|details|math|video|audio|source|input|select|textarea|button|form)\b[^>]{0,256}\bon(?:error|load|click|mouse(?:over|enter|move)|focus|blur|change|submit|key(?:up|down|press)|input|animationend|toggle|pointerover)\s*=)/i', $value )
+			|| preg_match( '/(?:javascript|vbscript|livescript)\s*:/i', $value )
+			|| preg_match( '/<\s*(?:svg|math)\b[^>]{0,256}>.*<\s*(?:script|handler|set|animate)/is', $value )
+			|| preg_match( '/data\s*:\s*(?:text\/html|application\/xhtml)[^,]{0,64};?base64\s*,/i', $value );
 	}
 
 	/** Rule metadata is fixed source data, never executable downloaded patterns. */
@@ -568,6 +650,53 @@ final class GWQSH_Firewall {
 		return (bool) preg_match( '~(*LIMIT_MATCH=10000)(*LIMIT_DEPTH=100)(?:;\s*(?:drop\s+table|truncate\s+table|delete\s+from|alter\s+table|create\s+(?:table|function|procedure))\s+[a-z_][a-z0-9_]{0,63}|\bunion\s+(?:all\s+)?select\s+[^;\r\n]{1,100}\s+from\s+[a-z_]|\b(?:and|or)\s+(?:sleep\s*\(\s*[0-9]{1,3}\s*\)|benchmark\s*\(\s*[0-9]{1,8}\s*,|waitfor\s+delay\s|pg_sleep\s*\()|\binto\s+(?:out|dump)file\s|\bload_file\s*\(|\b(?:extractvalue|updatexml)\s*\()~i', $value );
 	}
 
+	/**
+	 * Detect a path-traversal sequence, including a single "../" segment.
+	 *
+	 * The previous expression required two segments, so a lone "../wp-config.php"
+	 * was never correlated. A parent-directory segment inside request data is not
+	 * required by WordPress core, REST, WooCommerce or the block editor.
+	 *
+	 * @param string $value Bounded request evidence (URL-decoded once already).
+	 * @return bool Whether a traversal shape matched.
+	 */
+	public static function traversal( $value ) {
+		$value = substr( (string) $value, 0, 2048 );
+		return (bool) preg_match( '~(?:^|[\s=;&|(,\x27"])[.][.](?:\x2f|\x5c)|(?:\x2f|\x5c)[.][.](?:\x2f|\x5c)~', $value )
+			|| preg_match( '~(?:%2e){2}(?:%2f|%5c)|%252e%252e~i', $value );
+	}
+
+	/**
+	 * Detect a serialized PHP object in any value position.
+	 *
+	 * Objects can start a value or be nested inside arrays, for example
+	 * a:1:{i:0;O:7:"WP_User":1:{...}}. Only the object shape is correlated; the
+	 * payload is never unserialized.
+	 *
+	 * @param string $value Bounded request evidence.
+	 * @return bool Whether an object-injection shape matched.
+	 */
+	public static function serialized_object( $value ) {
+		$value = substr( (string) $value, 0, 2048 );
+		return (bool) preg_match( '/(?:^|[=&{;|,(])\s*(?:O|C):[0-9]{1,6}:"[A-Za-z_\x5c][A-Za-z0-9_\x5c]{0,100}":[0-9]{1,6}:\{/', $value );
+	}
+
+	/**
+	 * Detect executable PHP source in a request value.
+	 *
+	 * Report-first rule (GWQSH-1017): sites that accept code snippets in forms
+	 * exist, so enforcement requires explicit operator approval via enforce_new.
+	 *
+	 * @param string $value Bounded request evidence.
+	 * @return bool Whether a PHP code shape matched.
+	 */
+	public static function php_code_in_request( $value ) {
+		$value = substr( (string) $value, 0, 2048 );
+		return (bool) preg_match( '/<\?(?:php\b|=)/i', $value )
+			|| preg_match( '/\b(?:eval|assert)\s*\(\s*(?:base64_decode|gzinflate|gzuncompress|str_rot13|gzinflate|\$_)/i', $value )
+			|| preg_match( '/\b(?:shell_exec|passthru|proc_open|popen|pcntl_exec)\s*\(/i', $value );
+	}
+
 	/** Match additional report-first request rules.
 	 *
 	 * @param array  $query Query parameters.
@@ -579,15 +708,20 @@ final class GWQSH_Firewall {
 	public static function advanced( array $query, array $post, array $files, $path, array $settings ) {
 		$sql_enabled = self::settings()['sql'];
 		$sql_match   = false;
-		$values      = array_merge( array( rawurldecode( substr( $path, 0, 2048 ) ) ), self::evidence( $query )['values'] );
+		// One bounded evidence walk per collection; credential-scoped values are
+		// included here because traversal, inclusion, command, SSRF and
+		// deserialization shapes stay unambiguous inside credential material.
+		$query_evidence = self::evidence( $query );
+		$values         = array_merge( array( rawurldecode( substr( (string) $path, 0, 2048 ) ) ), $query_evidence['values'], $query_evidence['credential_values'] );
 		if ( $settings['post'] ) {
-			$values = array_merge( $values, self::evidence( $post )['values'] );
+			$post_evidence = self::evidence( $post );
+			$values        = array_merge( $values, $post_evidence['values'], $post_evidence['credential_values'] );
 		}
 		foreach ( $values as $value ) {
 			if ( $sql_enabled && self::extended_sql( $value ) ) {
 				$sql_match = true;
 			}
-			if ( $settings['traversal'] && preg_match( '~(?:\.\.[/\\\\]){2}|(?:%2e){2}(?:%2f|%5c)~i', $value ) ) {
+			if ( $settings['traversal'] && self::traversal( $value ) ) {
 				return 'GWQSH-1001';
 			}
 			if ( $settings['inclusion'] && preg_match( '~(?:php|expect|phar|data|zip|glob|rar|compress\.zlib|ogg)://|(?:^|[= /])(?:/etc/passwd|/proc/self/environ|/etc/shadow|/var/log)~i', $value ) ) {
@@ -601,8 +735,14 @@ final class GWQSH_Firewall {
 			if ( preg_match( '~(?:https?://(?:127\.0\.0\.|10\.|172\.(?:1[6-9]|2[0-9]|3[01])\.|192\.168\.|169\.254\.169\.254|0\.0\.0\.0|localhost|metadata\.google\.internal|\[::1?\]|0x[0-9a-f]{8}))|(?:gopher|dict|file|ldap)://~i', $value ) ) {
 				return 'GWQSH-1008';
 			}
-			// PHP object deserialization: serialized object in parameter value.
-			if ( preg_match( '/(?:^|[=&])\s*(?:O|C):[0-9]+:"[A-Za-z_][A-Za-z0-9_]{0,100}":[0-9]+:\{/i', $value ) ) {
+			// Executable PHP code in request data (webshell/dropper attempt).
+			// Report-first: new rule, requires enforce_new approval to block.
+			if ( self::php_code_in_request( $value ) ) {
+				return 'GWQSH-1017';
+			}
+			// PHP object deserialization: serialized object anywhere in a value,
+			// including nested array/object payloads (a:1:{i:0;O:7:"WP_User"...}).
+			if ( self::serialized_object( $value ) ) {
 				return 'GWQSH-1009';
 			}
 		}

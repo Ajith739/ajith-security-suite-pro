@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/joshua-sundar/gracewell-security-suite-pro
  * Update URI: https://github.com/joshua-sundar/gracewell-security-suite-pro
  * Description: WordPress firewall, passkeys and two-factor recovery, login protection, scheduled file integrity scans, IP restrictions and security audit logs.
- * Version: 1.3.0-rc.5
+ * Version: 1.3.0-rc.6
  * Author: gracewell89
  * Author URI: https://gracewell.in/
  * Contributors: gracewell89
@@ -30,7 +30,7 @@ if ( GWQSH_Pro_Compatibility::conflicts( __FILE__ ) || defined( 'GWQSH_PLUGIN_FI
 
 define( 'GWQSH_PATH', plugin_dir_path( __FILE__ ) );
 define( 'GWQSH_URL', plugin_dir_url( __FILE__ ) );
-define( 'GWQSH_VERSION', '1.3.0-rc.5' );
+define( 'GWQSH_VERSION', '1.3.0-rc.6' );
 define( 'GWQSH_DB_VERSION', '1.6.1' );
 define( 'GWQSH_PLUGIN_FILE', __FILE__ );
 define( 'GWQSH_PLUGIN_DIR', GWQSH_PATH );

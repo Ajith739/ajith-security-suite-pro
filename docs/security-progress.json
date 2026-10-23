@@ -1,0 +1,203 @@
+{
+  "product": "Gracewell Security Suite Pro",
+  "version": "1.3.0-rc.6",
+  "db_version": "1.6.1",
+  "updated_at": "2026-10-22",
+  "branch": "arena/a0b93feb-ajith-security-suite-pro",
+  "base_commit": "4728e6c",
+  "environment": {
+    "php": "8.4.1 (WebAssembly via php-wasm 0.2.0, Node 22.22.3)",
+    "extensions_present": [
+      "hash",
+      "tokenizer",
+      "filter",
+      "pdo",
+      "ctype",
+      "json",
+      "pcre"
+    ],
+    "extensions_absent": [
+      "sodium",
+      "openssl",
+      "mbstring",
+      "dom",
+      "dns"
+    ],
+    "wordpress": "not installed in this environment",
+    "mysql": "unavailable",
+    "php_cli": "unavailable"
+  },
+  "verification": {
+    "lint": {
+      "files": 108,
+      "failures": 0,
+      "evidence": "docs/evidence/lint.json"
+    },
+    "regression_suite": {
+      "total": 206,
+      "passed": 204,
+      "failed": 0,
+      "skipped": 2,
+      "skipped_reasons": [
+        "DOM extension unavailable (XML parser tests)",
+        "DNS unavailable (public webhook host)"
+      ],
+      "evidence": "docs/evidence/phpunit-results.json"
+    },
+    "package_gate": {
+      "result": "blocked",
+      "evidence": "docs/evidence/package-check.json",
+      "version_sources_agree": true,
+      "broken_requires": 0,
+      "guarded_missing_assets": 2,
+      "shipped_files_secret_scanned": 90,
+      "secret_findings": 0,
+      "dev_artifacts_present": []
+    }
+  },
+  "changes": [
+    {
+      "file": "includes/class-gwqsh-firewall.php",
+      "type": "security-fix",
+      "summary": "credential-scope inspection, single-segment traversal, tautology/comment/object/PHP-code correlations, single evidence walk"
+    },
+    {
+      "file": "includes/waf/rules.php",
+      "type": "metadata",
+      "summary": "registered report-first rule GWQSH-1017"
+    },
+    {
+      "file": "gracewell-security-suite-pro.php",
+      "type": "version",
+      "summary": "1.3.0-rc.6"
+    },
+    {
+      "file": "readme.txt",
+      "type": "version",
+      "summary": "stable tag and changelog"
+    },
+    {
+      "file": "tests/",
+      "type": "tests",
+      "summary": "new isolated regression harness (14 groups, 124 assertions) plus WASM runner and lint"
+    },
+    {
+      "file": "docs/engine-manifest.json",
+      "type": "architecture-guard",
+      "summary": "declares wired vs unwired engine classes"
+    },
+    {
+      "file": "AGENTS.md",
+      "type": "docs",
+      "summary": "authoritative contributor rules and measured scorecard"
+    },
+    {
+      "file": "includes/class-gwqsh-malware-analyzer.php",
+      "type": "detection",
+      "summary": "remote_include token-level rule, obfuscated_callable rule, analyzer VERSION 6->7 to invalidate scan caches"
+    },
+    {
+      "file": "tests/cases/110-malware-analyzer.php",
+      "type": "tests",
+      "summary": "synthetic malicious/benign PHP corpus against the real analyzer"
+    },
+    {
+      "file": "includes/class-gwqsh-settings.php",
+      "type": "security-fix",
+      "summary": "negative retention was converted to a positive value by absint(); now cast then clamp"
+    },
+    {
+      "file": "tests/cases/120-settings-normalize.php",
+      "type": "tests",
+      "summary": "settings validation/clamping, boolean coercion, trusted proxy sanitization"
+    },
+    {
+      "file": "tests/cases/130-xmlrpc-policy.php",
+      "type": "tests",
+      "summary": "XML-RPC method/header policy follows block/report/disabled and suite/hardening gates"
+    },
+    {
+      "file": "tests/cases/140-vulnerability-ranges.php",
+      "type": "tests",
+      "summary": "version grammar and inclusive/exclusive advisory range boundaries"
+    },
+    {
+      "file": "tests/cases/150-release-metadata.php",
+      "type": "tests",
+      "summary": "version consistency across four sources and documented missing assets"
+    },
+    {
+      "file": "tests/tools/package-check.php",
+      "type": "release-gate",
+      "summary": "version, require-target, asset, secret and artifact checks with machine-readable evidence"
+    },
+    {
+      "file": "docs/PACKAGE-CHECK.md",
+      "type": "docs",
+      "summary": "release gate documentation"
+    }
+  ],
+  "fixed_gaps": [
+    "WAF-1",
+    "WAF-2",
+    "WAF-3",
+    "WAF-4",
+    "WAF-5",
+    "SCAN-3",
+    "SCAN-4",
+    "CFG-1",
+    "REL-1"
+  ],
+  "open_gaps": [
+    "WAF-6",
+    "WAF-7",
+    "WAF-8",
+    "INT-2",
+    "AUTH-1",
+    "AUTH-2",
+    "UI-1",
+    "SCAN-1",
+    "SCAN-2",
+    "REC-1",
+    "OPS-1",
+    "SEC-1",
+    "SEC-2"
+  ],
+  "external_dependencies": [
+    "VULN-1",
+    "VULN-2",
+    "OPS-1"
+  ],
+  "self_assessed_scores": {
+    "waf_request_inspection": 7.5,
+    "bot_and_ip_defense": 6.0,
+    "malware_detection": 5.5,
+    "vulnerability_intelligence": 4.0,
+    "authentication": 6.5,
+    "file_integrity_and_cleanup": 5.0,
+    "backup_and_recovery": 3.5,
+    "security_operations": 5.5,
+    "hardening": 6.0,
+    "premium_infrastructure": 3.0,
+    "performance": 5.5,
+    "compatibility": 4.0,
+    "release_security": 6.0,
+    "overall": 5.4
+  },
+  "not_verified": [
+    "WordPress activation/deactivation and Free-to-Pro migration",
+    "WooCommerce checkout, Gutenberg publish, REST/AJAX round trips",
+    "multisite network behaviour",
+    "browser passkey enrolment/login and TOTP UI",
+    "malware corpus detection rate and false positives",
+    "backup/restore/cutover/rollback",
+    "alert delivery, cron reliability, scheduled reports",
+    "PHPCS, PHPStan, Plugin Check, composer audit",
+    "production latency and memory ceilings"
+  ],
+  "next_tasks": [
+    "Ship the locked WebAuthn and three.js vendor assets (or fail release) and add a packaging check",
+    "Run the suite inside a disposable WordPress install (activation, migration, WAF end-to-end, quarantine round trip)",
+    "Delete the eight unwired duplicate engines or wire the ones that add capability; keep the manifest test green"
+  ]
+}

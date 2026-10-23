@@ -1,0 +1,1257 @@
+{
+    "generated_at": "2026-10-22T08:26:25+00:00",
+    "php_version": "8.4.1",
+    "extensions": {
+        "sodium": false,
+        "openssl": false,
+        "mbstring": false,
+        "tokenizer": true,
+        "pdo": true
+    },
+    "summary": {
+        "passed": 204,
+        "failed": 0,
+        "skipped": 2,
+        "total": 206
+    },
+    "results": [
+        {
+            "group": "waf",
+            "test": "SQL injection corpus detected",
+            "passed": true,
+            "detail": "12 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "XSS corpus detected",
+            "passed": true,
+            "detail": "8 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "Path traversal corpus detected",
+            "passed": true,
+            "detail": "5 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "File inclusion corpus detected",
+            "passed": true,
+            "detail": "5 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "Command injection corpus detected",
+            "passed": true,
+            "detail": "4 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "SSRF corpus detected",
+            "passed": true,
+            "detail": "6 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "PHP object injection corpus detected",
+            "passed": true,
+            "detail": "2 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "Benign traffic allowed",
+            "passed": true,
+            "detail": "19 benign samples allowed"
+        },
+        {
+            "group": "waf",
+            "test": "SQL injection obfuscation corpus detected",
+            "passed": true,
+            "detail": "9 samples matched"
+        },
+        {
+            "group": "waf",
+            "test": "XSS obfuscation corpus detected",
+            "passed": true,
+            "detail": "6 samples matched"
+        },
+        {
+            "group": "waf-credential-keys",
+            "test": "Credential-named parameters still inspected for high-confidence attacks",
+            "passed": true,
+            "detail": "7 samples matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 exact match",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 CIDR /24 inside",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 CIDR /24 outside",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 CIDR /0 matches all",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv4 non-octet boundary /33 rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv6 CIDR inside",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "IPv6 CIDR outside",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Mixed-family comparison rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Malformed range rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Non-numeric prefix rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Canonical IPv4-mapped IPv6",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Canonical rejects garbage",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "XFF rightmost untrusted hop is the visitor",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Client-supplied left entries cannot choose identity",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "All-trusted chain returns empty (use peer address)",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Malformed chain element returns empty",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Oversized chain rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust",
+            "test": "Credential-like header value is not accepted as an IP",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Proxy disabled ignores forged X-Forwarded-For",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Untrusted peer cannot inject X-Forwarded-For",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Trusted peer proxy header accepted",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Trusted peer chain resolved to nearest visitor",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ip-trust-client",
+            "test": "Forged Cloudflare header ignored for non-Cloudflare peer",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Sensitive-file probes detected",
+            "passed": true,
+            "detail": "17 samples matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Ordinary requests are not treated as probes",
+            "passed": true,
+            "detail": "20 benign samples allowed"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Hold requires block mode, enabled Bot Shield and anonymous traffic",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Hold allowed for anonymous traffic in block mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Hold refused in report mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "bot-shield",
+            "test": "Hold refused for private/reserved addresses",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Legacy rule blocks in block mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Report mode records the match instead of blocking",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Report mode keeps the matched rule identifier",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "New rule is report-only until enforce_new",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "New rule still reported as the matched rule",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "New rule blocks after enforce_new approval",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Extended SQL correlation needs its own approval",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Extended SQL correlation blocks with both approvals",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Virtual patch blocks only when approved",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Virtual patch is report-only without approval",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Report-only rule cannot shadow a legacy block",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Authenticated traffic defaults to report",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Guest traffic uses the global mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Authenticated enforcement is possible when configured",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Strictest inspection state wins",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Parsing error beats partial inspection",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Clean state reported as fully inspected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Oversized REST JSON is not parsed as an attack verdict",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Malformed JSON is a parsing error",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "JSON scalar is an unsupported format",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Valid JSON object is inspected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "WooCommerce REST bodies get a larger budget",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Anonymous REST bodies stay small",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-policy",
+            "test": "Authenticated editor bodies are larger",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Deeply nested input is bounded and reported",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Wide input is bounded and reported",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Inspection status reflects the budget",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Credential keys are not ordinary evidence",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "waf-evidence",
+            "test": "Credential keys are still collected for injection screening",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Nested JSON is fully inspected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Nested JSON values reach the input list",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Malformed JSON is reported as a parsing error",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Oversized body is reported as a budget limit",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Unsupported content types are reported honestly",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Multipart fields parsed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Multipart filename captured as metadata",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Multipart parsing reported success",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Missing boundary fails closed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Invalid boundary grammar fails closed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Oversized multipart body hits the budget state",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "Truncated multipart body fails closed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-parsers",
+            "test": "XML parser tests",
+            "passed": null,
+            "skipped": true,
+            "detail": "DOM extension is unavailable in this PHP runtime"
+        },
+        {
+            "group": "inspector-rate",
+            "test": "First request within the limit",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-rate",
+            "test": "Third request exceeds a limit of two",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-rate",
+            "test": "Credential stuffing across usernames detected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "inspector-rate",
+            "test": "Distinct username count is reported",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "First TOTP use in a window is accepted",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Same TOTP window cannot be replayed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Older TOTP window is rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Newer TOTP window is accepted",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Replay state is per user",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Valid assertion accepted",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Origin mismatch rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Wrong ceremony type rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Challenge mismatch rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Cloned-authenticator counter regression rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Malformed clientDataJSON rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Zero counter authenticators remain usable",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "auth-guard",
+            "test": "Trailing slash origin is normalized",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Plain HTTP webhook rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Missing scheme rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Empty host rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Loopback IP literal rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Private range IP literal rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Link-local metadata IP rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "IPv6 loopback rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "IPv6 unique-local rejected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "ssrf",
+            "test": "Public hostname acceptance",
+            "passed": null,
+            "skipped": true,
+            "detail": "DNS resolution unavailable in this runtime"
+        },
+        {
+            "group": "performance",
+            "test": "Typical request evaluation stays bounded",
+            "passed": true,
+            "detail": "403.3 \u00b5s/request (WASM)"
+        },
+        {
+            "group": "performance",
+            "test": "Worst-case budgeted body stays bounded",
+            "passed": true,
+            "detail": "1300.0 \u00b5s/request for ~30KB values (WASM)"
+        },
+        {
+            "group": "performance",
+            "test": "Nested cart-like payloads stay bounded",
+            "passed": true,
+            "detail": "980.0 \u00b5s/request for 120 nested values (WASM)"
+        },
+        {
+            "group": "performance",
+            "test": "WAF timing summary",
+            "passed": true,
+            "detail": "typical=403.3\u00b5s, heavy=1300.0\u00b5s, nested=980.0\u00b5s (PHP 8.4.1, WASM runtime)"
+        },
+        {
+            "group": "false-positives",
+            "test": "Legitimate content remains allowed",
+            "passed": true,
+            "detail": "14 samples matched"
+        },
+        {
+            "group": "false-positives",
+            "test": "Aggressive heuristics are explicit and documented",
+            "passed": true,
+            "detail": "5 samples matched"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_WAF_Inspector is genuinely wired",
+            "passed": true,
+            "detail": "manifest claims wired but no production file references it"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Auth_Guard is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_SSRF_Safe_Dispatcher is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Malware_Scanner is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Virtual_Patch_Engine is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Signed_Feed_Verifier is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Threat_Feed_Manager is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_DB_Malware_Remediator is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Gracewell_Safe_DB_Restore is recorded as unwired and stays unreferenced",
+            "passed": true,
+            "detail": "engine is referenced by production code; update docs/engine-manifest.json"
+        },
+        {
+            "group": "integration-manifest",
+            "test": "Manifest coverage",
+            "passed": true,
+            "detail": "1 wired, 8 unwired"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "Synthetic malicious PHP flagged at >=40",
+            "passed": true,
+            "detail": "8/8 flagged"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "Benign PHP stays below the flag threshold",
+            "passed": true,
+            "detail": "10 benign samples clean"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "PHP-8-removed constructs are documented as not detected",
+            "passed": true,
+            "detail": "no score, accepted (cannot execute on PHP 8+)"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "PHP inside uploads is treated as executable content",
+            "passed": true,
+            "detail": "score=65 evidence=upload_executable"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "Oversized input reports partial analysis instead of a silent pass",
+            "passed": true,
+            "detail": "partial=true confidence=Unknown"
+        },
+        {
+            "group": "malware-analyzer",
+            "test": "Analysis returns an explainable shape",
+            "passed": true,
+            "detail": "keys=score,severity,confidence,evidence,signature_ids,auto_block,analysis_partial,version"
+        },
+        {
+            "group": "settings",
+            "test": "Unknown keys are discarded on read",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Defaults fill missing keys",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Plugin active state honoured",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Retention is clamped to the maximum",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Scan budget is clamped to the maximum",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Unknown theme falls back to light",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Unknown proxy header falls back to xff",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Boolean false is honoured",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Boolean true is honoured",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Trusted proxies keep CIDR and IPv6",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Trusted proxies drop invalid entries",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Negative retention clamps to zero",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Zero scan budget clamps to one",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Truthy string becomes true",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Zero becomes false",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "String true becomes true",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Non-scalar values are ignored rather than coerced",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "settings",
+            "test": "Inactive status disables the suite gate",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement active in block mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "system.multicall is removed (amplification)",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "pingback.ping is removed (DDoS amplification)",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "pingback getPingbacks is removed",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Legitimate publishing methods are kept",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "X-Pingback header removed in block mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Other headers untouched",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement inactive in report mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Methods untouched in report mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Pingback header kept in report mode",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement inactive when the WAF is disabled",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement inactive when the suite is switched off",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Enforcement inactive when the firewall toggle is off",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "Hardening rule disables XML-RPC entirely",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "xmlrpc",
+            "test": "XML-RPC stays enabled when hardening is off",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.2",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.2.3",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.2.3.4",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 2.0.0-beta",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.9.9-RC2",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Supported version grammar: 1.0.0.dev",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: ",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: v1.2.3",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.3 ",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.3.4.5",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.3-",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.x",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1.2.3\\n2.0",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: <1.2.3",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Rejected version grammar: 1,2,3",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Version below introduction is unaffected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Introduction boundary is affected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Mid-range is affected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Fixed version is not affected (exclusive)",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Later version is not affected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Open-ended range affects all later versions",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Open-ended range excludes earlier versions",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "last_affected boundary is inclusive",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Version after last_affected is unaffected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "First range matched",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Gap between ranges unaffected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Second range matched",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Second range fix respected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Empty range list is not affected",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Unsupported vendor version requires manual review",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Empty installed version requires manual review",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "vulnerability-ranges",
+            "test": "Non-string version requires manual review",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Plugin header declares a version",
+            "passed": true,
+            "detail": "1.3.0-rc.6"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Runtime constant matches the header",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "readme.txt stable tag matches the header",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Progress record matches the header",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Database version is unchanged by this release",
+            "passed": true,
+            "detail": "matched"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Database version constant is present",
+            "passed": true,
+            "detail": ""
+        },
+        {
+            "group": "release-metadata",
+            "test": "Required process documents exist",
+            "passed": true,
+            "detail": "10 documents present"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Every manifest engine file exists",
+            "passed": true,
+            "detail": "all present"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Missing asset is disclosed in release notes: WebAuthn.php",
+            "passed": true,
+            "detail": "docs/RELEASE-READINESS.md must name the asset"
+        },
+        {
+            "group": "release-metadata",
+            "test": "Missing asset is disclosed in release notes: three.module.js",
+            "passed": true,
+            "detail": "docs/RELEASE-READINESS.md must name the asset"
+        }
+    ]
+}

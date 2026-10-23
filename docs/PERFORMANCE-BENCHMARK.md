@@ -1,7 +1,46 @@
-# Measured performance scope
+# Performance benchmark — 2026-10-22
 
-See evidence/integration.json for measured whole-corpus WAF/analyzer runtime, total suite time and PHP peak allocation on a fresh WordPress 6.8.3/XAMPP PHP 8.2.4 site. These are single-process regression timings, not request latency/TTFB, frontend browser timing, throughput or results for 10000–50000 files. The full process peak includes WordPress and all test setup; it is not a scanner-only allocation. The requested 50MB absolute request budget is not established.
+## Method
 
-Existing file/database scans use bounded resumable work, stored cursors and owned leases. Reports perform one grouped aggregate and a 200-row detail query over existing indexed timestamps; calendar trends are at most 366 days. Counts cover the retained date window and can still be expensive on large logs. No global PHP memory_limit is lowered, because that can crash unrelated WordPress work.
+`tests/cases/080-performance.php` times the real evaluation path
+(`GWQSH_Firewall::match()` + `GWQSH_Firewall::advanced()`) inside a **PHP 8.4.1
+WebAssembly runtime on a shared sandbox CPU**. WASM is materially slower than
+PHP-FPM with opcache, so the numbers are useful for *relative regression
+tracking* and for spotting algorithmic blow-ups — they are **not** production
+latency and no p50/p95 claim is made.
 
-Outstanding: repeatable baseline-vs-candidate TTFB, 100k-row scans, 50k-file scans, object-cache configurations, storage failure, peak concurrent workers and multisite scaling. No unmeasured percentage improvement is claimed.
+## Measured (in-harness)
+
+| Case | Work per request | Time |
+| --- | --- | --- |
+| Typical anonymous GET | 5 short parameters, one evidence walk each for `match()`/`advanced()` | ≈397 µs |
+| Worst-case budgeted values | two values ≈15 KB each (truncated to 2048 bytes by the evidence bound) | ≈1400 µs |
+| Nested cart-like payload | 120 nested values under a WooCommerce REST path | ≈1020 µs |
+
+Threat bounds enforced in code (not just measured):
+
+* evidence: 128 nodes, 16 KiB total, 2048 bytes per value, depth 8, 10 ms deadline;
+* multipart parser: 1 MiB body cap, 128 parts, 8 KiB headers, 70-byte boundary;
+* REST JSON: endpoint-specific caps (16 KiB anonymous → 1 MiB authenticated editor);
+* regexes: bounded quantifiers, `(*LIMIT_MATCH)`/`(*LIMIT_DEPTH)` on the extended
+  SQL matcher, values truncated to 2048 bytes before matching.
+
+## Regression thresholds in the suite
+
+| Assertion | Threshold |
+| --- | --- |
+| typical request | < 8000 µs |
+| two ~30 KB values | < 200000 µs |
+| 120 nested values | < 60000 µs |
+
+Thresholds are deliberately loose for WASM; they exist to catch order-of-magnitude
+regressions (e.g. accidental nested-loop re-walking of evidence).
+
+## Not measured
+
+* production p50/p95 latency, TTFB impact, opcache/JIT effects;
+* memory ceilings for scans and backup jobs;
+* concurrency (parallel requests, counter contention on `gwqsh_security_state`);
+* database query counts per request (`GWQSH_Enterprise_Store::hit()` performs an
+  atomic UPDATE plus occasional admission SELECTs — this is the main DB cost per
+  evaluated request and was not profiled).
